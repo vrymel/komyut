@@ -12,18 +12,31 @@
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
+    <div class="navbar">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item " href="/">
+            Home
+          </a>
+          <a class="navbar-item " href="/users">
+            Users
+          </a>
+        </div>
+      </div>
+    </div>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <div class="container">
+      <% if info = get_flash(@conn, :info) do %>
+      <article class="message is-info">
+        <div class="message-body"><%= info %></div>
+      </article>
+      <% end %>
+
+      <% if error = get_flash(@conn, :error) do %>
+      <article class="message is-danger">
+        <div class="message-body"><%= error %></div>
+      </article>
+      <% end %>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
