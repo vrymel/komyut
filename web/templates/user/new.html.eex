@@ -1,0 +1,26 @@
+<%= form_for @changeset, user_path(@conn, :create), fn f -> %>
+
+<div class="field">
+  <label class="label">Email</label>
+  <p class="control">
+    <%= email_input f, :email, class: "input" %>
+  </p>
+</div>
+
+<div class="field">
+  <label class="label">Password</label>
+  <p class="control">
+    <%= password_input f, :password, class: "input" %>
+  </p>
+</div>
+
+<div class="field">
+  <label class="label">Display Name</label>
+  <p class="control">
+    <%= text_input f, :display_name, class: "input" %>
+  </p>
+</div>
+
+<%= submit "Create", class: "button is-primary" %>
+
+<% end %>
