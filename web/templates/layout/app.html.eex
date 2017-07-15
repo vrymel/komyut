@@ -19,6 +19,7 @@
             Home
           </a>
           <%= link "Users", to: user_path(@conn, :index), class: "navbar-item" %>
+          <%= link "Routes", to: route_path(@conn, :index), class: "navbar-item" %>
         </div>
       </div>
     </div>

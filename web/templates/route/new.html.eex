@@ -1,0 +1,13 @@
+<%= form_for @changeset, route_path(@conn, :create), fn f -> %>
+
+<div class="field">
+  <label class="label">Description</label>
+  <p class="control">
+    <%= text_input f, :description, class: "input" %>
+  </p>
+  <%= error_tag f, :description %>
+</div>
+
+<%= submit "Create", class: "button is-primary" %>
+
+<%= end %>
