@@ -18,9 +18,7 @@
           <a class="navbar-item " href="/">
             Home
           </a>
-          <a class="navbar-item " href="/users">
-            Users
-          </a>
+          <%= link "Users", to: user_path(@conn, :index), class: "navbar-item" %>
         </div>
       </div>
     </div>
