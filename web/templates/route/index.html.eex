@@ -1,1 +1,10 @@
-Route index
+<div class="content">
+    <h5>Routes available</h5>
+    <ul>
+    <%= for route <- @routes do %>
+        <li>
+            <%= link route.description, to: route_path(@conn, :show, route) %>
+        </li>
+    <%= end %>
+    </ul>
+</div>

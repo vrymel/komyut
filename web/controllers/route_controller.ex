@@ -4,7 +4,9 @@ defmodule HelloPhoenix.RouteController do
     alias HelloPhoenix.Route
 
     def index(conn, _params) do
-        render conn, :index
+        routes = Repo.all(Route)
+
+        render conn, :index, routes: routes
     end
 
     def new(conn, _params) do
