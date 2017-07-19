@@ -3,6 +3,7 @@ defmodule HelloPhoenix.Route do
 
     schema "routes" do
         field :description, :string
+        has_many :waypoints, HelloPhoenix.RouteWaypoint
 
         timestamps()
     end
