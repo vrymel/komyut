@@ -1,1 +1,17 @@
 <%= @route.description %>
+
+<div id="map"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
+
+<script>
+    function ready() {
+        require("web/static/js/route/show.js").default(<%= @route.id %>)
+    }
+
+    if (document.readyState === "complete" || document.readyState !== "loading") {
+        ready();
+    } else {
+        document.addEventListener("DOMContentLoaded", ready);
+    }
+</script>

@@ -31,6 +31,12 @@ defmodule HelloPhoenix.Router do
     resources "/", RouteController
   end
 
+  scope "/api/routes", HelloPhoenix do
+    pipe_through :browser
+
+    resources "/", RouteApiController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", HelloPhoenix do
   #   pipe_through :api
