@@ -1,5 +1,6 @@
 <div class="content">
     <h5>Routes available</h5>
+    <%= link "Add new route", to: route_path(@conn, :new), class: "button is-primary" %>
     <ul>
     <%= for route <- @routes do %>
         <li>
