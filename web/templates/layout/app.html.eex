@@ -13,12 +13,13 @@
 
   <body>
     <div class="navbar">
+      <div class="navbar-brand">
+        <a href="<%= route_path(@conn, :index) %>">
+          <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
+        </a>
+      </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item " href="/">
-            Home
-          </a>
-          <%= link "Users", to: user_path(@conn, :index), class: "navbar-item" %>
           <%= link "Routes", to: route_path(@conn, :index), class: "navbar-item" %>
         </div>
       </div>

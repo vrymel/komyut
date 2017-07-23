@@ -1,6 +1,17 @@
-<%= @route.description %>
-
 <div id="map"></div>
+
+<div class="content">
+    <h1 class="title"><%= @route.description %></h1>
+
+    <%# TODO: put actual data, based on input from create page (another TODO)  %>
+    <p>List of landmarks this route will be passing by:</p>
+    <ul>
+    <li>Rotonda</li>
+    <li>Carmen Bridge</li>
+    <li>Night market</li>
+    <li>The bar</li>
+    </ul>
+</div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
 

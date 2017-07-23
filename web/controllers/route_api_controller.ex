@@ -10,7 +10,7 @@ defmodule HelloPhoenix.RouteApiController do
         new_waypoints = Enum.map route.waypoints, 
         fn(waypoint) -> 
             Map.from_struct(waypoint) 
-            |> Map.take([:id, :lat, :long])
+            |> Map.take([:id, :lat, :lng])
         end
         
         payload = %{
