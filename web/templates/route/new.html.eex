@@ -10,15 +10,18 @@
 
 <div id="map"></div>
 
-<%= submit "Create", class: "button is-primary" %>
-
 <%= end %>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
+<div id="submit" class="button is-primary">Create</div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
 <script>
+    PAGE_ROUTES = {
+        "CREATE": "<%= route_api_path(@conn, :create) %>"
+    };
+
     function ready() {
-        require("web/static/js/route/new.js").default()
+        require("web/static/js/route/new.js").default(PAGE_ROUTES)
     }
 
 

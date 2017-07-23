@@ -3,7 +3,7 @@ defmodule HelloPhoenix.RouteWaypoint do
 
     schema "route_waypoints" do
         field :lat, :float
-        field :long, :float
+        field :lng, :float
         field :order_value, :integer
         belongs_to :route, HelloPhoenix.Route
 
@@ -12,7 +12,7 @@ defmodule HelloPhoenix.RouteWaypoint do
 
     def changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:lat, :long])
-        |> validate_required([:lat, :long])
+        |> cast(params, [:lat, :lng])
+        |> validate_required([:lat, :lng])
     end
 end
