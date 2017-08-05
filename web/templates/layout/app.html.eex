@@ -12,18 +12,33 @@
   </head>
 
   <body>
-    <div class="navbar">
-      <div class="navbar-brand">
-        <a href="<%= route_path(@conn, :index) %>">
-          <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
-        </a>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <%= link "Routes", to: route_path(@conn, :index), class: "navbar-item" %>
+    <div class="container">
+      <div class="navbar">
+        <div class="navbar-brand">
+          <a href="<%= route_path(@conn, :index) %>">
+            <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
+          </a>
+        </div>
+        <div class="navbar-menu">
+          <div class="navbar-start">
+            <%= link "Routes", to: route_path(@conn, :index), class: "navbar-item" %>
+          </div>
         </div>
       </div>
     </div>
+
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            <%= @view_module.page_title(@view_template, assigns) %>
+          </h1>
+          <h2 class="subtitle">
+            Cagayan de Oro jeepney routes in one place
+          </h2>
+        </div>
+      </div>
+    </section>
 
     <div class="container">
       <% if info = get_flash(@conn, :info) do %>
