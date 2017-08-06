@@ -28,6 +28,9 @@ defmodule HelloPhoenix.RouteApiController do
         case Repo.insert(changeset) do
             {:ok, route} -> 
                 relate_waypoints(route, waypoints)
+                json conn, %{
+                    "success": true
+                }
         end
     end
 

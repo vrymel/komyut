@@ -1,10 +1,14 @@
-import { first, last, slice } from "lodash/fp"
+import { first, last, slice } from "lodash/fp";
+// TODO: read more about runtime and compiletime versions of vue
+import Vue from "vue/dist/vue";
 
-let map = null
-const directionsService = new google.maps.DirectionsService
-const directionsDisplay = new google.maps.DirectionsRenderer
-const waypoints = []
-let pageRoutes = null
+const directionsService = new google.maps.DirectionsService;
+const directionsDisplay = new google.maps.DirectionsRenderer;
+
+let map = null;
+let pageRoutes = null;
+let waypointsList;
+
 
 function init(configPageRoutes) {
     pageRoutes = configPageRoutes
@@ -16,7 +20,25 @@ function init(configPageRoutes) {
     directionsDisplay.setMap(map);
     
     attachEventHandlers();
+    initWaypointList();
 }
+
+const initWaypointList = () => {
+    waypointsList = new Vue({
+        el: "#waypoints-list",
+        data: {
+            waypoints: []
+        },
+        methods: {
+            removeWaypoint: function (waypoint){
+                this.waypoints = this.waypoints.filter((w) => {
+                    return w !== waypoint;
+                });
+                updateRouteMap();
+            }
+        }
+    });
+};
 
 function attachEventHandlers() {
     map.addListener("click", function(data) {
@@ -25,9 +47,9 @@ function attachEventHandlers() {
         const lng = latLng.lng()
         
         const mapLatLng = new google.maps.LatLng(lat, lng)
-        
-        waypoints.push(mapLatLng)
-        updateRouteMap()   // test
+
+        waypointsList.waypoints.push(mapLatLng)
+        updateRouteMap();
     });
     
     document.getElementById("submit").addEventListener("click", onSubmitClick)
@@ -38,7 +60,7 @@ function onSubmitClick(event) {
     
     const payload = {
         "description": routeDescription,
-        "waypoints": waypoints.map((w) => w.toJSON())
+        "waypoints": waypointsList.waypoints.map((w) => w.toJSON())
     }
     
     fetch(pageRoutes.CREATE, {
@@ -49,7 +71,12 @@ function onSubmitClick(event) {
         },
         "body": JSON.stringify(payload),
         "credentials": "same-origin" // needed for x-csrf-token to work
-    }).then(console.log)
+    }).then(() => {
+        waypointsList.waypoints = [];
+        directionsDisplay.set('directions', null);
+        updateRouteMap();
+        // alert("Route created!")
+    })
 }
 
 function getCSRFToken() {
@@ -57,8 +84,11 @@ function getCSRFToken() {
 }
 
 function updateRouteMap() {
-    if (waypoints.length < 2) 
+    if (waypointsList.waypoints.length < 2) {
         return;
+    }
+
+    const waypoints = waypointsList.waypoints;
     
     const f = first(waypoints)
     const l = last(waypoints);
