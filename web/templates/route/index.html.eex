@@ -1,11 +1,44 @@
-<div class="content">
-    <h5>Routes available</h5>
-    <%= link "Add new route", to: route_path(@conn, :new), class: "button is-primary" %>
-    <ul>
-    <%= for route <- @routes do %>
-        <li>
-            <%= link route.description, to: route_path(@conn, :show, route) %>
-        </li>
-    <%= end %>
-    </ul>
+<div class="route-index container">
+	<div class="columns">
+		<div class="column is-one-third routes-panel">
+			<nav class="panel">
+				<p class="panel-heading">
+					Routes
+				</p>
+
+				<%= for route <- @routes do %>
+				<a class="panel-block route-item" data-route-id="<%= route.id %>">
+					<%= route.description %>
+				</a>
+				<%= end %>
+			</nav>
+		</div>
+
+		<div class="column route-card-column">
+			<div class="card route-card">
+				<div class="card-content">
+					<div id="map"></div>
+					<h5 class="description title is-5"></h5>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
+
+<script>
+	function ready() {
+		var index = require("web/static/js/route/index.js");
+
+		index.init();
+	}
+
+	if (document.readyState === "complete" || document.readyState !== "loading") {
+		ready();
+	} else {
+		document.addEventListener("DOMContentLoaded", ready);
+	}
+</script>

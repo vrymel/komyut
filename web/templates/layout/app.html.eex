@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Hello HelloPhoenix!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-  </head>
+  <title>Hello HelloPhoenix!</title>
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+</head>
 
-  <body>
+<body>
+  <!--
     <div class="container">
       <div class="navbar">
         <div class="navbar-brand">
@@ -25,20 +26,20 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>  -->
 
     <section class="hero is-primary">
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            <%= @view_module.page_title(@view_template, assigns) %>
+            Jeepney Routes
           </h1>
           <h2 class="subtitle">
             Cagayan de Oro jeepney routes in one place
           </h2>
         </div>
       </div>
-    </section>
+    </section> 
 
     <div class="container">
       <% if info = get_flash(@conn, :info) do %>
@@ -53,11 +54,13 @@
       </article>
       <% end %>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
 
     </div> <!-- /container -->
+
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>    
+
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
-</html>
+  </html>
