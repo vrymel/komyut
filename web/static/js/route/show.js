@@ -1,49 +1,52 @@
-import {origin, destination, between} from "./helper"
+import {origin, destination, between} from "./helper";
 
-const directionsService = new google.maps.DirectionsService
-const directionsDisplay = new google.maps.DirectionsRenderer
+let map;
+let routePath;
 
 const init = (routeId) => {
-    const mapContainer = document.getElementById("map");
+	const mapContainer = document.getElementById("map");
 
-    getWaypoints(routeId)
-        .then((waypoints) => {
-            initMap(mapContainer, waypoints)
-        })
+	getWaypoints(routeId)
+	.then((waypoints) => {
+		initMap(mapContainer, waypoints);
+	})
 };
 
 const getWaypoints = (routeId) => {
-    return fetch(`http://localhost:4000/api/routes/${routeId}`)
-        .then((response) => response.json())
-        .then((json) => json.waypoints)
+	return fetch(`http://localhost:4000/api/routes/${routeId}`)
+	.then((response) => response.json())
+	.then((json) => json.waypoints)
 };
 
-function initMap(mapContainer, waypoints) {
-    var map = new google.maps.Map(mapContainer, {
-        center: new google.maps.LatLng(8.48379, 124.6509111),
-        zoom: 16
-    });
-    
-    directionsDisplay.setMap(map);
+const initMap = (mapContainer, waypoints) => {
+	const originWaypoint = waypoints[0];
+	const destinationWaypoint = waypoints[waypoints.length - 1];
 
-    const originLatLng = origin(waypoints)
-    const destinationLatLng = destination(waypoints)
-    const betweenLatLng = between(waypoints)
+	map = new google.maps.Map(mapContainer, {
+		"center": originWaypoint,
+		"zoom": 15
+	});
 
-    directionsService.route({
-        origin: new google.maps.LatLng(originLatLng.lat, destinationLatLng.lng),
-        destination: new google.maps.LatLng(destinationLatLng.lat, destinationLatLng.lng),
-        waypoints: betweenLatLng.map((waypoint) => { 
-            return {
-                location: new google.maps.LatLng(waypoint.lat, waypoint.lng)
-            }
-         }),
-        travelMode: "DRIVING"
-    }, function(response, status) {
-        if (status === "OK") {
-            directionsDisplay.setDirections(response);
-        }
+	routePath = new google.maps.Polyline({
+		"path": waypoints,
+		"strokeColor": '#FF0000',
+		"strokeOpacity": 1.0,
+		"strokeWeight": 2
+	});
+	routePath.setMap(map);
+
+
+
+	const originMarker = new google.maps.Marker({
+        "position": originWaypoint,
+        "map": map,
+        "title": "Origin"
     });
+    const destinationMarker = new google.maps.Marker({
+    	"position": destinationWaypoint,
+    	"map": map,
+    	"title": "Destination"
+    })
 };
 
 export default init;
