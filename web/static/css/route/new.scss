@@ -1,7 +1,11 @@
-.route-new.container {
-	#submit {
-		margin-top: 5px;
-	}	
+.new {
+	padding-bottom: 20px;
+
+	.route-new.container {
+		#submit {
+			margin-top: 5px;
+		}
+	}
 
 	#map {
 		height: 500px;

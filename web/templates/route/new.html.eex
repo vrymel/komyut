@@ -1,44 +1,49 @@
-<div class="route-new container">
-  <%= form_for @changeset, route_path(@conn, :create), fn f -> %>
-
-  <div class="field">
-    <label class="label">Description</label>
-    <p class="control">
-      <%= text_input f, :description, class: "input" %>
-    </p>
-    <%= error_tag f, :description %>
-
-    <div id="submit" class="button is-primary">Create</div>
-  </div>
-
-  <div class="columns">
-  <div id="map" class="column"></div>
-    <div id="waypoints-list" class="column">
-      <div v-for="w in waypoints">
-        <span>{{w}}</span>
-        <i class="fa fa-times" v-on:click="removeWaypoint(w)"></i>
-      </div>
+<div class="new">
+    <div class="columns">
+        <div class="column is-three-quarters">
+            <div id="map"></div>
+        </div>
+        <div id="waypoints-list" class="column">
+            <div v-for="(w, index) in waypoints">
+                <span>{{w}}</span>
+                <i class="fa fa-times" v-on:click="removeWaypoint(w, index)"></i>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <%= end %>
+    <div class="route-new container">
+        <%= form_for @changeset, route_path(@conn, :create), fn f -> %>
 
+        <div class="field">
+            <label class="label">Description</label>
+            <p class="control">
+              <%= text_input f, :description, class: "input" %>
+          </p>
+          <%= error_tag f, :description %>
+
+          <div id="submit" class="button is-primary">
+            Create
+        </div>
+    </div>
+</div>
+
+<%= end %>
 </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
 <script>
-  PAGE_ROUTES = {
-    "CREATE": "<%= route_api_path(@conn, :create) %>"
-  };
+    PAGE_ROUTES = {
+        "CREATE": "<%= route_api_path(@conn, :create) %>"
+    };
 
-  function ready() {
-    require("web/static/js/route/new.js").default(PAGE_ROUTES)
-  }
+    function ready() {
+        require("web/static/js/route/new.js").default(PAGE_ROUTES)
+    }
 
 
-  if (document.readyState === "complete" || document.readyState !== "loading") {
-    ready();
-  } else {
-    document.addEventListener("DOMContentLoaded", ready);
-  }
+    if (document.readyState === "complete" || document.readyState !== "loading") {
+        ready();
+    } else {
+        document.addEventListener("DOMContentLoaded", ready);
+    }
 </script>
