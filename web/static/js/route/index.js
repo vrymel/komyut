@@ -1,41 +1,65 @@
 import {origin, destination, between} from "./helper";
-import $ from "jquery";
+import Vue from "vue/dist/vue";
 
-const $map = $("#map");
-const $routesPanel = $(".routes-panel");
-const $routeCard = $(".route-card");
 let routePath;
 let map;
 let originMarker;
 let destinationMarker;
+let routeCard;
+let routesPanel;
+let pageRoutes;
 
-const init = () => {
-    initMap($map);
-    attachEventHandlers();
+const init = (_pageRoutes) => {
+	pageRoutes = _pageRoutes;
+
+    initRouteCard();
+    initRoutesPanel();
 };
 
-const initMap = ($mapContainer) => {
-    map = new google.maps.Map($mapContainer[0], {
-        center: new google.maps.LatLng(8.48379, 124.6509111),
-        zoom: 14
+const initRouteCard = () => {
+	routeCard = new Vue({
+		"el": "#route-card",
+		"data": {
+			"routeData": null
+		},
+		"methods": {
+			"setRouteData": function(routeData) {
+				this.routeData = routeData;
+			},
+			"toRoutePage": function() {
+
+			}
+		},
+		"mounted": function() {
+			initMap(this.$refs.map);
+		}
+	});
+};
+
+const initRoutesPanel = () => {
+	routesPanel = new Vue({
+		"el": "#routes-panel",
+		"methods": {
+			"loadRoute": function(routeId) {
+				loadRoute(routeId);
+			}
+		}
+	});
+};
+
+const initMap = (mapContainer) => {
+    map = new google.maps.Map(mapContainer, {
+        "center": new google.maps.LatLng(8.48379, 124.6509111),
+        "zoom": 14
     });
 
 	routePath = new google.maps.Polyline({
-		strokeColor: '#FF0000',
-		strokeOpacity: 1.0,
-		strokeWeight: 2
+		"strokeColor": '#FF0000',
+		"strokeOpacity": 1.0,
+		"strokeWeight": 2
 	});
 
 	routePath.setMap(map);
-};
-
-const attachEventHandlers = () => {
-    $routesPanel.on("click", ".route-item", function() {
-        var $this = $(this);
-        var routeId = $this.data("route-id");
-
-        loadRoute(routeId);
-    });
 };
 
 const loadRoute = (routeId) => {
@@ -44,7 +68,7 @@ const loadRoute = (routeId) => {
         setWaypoints(routeData.waypoints);
         setMarkers(routeData.waypoints);
 
-        $routeCard.find(".description").html(routeData.description);
+        routeCard.setRouteData(routeData);
     })
 };
 
@@ -70,7 +94,7 @@ const setMarkers = (waypoints) => {
 };
 
 const getRouteData = (routeId) => {
-    return fetch(`http://localhost:4000/api/routes/${routeId}`)
+    return fetch(`${pageRoutes.ROUTES_API}/${routeId}`)
     .then((response) => response.json())
 };
 
