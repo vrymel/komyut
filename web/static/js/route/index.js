@@ -12,7 +12,9 @@ let pageRoutes;
 const init = (_pageRoutes) => {
 	pageRoutes = _pageRoutes;
 
-    initRouteCard();
+	initMap(document.querySelector("#map"));
+
+    // initRouteCard();
     initRoutesPanel();
 };
 
@@ -38,7 +40,7 @@ const initRouteCard = () => {
 
 const initRoutesPanel = () => {
 	routesPanel = new Vue({
-		"el": "#routes-panel",
+		"el": ".routes",
 		"methods": {
 			"loadRoute": function(routeId) {
 				loadRoute(routeId);
@@ -50,7 +52,7 @@ const initRoutesPanel = () => {
 const initMap = (mapContainer) => {
     map = new google.maps.Map(mapContainer, {
         "center": new google.maps.LatLng(8.48379, 124.6509111),
-        "zoom": 14
+        "zoom": 16
     });
 
 	routePath = new google.maps.Polyline({
@@ -83,12 +85,14 @@ const setMarkers = (waypoints) => {
 
 	originMarker = new google.maps.Marker({
         "position": originWaypoint,
-        "map": map,
+		"map": map,
+		"label": "A",
         "title": "Origin"
     });
     destinationMarker = new google.maps.Marker({
     	"position": destinationWaypoint,
-    	"map": map,
+		"map": map,
+		"label": "B",
     	"title": "Destination"
     })
 };

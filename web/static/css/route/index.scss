@@ -1,15 +1,29 @@
+$routesHeight: 70px;
+
 .route-index {
-	margin-top: 20px;
+	.routes {
+		padding: 5px 10px;
+		height: $routesHeight;
 
-	.routes-panel {
-	}
-
-	.route-card-column {
-		padding-bottom: 20px;
-
-		#map {
-			height: 300px;
+		.header {
+			font-size: 0.8em;
+			margin-left: 10px;
+			margin-top: 4px;
+			color: gray;
 		}
+
+		.routes-list {
+			display: flex;
+
+			.route-item {
+				cursor: pointer;
+				padding: 4px 10px;
+			}
+		}
+	}
+	
+	#map {
+		height: calc(100vh - #{$routesHeight});
 	}
 }
 

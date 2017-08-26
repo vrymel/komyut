@@ -14,35 +14,6 @@
 </head>
 
 <body>
-  <!--
-    <div class="container">
-      <div class="navbar">
-        <div class="navbar-brand">
-          <a href="<%= route_path(@conn, :index) %>">
-            <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
-          </a>
-        </div>
-        <div class="navbar-menu">
-          <div class="navbar-start">
-            <%= link "Routes", to: route_path(@conn, :index), class: "navbar-item" %>
-          </div>
-        </div>
-      </div>
-    </div>  -->
-
-    <section class="hero is-primary">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Jeepney Routes
-          </h1>
-          <h2 class="subtitle">
-            Cagayan de Oro jeepney routes in one place
-          </h2>
-        </div>
-      </div>
-    </section> 
-
     <div class="container">
       <% if info = get_flash(@conn, :info) do %>
       <article class="message is-info">
@@ -55,13 +26,11 @@
         <div class="message-body"><%= error %></div>
       </article>
       <% end %>
-
-
     </div> <!-- /container -->
 
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
-    </main>    
+    </main>
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>

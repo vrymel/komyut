@@ -11,17 +11,17 @@
         </div>
     </div>
 
-    <div class="route-new container">
+    <div class="container">
         <%= form_for @changeset, route_path(@conn, :create), fn f -> %>
 
-        <div class="field">
+        <div class="form-group">
             <label class="label">Description</label>
             <p class="control">
-              <%= text_input f, :description, class: "input" %>
+              <%= text_input f, :description, class: "form-control" %>
           </p>
           <%= error_tag f, :description %>
 
-          <div id="submit" class="button is-primary">
+          <div id="submit" class="btn btn-primary">
             Create
         </div>
     </div>

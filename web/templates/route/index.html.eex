@@ -1,34 +1,18 @@
-<div class="route-index container">
-	<div class="columns">
-		<div class="column is-one-third routes-panel">
-			<nav id="routes-panel" class="panel">
-				<p class="panel-heading">
-					Routes
-				</p>
+<div class="route-index">
+	<div class="routes">
+		<h6 class="header">Routes</h6>
 
-				<%= for route <- @routes do %>
-				<a class="panel-block route-item" v-on:click="loadRoute(<%= route.id %>)">
-					<%= route.description %>
-				</a>
-				<%= end %>
-			</nav>
+		<div class=routes-list>
+		<%= for route <- @routes do %>
+			<div class="route-item" v-on:click="loadRoute(<%= route.id %>)">
+				<%= route.description %>
+			</div>
+		<%= end %>
 		</div>
-
-		<div class="column route-card-column">
-			<div id="route-card" class="card route-card">
-				<div class="card-content">
-					<div id="map" ref="map"></div>
-					<h5 class="description title is-5" v-if="routeData">{{routeData.description}}</h5>
-				</div>
-                 <footer class="card-footer">
-                    <a class="card-footer-item" :href="'<%= route_path(@conn, :index) %>/' + routeData.id" v-if="routeData">View</a>
-                </footer>
-            </div>
-        </div>
-    </div>
+	</div>
+	
+	<div id="map" ref="map"></div>
 </div>
-
-
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
 
