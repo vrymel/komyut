@@ -57,7 +57,8 @@ exports.config = {
     },
     sass: {
       options: {
-        includePaths: ["node_modules/bulma"]
+        includePaths: ["node_modules/bootstrap/scss"],
+        precision: 8
       }
     }
   },
