@@ -1,8 +1,25 @@
-<div class="route-index">
-	<div class="routes">
-		<h6 class="header">Routes</h6>
+<div class="module-route-index">
+	<div id="map" ref="map"></div>
 
-		<div class=routes-list>
+	<div class="route-context">
+		<div class="current">
+			<h6 class="header">Route</h6>
+
+			<div class="route-name">
+				Route D
+			</div>
+		</div>
+
+		<div class="segments">
+			<h6 class="header">Segments</h6>
+
+			<ul class="hlist">
+				<li class="active">East Bound</li>
+				<li>West Bound</li>
+			</ul>
+		</div>
+
+		<div class=routes-list style="display: none;">
 		<%= for route <- @routes do %>
 			<div class="route-item" v-on:click="loadRoute(<%= route.id %>)">
 				<%= route.description %>
@@ -10,8 +27,6 @@
 		<%= end %>
 		</div>
 	</div>
-	
-	<div id="map" ref="map"></div>
 </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>

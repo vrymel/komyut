@@ -1,20 +1,54 @@
+@import "../_variables";
+
 $routesHeight: 70px;
 
-.route-index {
-	.routes {
-		padding: 5px 10px;
+.module-route-index {
+	.route-context {
+		display: flex;
+		padding: 12px 8px;
 		height: $routesHeight;
-
+		background-color: $primaryColor;
+		color: $primaryTextColor;
+		border-top: solid 2px lighten($primaryColor, 1%);
+		
 		.header {
 			font-size: 0.8em;
-			margin-left: 10px;
-			margin-top: 4px;
-			color: gray;
+			color: transparentize($primaryTextColor, 0.3);
 		}
-
+		
+		.current {
+			flex-basis: 300px;
+			flex-shrink: 1;
+			
+			.route-name {
+				font-weight: bold;
+			}
+		}
+		
+		.segments {
+			flex-basis: 250px;
+			flex-shrink: 2;
+			
+			.hlist li {
+				background-color: darken($primaryColor, 2%);
+				padding: 3px 8px;
+				border-radius: 3px;
+				font-size: 0.8em;
+				cursor: pointer;
+				
+				&:hover {
+					background-color: darken($primaryColor, 3.5%);
+				}
+				
+				&.active, &:hover.active {
+					background-color: darken($primaryColor, 7%);
+				}			
+			}
+		}
+		
 		.routes-list {
 			display: flex;
-
+			
 			.route-item {
 				cursor: pointer;
 				padding: 4px 10px;
