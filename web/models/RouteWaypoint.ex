@@ -5,7 +5,7 @@ defmodule HelloPhoenix.RouteWaypoint do
         field :lat, :float
         field :lng, :float
         field :order_value, :integer
-        belongs_to :route, HelloPhoenix.Route
+        belongs_to :route_segment, HelloPhoenix.Route
 
         timestamps()
     end

@@ -63,12 +63,13 @@ function attachEventHandlers() {
 }
 
 function onSubmitClick(event) {
-    const routeDescription = document.getElementById("route_description").value
-    
+    const routeDescription = document.getElementById("route_description").value;
+    const routeId = document.getElementById("route_route_id").value;
     const payload = {
-        "description": routeDescription,
-        "waypoints": waypointsList.waypoints.map((w) => w.toJSON())
-    }
+        description: routeDescription,
+        waypoints: waypointsList.waypoints.map((w) => w.toJSON()),
+        route_id: routeId
+    };
     
     fetch(pageRoutes.CREATE, {
         "method": "POST",

@@ -18,10 +18,16 @@
             <label class="label">Description</label>
             <p class="control">
               <%= text_input f, :description, class: "form-control" %>
-          </p>
+            </p>
           <%= error_tag f, :description %>
+          </div>
+          <div class="form-group">
+            <label class="label">Route ID</label>
+            <%= text_input f, :route_id, class: "form-control" %>
+            <%= error_tag f, :route_id %>
+          </div>
 
-          <div id="submit" class="btn btn-primary">
+        <div id="submit" class="btn btn-primary">
             Create
         </div>
     </div>
