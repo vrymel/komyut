@@ -1,12 +1,12 @@
 <div class="module-route-index">
 	<div id="map" ref="map"></div>
 
-	<div class="route-context">
+	<div id="route-context" class="route-context">
 		<div class="current">
 			<h6 class="header">Route</h6>
 
 			<div class="route-name">
-				Route D
+				{{description}}
 			</div>
 		</div>
 
@@ -14,8 +14,7 @@
 			<h6 class="header">Segments</h6>
 
 			<ul class="hlist">
-				<li class="active">East Bound</li>
-				<li>West Bound</li>
+				<li v-for="segment in segments" v-on:click="loadWaypoints(segment)">{{segment.description}}</li>
 			</ul>
 		</div>
 

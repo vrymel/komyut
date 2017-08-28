@@ -28,6 +28,7 @@ $routesHeight: 70px;
 		.segments {
 			flex-basis: 250px;
 			flex-shrink: 2;
+			flex-grow: 1;
 			
 			.hlist li {
 				background-color: darken($primaryColor, 2%);

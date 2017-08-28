@@ -35,6 +35,7 @@ defmodule HelloPhoenix.Router do
     pipe_through :browser
 
     resources "/", RouteApiController
+    get "/get_segment_waypoints/:segment_id", RouteApiController, :get_segment_waypoints
   end
 
   # Other scopes may use custom stacks.

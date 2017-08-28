@@ -6,21 +6,34 @@ defmodule HelloPhoenix.RouteApiController do
     
     def show(conn, %{"id" => route_id}) do
         route = Repo.get(Route, route_id)
-        |> Repo.preload(:waypoints)
-        
-        new_waypoints = Enum.map route.waypoints, 
-        fn(waypoint) -> 
-            Map.from_struct(waypoint) 
-            |> Map.take([:id, :lat, :lng])
+        |> Repo.preload(:segments)
+
+        new_segments = Enum.map route.segments, 
+        fn(segment) -> 
+            Map.from_struct(segment) 
+            |> Map.take([:description, :id])
         end
         
         payload = %{
             id: route.id,
             description: route.description,
-            waypoints: new_waypoints
+            segments: new_segments
         }
         
         json conn, payload
+    end
+
+    def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do
+        segment = Repo.get(RouteSegment, segment_id)
+        |> Repo.preload(:waypoints)
+
+        new_waypoints = Enum.map segment.waypoints, 
+        fn(waypoint) -> 
+            Map.from_struct(waypoint) 
+            |> Map.take([:id, :lat, :lng])
+        end
+
+        json conn, new_waypoints
     end
     
     def create(conn, %{"description" => route_description, "route_id" => route_id, "waypoints" => waypoints}) do

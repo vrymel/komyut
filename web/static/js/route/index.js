@@ -1,4 +1,4 @@
-import {origin, destination, between} from "./helper";
+import { origin, destination, between } from "./helper";
 import Vue from "vue/dist/vue";
 
 let routePath;
@@ -14,46 +14,49 @@ const init = (_pageRoutes) => {
 
 	initMap(document.querySelector("#map"));
 
-    // initRouteCard();
-    initRoutesPanel();
+	initRouteContextPanel();
 };
 
-const initRouteCard = () => {
-	routeCard = new Vue({
-		"el": "#route-card",
-		"data": {
-			"routeData": null
-		},
-		"methods": {
-			"setRouteData": function(routeData) {
-				this.routeData = routeData;
-			},
-			"toRoutePage": function() {
-
-			}
-		},
-		"mounted": function() {
-			initMap(this.$refs.map);
-		}
-	});
-};
-
-const initRoutesPanel = () => {
+const initRouteContextPanel = () => {
 	routesPanel = new Vue({
-		"el": ".routes",
-		"methods": {
-			"loadRoute": function(routeId) {
-				loadRoute(routeId);
+		el: "#route-context",
+		data: {
+			description: "Select a route",
+			segments: []
+		},
+		methods: {
+			setContext: function (routeData) {
+				this.description = routeData.description;
+				this.segments = routeData.segments;
+			},
+			loadRoute: function (routeId) {
+				var self = this;
+
+				fetch(`${pageRoutes.ROUTES_API}/${routeId}`)
+					.then((response) => response.json())
+					.then((routeData) => {
+						self.setContext(routeData);
+					});
+			},
+			loadWaypoints: function (segment) {
+				fetch(`${pageRoutes.ROUTES_API}/get_segment_waypoints/${segment.id}`)
+					.then((response) => response.json())
+					.then((waypoints) => {
+						setWaypoints(waypoints);
+						setMarkers(waypoints);
+					});
 			}
 		}
 	});
+
+	window.routesPanel = routesPanel;
 };
 
 const initMap = (mapContainer) => {
-    map = new google.maps.Map(mapContainer, {
-        "center": new google.maps.LatLng(8.48379, 124.6509111),
-        "zoom": 16
-    });
+	map = new google.maps.Map(mapContainer, {
+		"center": new google.maps.LatLng(8.48379, 124.6509111),
+		"zoom": 16
+	});
 
 	routePath = new google.maps.Polyline({
 		"strokeColor": '#FF0000',
@@ -62,16 +65,6 @@ const initMap = (mapContainer) => {
 	});
 
 	routePath.setMap(map);
-};
-
-const loadRoute = (routeId) => {
-    getRouteData(routeId)
-    .then((routeData) => {
-        setWaypoints(routeData.waypoints);
-        setMarkers(routeData.waypoints);
-
-        routeCard.setRouteData(routeData);
-    })
 };
 
 const setMarkers = (waypoints) => {
@@ -84,31 +77,29 @@ const setMarkers = (waypoints) => {
 	!!destinationMarker && destinationMarker.setMap(null);
 
 	originMarker = new google.maps.Marker({
-        "position": originWaypoint,
+		"position": originWaypoint,
 		"map": map,
 		"label": "A",
-        "title": "Origin"
-    });
-    destinationMarker = new google.maps.Marker({
-    	"position": destinationWaypoint,
+		"title": "Origin"
+	});
+	destinationMarker = new google.maps.Marker({
+		"position": destinationWaypoint,
 		"map": map,
 		"label": "B",
-    	"title": "Destination"
-    })
+		"title": "Destination"
+	})
 };
 
 const getRouteData = (routeId) => {
-    return fetch(`${pageRoutes.ROUTES_API}/${routeId}`)
-    .then((response) => response.json())
 };
 
 const setWaypoints = (waypoints) => {
 	const path = routePath.getPath();
-	while(path.length)
+	while (path.length)
 		path.removeAt(0);
 
-	for(var i = 0; i < waypoints.length; i++) {
-		const {lat, lng} = waypoints[i];
+	for (var i = 0; i < waypoints.length; i++) {
+		const { lat, lng } = waypoints[i];
 		const mapLatLng = new google.maps.LatLng(lat, lng)
 
 		path.push(mapLatLng);
@@ -117,6 +108,5 @@ const setWaypoints = (waypoints) => {
 
 
 export {
-    init,
-    loadRoute
+	init
 }
