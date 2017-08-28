@@ -14,9 +14,9 @@
 			</div>
 		</div>
 
-		<div class="segments">
+		<div class="segments" v-if="segments.length">
 			<h6 class="header">Segments</h6>
-
+			
 			<ul class="hlist">
 				<li 
 					v-bind:class="{ active: loadedSegment && loadedSegment.id === segment.id }"
