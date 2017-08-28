@@ -22,7 +22,8 @@ const initRouteContextPanel = () => {
 		el: "#route-context",
 		data: {
 			description: "Select a route",
-			segments: []
+			segments: [],
+			loadedSegment: null
 		},
 		methods: {
 			setContext: function (routeData) {
@@ -30,20 +31,26 @@ const initRouteContextPanel = () => {
 				this.segments = routeData.segments;
 			},
 			loadRoute: function (routeId) {
-				var self = this;
+				const self = this;
 
 				fetch(`${pageRoutes.ROUTES_API}/${routeId}`)
 					.then((response) => response.json())
 					.then((routeData) => {
 						self.setContext(routeData);
+
+						self.loadWaypoints(routeData.segments[0]);
 					});
 			},
 			loadWaypoints: function (segment) {
+				const self = this;
+
 				fetch(`${pageRoutes.ROUTES_API}/get_segment_waypoints/${segment.id}`)
 					.then((response) => response.json())
 					.then((waypoints) => {
 						setWaypoints(waypoints);
 						setMarkers(waypoints);
+
+						self.loadedSegment = segment;
 					});
 			}
 		}

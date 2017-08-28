@@ -14,7 +14,10 @@
 			<h6 class="header">Segments</h6>
 
 			<ul class="hlist">
-				<li v-for="segment in segments" v-on:click="loadWaypoints(segment)">{{segment.description}}</li>
+				<li 
+					v-bind:class="{ active: loadedSegment && loadedSegment.id === segment.id }"
+					v-for="segment in segments" 
+					v-on:click="loadWaypoints(segment)">{{segment.description}}</li>
 			</ul>
 		</div>
 
