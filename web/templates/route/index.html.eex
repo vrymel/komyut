@@ -2,6 +2,10 @@
 	<div id="map" ref="map"></div>
 
 	<div id="route-context" class="route-context">
+		<div class="app-logo">
+            <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
+		</div>
+
 		<div class="current">
 			<h6 class="header">Route</h6>
 
@@ -19,14 +23,6 @@
 					v-for="segment in segments" 
 					v-on:click="loadWaypoints(segment)">{{segment.description}}</li>
 			</ul>
-		</div>
-
-		<div class=routes-list style="display: none;">
-		<%= for route <- @routes do %>
-			<div class="route-item" v-on:click="loadRoute(<%= route.id %>)">
-				<%= route.description %>
-			</div>
-		<%= end %>
 		</div>
 	</div>
 </div>

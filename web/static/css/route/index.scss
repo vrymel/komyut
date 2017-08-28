@@ -15,6 +15,10 @@ $routesHeight: 70px;
 			font-size: 0.8em;
 			color: transparentize($primaryTextColor, 0.3);
 		}
+
+		.app-logo {
+			flex-basis: 100px;
+		}
 		
 		.current {
 			flex-basis: 300px;
@@ -44,15 +48,6 @@ $routesHeight: 70px;
 				&.active, &:hover.active {
 					background-color: darken($primaryColor, 7%);
 				}			
-			}
-		}
-		
-		.routes-list {
-			display: flex;
-			
-			.route-item {
-				cursor: pointer;
-				padding: 4px 10px;
 			}
 		}
 	}
