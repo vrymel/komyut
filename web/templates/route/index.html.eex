@@ -34,6 +34,35 @@
 			</ul>
 		</div>
 	</div>
+
+	<div id="city-selection-modal" class="app-modal">
+		<div class="modal-main">
+			<header>
+				City Select
+			</header>
+			<div class="modal-body">
+				<p>
+					We currently only have route information for the city of <strong>Cagayan de Oro</strong>. But rest assured, as support
+					of as many cities as possible is on our priority checklist. As of right now, we are on the constant
+					refinement phase of the application to make it stable and fully accomplish its designed purpose.
+				</p>
+				<p>
+					But we can't do it without your help! If you'd like to volunteer and help us map the route of different
+					cities that you are familiar with, give us a message at route-creator@sasakayan.com. 
+				</p>
+				<p>
+					We hope to hear from you soon!
+				</p>
+				<p>
+					Thank you,<br>
+					Sasakayan Team
+				</p>
+			</div>
+			<footer>
+				<button type="button" class="btn btn-secondary">Close</button>
+ 			</footer>
+		</div>
+	</div>
 </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>

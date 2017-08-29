@@ -1,3 +1,5 @@
+@import "./_variables";
+
 .hlist {
     display: flex;
     padding: 0;
@@ -5,5 +7,48 @@
     li {
         list-style: none;
         margin-right: 20px;
+    }
+}
+
+.app-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    
+    .modal-main {
+        background-color: white;
+        border: solid 1px $borderColor;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+
+        width: 45vw;
+        
+        header {
+            display: block;
+            padding: 15px;
+            border-bottom: solid 1px $borderColor;
+            color: $primaryTextColorDark;
+            background-color: $secondaryBackgroundColor;
+        }
+        
+        .modal-body {
+            padding: 15px;
+        }
+
+        footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 5px 15px;
+
+            background-color: $secondaryBackgroundColor;
+            border-top: solid 1px $borderColor;
+        }
     }
 }
