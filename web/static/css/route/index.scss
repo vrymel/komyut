@@ -29,8 +29,10 @@ $routesHeight: 70px;
 			}
 		}
 
-		.current.city .description {
-			cursor: pointer;
+		.current.city, .current.route {
+			.description {
+				cursor: pointer;
+			}
 		}
 		
 		.segments {

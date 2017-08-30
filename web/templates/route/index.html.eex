@@ -18,7 +18,7 @@
 		<div class="current route">
 			<h6 class="header">Route</h6>
 
-			<div class="description">
+			<div class="description" v-on:click="showRouteSelectModal">
 				{{description}}
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	<div id="city-selection-modal" class="app-modal" v-show="visible">
+	<div id="city-select-modal" class="app-modal" v-show="visible">
 		<div class="modal-main">
 			<header>
 				City Select
@@ -57,6 +57,25 @@
 					Thank you,<br>
 					Sasakayan Team
 				</p>
+			</div>
+			<footer>
+				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
+ 			</footer>
+		</div>
+	</div>
+
+	<div id="route-select-modal" class="app-modal" v-show="visible">
+		<div class="modal-main">
+			<header>
+				Route Select
+			</header>
+			<div class="modal-body">
+				<p>Select a route to view its path</p>
+
+				<ul class="list-group">
+					<li class="list-group-item">Route C</li>
+					<li class="list-group-item">Route D</li>
+				</ul>
 			</div>
 			<footer>
 				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>

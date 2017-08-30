@@ -9,6 +9,7 @@ let routeCard;
 let routesPanel;
 let pageRoutes;
 let citySelectModal;
+let routeSelectModal;
 
 const init = (_pageRoutes) => {
 	pageRoutes = _pageRoutes;
@@ -16,11 +17,29 @@ const init = (_pageRoutes) => {
 	initMap(document.querySelector("#map"));
 	initRouteContextPanel();
 	initCitySelectModal();
+	initRouteSelectModal();
 };
 
 const initCitySelectModal = () => {
 	citySelectModal = new Vue({
-		el: "#city-selection-modal",
+		el: "#city-select-modal",
+		data: {
+			visible: false
+		},
+		methods: {
+			close: function () {
+				this.visible = false;
+			},
+			show: function () {
+				this.visible = true;
+			}
+		}
+	});
+};
+
+const initRouteSelectModal = () => {
+	routeSelectModal = new Vue({
+		el: "#route-select-modal",
 		data: {
 			visible: false
 		},
@@ -73,6 +92,9 @@ const initRouteContextPanel = () => {
 			},
 			showCitySelectModal: function () {
 				citySelectModal.show();
+			},
+			showRouteSelectModal: function () {
+				routeSelectModal.show();
 			}
 		}
 	});
