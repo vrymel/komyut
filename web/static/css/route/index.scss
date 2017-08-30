@@ -28,6 +28,10 @@ $routesHeight: 70px;
 				font-weight: bold;
 			}
 		}
+
+		.current.city .description {
+			cursor: pointer;
+		}
 		
 		.segments {
 			flex-basis: 250px;

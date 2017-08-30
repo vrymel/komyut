@@ -9,7 +9,7 @@
 		<div class="current city">
 			<h6 class="header">City</h6>
 
-			<div class="description">
+			<div class="description" v-on:click="showCitySelectModal">
 				Cagayan de Oro City
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	<div id="city-selection-modal" class="app-modal">
+	<div id="city-selection-modal" class="app-modal" v-show="visible">
 		<div class="modal-main">
 			<header>
 				City Select
@@ -59,7 +59,7 @@
 				</p>
 			</div>
 			<footer>
-				<button type="button" class="btn btn-secondary">Close</button>
+				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
  			</footer>
 		</div>
 	</div>

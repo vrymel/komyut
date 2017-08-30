@@ -8,13 +8,31 @@ let destinationMarker;
 let routeCard;
 let routesPanel;
 let pageRoutes;
+let citySelectModal;
 
 const init = (_pageRoutes) => {
 	pageRoutes = _pageRoutes;
 
 	initMap(document.querySelector("#map"));
-
 	initRouteContextPanel();
+	initCitySelectModal();
+};
+
+const initCitySelectModal = () => {
+	citySelectModal = new Vue({
+		el: "#city-selection-modal",
+		data: {
+			visible: false
+		},
+		methods: {
+			close: function () {
+				this.visible = false;
+			},
+			show: function () {
+				this.visible = true;
+			}
+		}
+	});
 };
 
 const initRouteContextPanel = () => {
@@ -52,6 +70,9 @@ const initRouteContextPanel = () => {
 
 						self.loadedSegment = segment;
 					});
+			},
+			showCitySelectModal: function () {
+				citySelectModal.show();
 			}
 		}
 	});
