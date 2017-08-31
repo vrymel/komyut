@@ -36,6 +36,7 @@ defmodule HelloPhoenix.Router do
 
     resources "/", RouteApiController
     get "/get_segment_waypoints/:segment_id", RouteApiController, :get_segment_waypoints
+    get "/get_city_routes/:city_id", RouteApiController, :get_city_routes
   end
 
   # Other scopes may use custom stacks.

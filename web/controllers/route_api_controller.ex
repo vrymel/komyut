@@ -23,6 +23,17 @@ defmodule HelloPhoenix.RouteApiController do
         json conn, payload
     end
 
+    def get_city_routes(conn, %{"city_id" => city_id}) do
+        query = from r in Route, order_by: r.description
+        routes = Repo.all(query)
+        |> Enum.map fn(route) ->
+            Map.from_struct(route)
+            |> Map.take [:description, :id]
+        end
+
+        json conn, routes
+    end
+
     def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do
         segment = Repo.get(RouteSegment, segment_id)
         |> Repo.preload(:waypoints)

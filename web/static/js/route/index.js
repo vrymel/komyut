@@ -41,14 +41,26 @@ const initRouteSelectModal = () => {
 	routeSelectModal = new Vue({
 		el: "#route-select-modal",
 		data: {
-			visible: false
+			visible: false,
+			routes: []
 		},
 		methods: {
 			close: function () {
 				this.visible = false;
 			},
 			show: function () {
+				const self = this;
+
 				this.visible = true;
+
+				fetch(`${pageRoutes.ROUTES_API}/get_city_routes/${routesPanel.cityId}`)
+					.then((response) => response.json())
+					.then((routesData) => {
+						self.routes = routesData;
+					});
+			},
+			selectRoute: function (routeId) {
+				routesPanel.loadRoute(routeId)
 			}
 		}
 	});
@@ -60,7 +72,9 @@ const initRouteContextPanel = () => {
 		data: {
 			description: "Select a route",
 			segments: [],
-			loadedSegment: null
+			loadedSegment: null,
+			cityId: null,
+			routeId: null
 		},
 		methods: {
 			setContext: function (routeData) {
@@ -75,7 +89,12 @@ const initRouteContextPanel = () => {
 					.then((routeData) => {
 						self.setContext(routeData);
 
-						self.loadWaypoints(routeData.segments[0]);
+						if (!!routeData.segments[0])
+							self.loadWaypoints(routeData.segments[0]);
+						else {
+							setWaypoints([]);
+							setMarkers([]);
+						}
 					});
 			},
 			loadWaypoints: function (segment) {
@@ -126,18 +145,22 @@ const setMarkers = (waypoints) => {
 	!!originMarker && originMarker.setMap(null);
 	!!destinationMarker && destinationMarker.setMap(null);
 
-	originMarker = new google.maps.Marker({
-		"position": originWaypoint,
-		"map": map,
-		"label": "A",
-		"title": "Origin"
-	});
-	destinationMarker = new google.maps.Marker({
-		"position": destinationWaypoint,
-		"map": map,
-		"label": "B",
-		"title": "Destination"
-	})
+	if (!!originWaypoint) {
+		originMarker = new google.maps.Marker({
+			"position": originWaypoint,
+			"map": map,
+			"label": "A",
+			"title": "Origin"
+		});
+	}
+	if (!!destinationWaypoint) {
+		destinationMarker = new google.maps.Marker({
+			"position": destinationWaypoint,
+			"map": map,
+			"label": "B",
+			"title": "Destination"
+		})
+	}
 };
 
 const getRouteData = (routeId) => {

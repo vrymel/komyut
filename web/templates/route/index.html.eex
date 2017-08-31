@@ -73,8 +73,10 @@
 				<p>Select a route to view its path</p>
 
 				<ul class="list-group">
-					<li class="list-group-item">Route C</li>
-					<li class="list-group-item">Route D</li>
+					<li 
+						class="list-group-item" 
+						v-for="route in routes"
+						v-on:click="selectRoute(route.id)">{{route.description}}</li>
 				</ul>
 			</div>
 			<footer>
