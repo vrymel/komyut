@@ -12,7 +12,8 @@ let routhPath;
 
 
 function init(configPageRoutes) {
-    pageRoutes = configPageRoutes
+    pageRoutes = configPageRoutes;
+
     map = new google.maps.Map(document.getElementById("map"), {
         center: new google.maps.LatLng(8.48379, 124.6509111),
         zoom: 16
@@ -37,14 +38,21 @@ const initWaypointList = () => {
         data: {
             waypoints: []
         },
+        computed: {
+            displayWaypoints: function() {
+                var copy = this.waypoints.slice();
+
+                return copy.reverse();
+            }
+        },
         methods: {
-            removeWaypoint: function (waypoint, index){
-                this.waypoints = this.waypoints.filter((w) => {
-                    return w !== waypoint;
+            removeWaypoint: function (removeIndex){
+                this.waypoints = this.waypoints.filter((w, index) => {
+                    return removeIndex !== index;
                 });
                 
                 const path = routhPath.getPath();
-                path.removeAt(index);
+                path.removeAt(removeIndex);
             }
         }
     });
