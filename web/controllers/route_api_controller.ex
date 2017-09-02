@@ -3,6 +3,7 @@ defmodule HelloPhoenix.RouteApiController do
     
     alias HelloPhoenix.Route
     alias HelloPhoenix.RouteSegment
+    alias HelloPhoenix.RouteWaypoint
     
     def show(conn, %{"id" => route_id}) do
         route = Repo.get(Route, route_id)
@@ -36,7 +37,7 @@ defmodule HelloPhoenix.RouteApiController do
 
     def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do
         segment = Repo.get(RouteSegment, segment_id)
-        |> Repo.preload(:waypoints)
+        |> Repo.preload(waypoints: from(w in RouteWaypoint, order_by: w.id))
 
         new_waypoints = Enum.map segment.waypoints, 
         fn(waypoint) -> 
