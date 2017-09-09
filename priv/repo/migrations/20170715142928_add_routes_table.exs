@@ -1,4 +1,4 @@
-defmodule HelloPhoenix.Repo.Migrations.AddRoutesTable do
+defmodule WaypointsDirect.Repo.Migrations.AddRoutesTable do
   use Ecto.Migration
 
   def change do

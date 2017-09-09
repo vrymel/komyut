@@ -1,5 +1,5 @@
-defmodule HelloPhoenix.PageController do
-  use HelloPhoenix.Web, :controller
+defmodule WaypointsDirect.PageController do
+  use WaypointsDirect.Web, :controller
 
   def index(conn, _params) do
     render conn, "index.html"

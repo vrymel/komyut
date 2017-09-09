@@ -1,5 +1,5 @@
-defmodule HelloPhoenix.Router do
-  use HelloPhoenix.Web, :router
+defmodule WaypointsDirect.Router do
+  use WaypointsDirect.Web, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,25 +13,25 @@ defmodule HelloPhoenix.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", HelloPhoenix do
+  scope "/", WaypointsDirect do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
-  scope "/users", HelloPhoenix do 
+  scope "/users", WaypointsDirect do 
     pipe_through :browser
 
     resources "/", UserController
   end
 
-  scope "/routes", HelloPhoenix do
+  scope "/routes", WaypointsDirect do
     pipe_through :browser
 
     resources "/", RouteController
   end
 
-  scope "/api/routes", HelloPhoenix do
+  scope "/api/routes", WaypointsDirect do
     pipe_through :browser
 
     resources "/", RouteApiController
@@ -40,7 +40,7 @@ defmodule HelloPhoenix.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HelloPhoenix do
+  # scope "/api", WaypointsDirect do
   #   pipe_through :api
   # end
 end

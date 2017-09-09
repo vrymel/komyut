@@ -1,4 +1,4 @@
-defmodule HelloPhoenix.ErrorHelpers do
+defmodule WaypointsDirect.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -32,9 +32,9 @@ defmodule HelloPhoenix.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(HelloPhoenix.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(WaypointsDirect.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(HelloPhoenix.Gettext, "errors", msg, opts)
+      Gettext.dgettext(WaypointsDirect.Gettext, "errors", msg, opts)
     end
   end
 end

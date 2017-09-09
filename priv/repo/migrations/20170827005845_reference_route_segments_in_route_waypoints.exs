@@ -1,4 +1,4 @@
-defmodule HelloPhoenix.Repo.Migrations.ReferenceRouteSegmentsInRouteWaypoints do
+defmodule WaypointsDirect.Repo.Migrations.ReferenceRouteSegmentsInRouteWaypoints do
   use Ecto.Migration
 
   def change do

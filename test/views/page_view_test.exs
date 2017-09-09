@@ -1,3 +1,3 @@
-defmodule HelloPhoenix.PageViewTest do
-  use HelloPhoenix.ConnCase, async: true
+defmodule WaypointsDirect.PageViewTest do
+  use WaypointsDirect.ConnCase, async: true
 end

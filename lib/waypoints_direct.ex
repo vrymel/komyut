@@ -1,4 +1,4 @@
-defmodule HelloPhoenix do
+defmodule WaypointsDirect do
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -9,23 +9,23 @@ defmodule HelloPhoenix do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(HelloPhoenix.Repo, []),
+      supervisor(WaypointsDirect.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(HelloPhoenix.Endpoint, []),
-      # Start your own worker by calling: HelloPhoenix.Worker.start_link(arg1, arg2, arg3)
-      # worker(HelloPhoenix.Worker, [arg1, arg2, arg3]),
+      supervisor(WaypointsDirect.Endpoint, []),
+      # Start your own worker by calling: WaypointsDirect.Worker.start_link(arg1, arg2, arg3)
+      # worker(WaypointsDirect.Worker, [arg1, arg2, arg3]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: HelloPhoenix.Supervisor]
+    opts = [strategy: :one_for_one, name: WaypointsDirect.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    HelloPhoenix.Endpoint.config_change(changed, removed)
+    WaypointsDirect.Endpoint.config_change(changed, removed)
     :ok
   end
 end

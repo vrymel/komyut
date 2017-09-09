@@ -1,5 +1,5 @@
-defmodule HelloPhoenix.User do
-    use HelloPhoenix.Web, :model
+defmodule WaypointsDirect.User do
+    use WaypointsDirect.Web, :model
 
     schema "users" do 
         field :email, :string

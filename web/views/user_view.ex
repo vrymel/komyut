@@ -1,3 +1,3 @@
-defmodule HelloPhoenix.UserView do
-    use HelloPhoenix.Web, :view
+defmodule WaypointsDirect.UserView do
+    use WaypointsDirect.Web, :view
 end

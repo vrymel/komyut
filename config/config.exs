@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :hello_phoenix,
-  ecto_repos: [HelloPhoenix.Repo]
+config :waypoints_direct,
+  ecto_repos: [WaypointsDirect.Repo]
 
 # Configures the endpoint
-config :hello_phoenix, HelloPhoenix.Endpoint,
+config :waypoints_direct, WaypointsDirect.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "79y/sq7ZjDjlnbYicNmzdwcaSTPB0wZjS+tMDtyNp6U18d12Hnu/PB/L5SlJWsoE",
-  render_errors: [view: HelloPhoenix.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: HelloPhoenix.PubSub,
+  render_errors: [view: WaypointsDirect.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: WaypointsDirect.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

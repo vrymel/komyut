@@ -1,5 +1,5 @@
-defmodule HelloPhoenix.PageControllerTest do
-  use HelloPhoenix.ConnCase
+defmodule WaypointsDirect.PageControllerTest do
+  use WaypointsDirect.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

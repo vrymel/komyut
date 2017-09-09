@@ -1,7 +1,7 @@
-defmodule HelloPhoenix.UserController do
-    use HelloPhoenix.Web, :controller
+defmodule WaypointsDirect.UserController do
+    use WaypointsDirect.Web, :controller
 
-    alias HelloPhoenix.User
+    alias WaypointsDirect.User
 
     def index(conn, _params) do 
         render conn, :index

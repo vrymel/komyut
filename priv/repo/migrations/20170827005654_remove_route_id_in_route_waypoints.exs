@@ -1,4 +1,4 @@
-defmodule HelloPhoenix.Repo.Migrations.RemoveRouteIdInRouteWaypoints do
+defmodule WaypointsDirect.Repo.Migrations.RemoveRouteIdInRouteWaypoints do
   use Ecto.Migration
 
   def change do

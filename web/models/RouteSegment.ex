@@ -1,10 +1,10 @@
-defmodule HelloPhoenix.RouteSegment do
-    use HelloPhoenix.Web, :model
+defmodule WaypointsDirect.RouteSegment do
+    use WaypointsDirect.Web, :model
 
     schema "route_segments" do
         field :description, :string
-        belongs_to :route, HelloPhoenix.Route
-        has_many :waypoints, HelloPhoenix.RouteWaypoint
+        belongs_to :route, WaypointsDirect.Route
+        has_many :waypoints, WaypointsDirect.RouteWaypoint
 
         timestamps()
     end

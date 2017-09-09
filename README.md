@@ -1,4 +1,4 @@
-# HelloPhoenix
+# WaypointsDirect
 
 To start your Phoenix app:
 

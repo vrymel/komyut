@@ -1,9 +1,9 @@
-defmodule HelloPhoenix.RouteApiController do
-    use HelloPhoenix.Web, :controller
+defmodule WaypointsDirect.RouteApiController do
+    use WaypointsDirect.Web, :controller
     
-    alias HelloPhoenix.Route
-    alias HelloPhoenix.RouteSegment
-    alias HelloPhoenix.RouteWaypoint
+    alias WaypointsDirect.Route
+    alias WaypointsDirect.RouteSegment
+    alias WaypointsDirect.RouteWaypoint
     
     def show(conn, %{"id" => route_id}) do
         route = Repo.get(Route, route_id)

@@ -1,4 +1,4 @@
-defmodule HelloPhoenix.Repo.Migrations.RenameLongitudeColumn do
+defmodule WaypointsDirect.Repo.Migrations.RenameLongitudeColumn do
   use Ecto.Migration
 
   def change do

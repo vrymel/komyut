@@ -1,7 +1,7 @@
-defmodule HelloPhoenix.RouteController do
-    use HelloPhoenix.Web, :controller
+defmodule WaypointsDirect.RouteController do
+    use WaypointsDirect.Web, :controller
 
-    alias HelloPhoenix.Route
+    alias WaypointsDirect.Route
 
     def index(conn, _params) do
         routes = Repo.all(Route)
