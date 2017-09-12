@@ -49,6 +49,12 @@
 
             background-color: $secondaryBackgroundColor;
             border-top: solid 1px $borderColor;
+
+            button {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

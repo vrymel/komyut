@@ -75,6 +75,7 @@
 				<ul class="list-group">
 					<li 
 						class="list-group-item" 
+						v-bind:class="{ active: activeRouteId == route.id }"
 						v-for="route in routes"
 						v-on:click="selectRoute(route.id)">{{route.description}}</li>
 				</ul>

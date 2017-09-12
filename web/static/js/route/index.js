@@ -42,7 +42,8 @@ const initRouteSelectModal = () => {
 		el: "#route-select-modal",
 		data: {
 			visible: false,
-			routes: []
+			routes: [],
+			activeRouteId: null
 		},
 		methods: {
 			close: function () {
@@ -60,6 +61,8 @@ const initRouteSelectModal = () => {
 					});
 			},
 			selectRoute: function (routeId) {
+				this.activeRouteId = routeId;
+
 				routesPanel.loadRoute(routeId)
 			}
 		}

@@ -15,7 +15,7 @@ $routesHeight: 70px;
 			font-size: 0.8em;
 			color: transparentize($primaryTextColor, 0.3);
 		}
-
+		
 		.app-logo {
 			flex-basis: 100px;
 		}
@@ -26,9 +26,13 @@ $routesHeight: 70px;
 			
 			.description {
 				font-weight: bold;
+				
+				&:hover {
+					color: transparentize($primaryTextColor, 0.1);
+				}
 			}
 		}
-
+		
 		.current.city, .current.route {
 			.description {
 				cursor: pointer;
@@ -61,5 +65,21 @@ $routesHeight: 70px;
 	#map {
 		height: calc(100vh - #{$routesHeight});
 	}
+
+	#route-select-modal .list-group {
+		.list-group-item {
+			&:hover {
+				background-color: #fbfbfb;
+				cursor: pointer;
+			}
+
+			// TODO: remove this if bootstrap scss default variables is overriden
+			&.active {
+				background-color: $primaryColor;
+				border-color: $primaryColor;
+			}
+		}	
+	}
 }
+
 
