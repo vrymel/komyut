@@ -3,7 +3,7 @@
 
 	<div id="route-context" class="route-context">
 		<div class="app-logo">
-            <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>" alt="">
+            <img src="<%= static_path(@conn, "/images/jeepney_logo_beta.png") %>" alt="">
 		</div>
 
 		<div class="current city">
