@@ -80,6 +80,63 @@ $routesHeight: 70px;
 			}
 		}	
 	}
+
+	@media (max-width: 450px) {
+		$heightOffset: 100px;
+		$mapHeight: $routesHeight + $heightOffset;
+
+		overflow: hidden;
+
+		#map {
+			height: calc(100vh - #{$mapHeight})
+		}
+
+		.route-context {
+			flex-wrap: wrap;
+			height: $routesHeight + $heightOffset;
+
+			.app-logo {
+				display: none;
+			}
+
+			.current {
+				margin-bottom: 10px;
+			}
+
+			.current.route {
+				flex-basis: 150px;
+			}
+
+			.segments {
+				flex-basis: 150px;
+
+				.hlist {
+					display: flex;
+					flex-wrap: wrap;
+
+					li {
+						margin-bottom: 5px;
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 800px) {
+		.app-logo {
+			flex-basis: 80px;
+		}
+
+		.current {
+			&.city {
+				flex-basis: 250px;
+			}
+
+			&.route {
+				flex-basis: 150px;
+			}
+		}
+	}
 }
 
 
