@@ -13,18 +13,6 @@ defmodule WaypointsDirect.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", WaypointsDirect do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
-  end
-
-  scope "/users", WaypointsDirect do 
-    pipe_through :browser
-
-    resources "/", UserController
-  end
-
   scope "/routes", WaypointsDirect do
     pipe_through :browser
 
