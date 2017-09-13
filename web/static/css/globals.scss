@@ -57,4 +57,10 @@
             }
         }
     }
+
+    @media (max-width: 450px) {
+        .modal-main {
+            width: 95vw;
+        }
+    }
 }
