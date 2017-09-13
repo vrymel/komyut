@@ -4,7 +4,7 @@
     <div class="sidebar">
         <%= form_for @changeset, route_path(@conn, :create), fn f -> %>
             <div class="form-group">
-                <label class="label">Description</label>
+                <label class="label">Segment Description</label>
                 <p class="control">
                   <%= text_input f, :description, class: "form-control" %>
                 </p>
