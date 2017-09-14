@@ -2,7 +2,7 @@
     <div id="map"></div>
 
     <div class="sidebar">
-        <%= form_for @changeset, route_path(@conn, :create), fn f -> %>
+        <%= form_for @changeset, route_path(@conn, :index), fn f -> %>
             <div class="form-group">
                 <label class="label">Segment Description</label>
                 <p class="control">
