@@ -16,7 +16,12 @@ defmodule WaypointsDirect.Router do
   scope "/routes", WaypointsDirect do
     pipe_through :browser
 
-    resources "/", RouteController
+    # Temporary comment this so we can restrict index and the new route
+    # resources "/", RouteController
+    get "/", RouteController, :index
+
+    # Obfuscate "new" so we only have access, for now
+    get "/22af645d1859cb5ca6da0c484f1f37ea", RouteController, :new
   end
 
   scope "/api/routes", WaypointsDirect do
