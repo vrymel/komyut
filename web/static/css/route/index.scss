@@ -45,9 +45,6 @@ $routesHeight: 70px;
 			flex-grow: 1;
 			
 			.hlist {
-				height: 50vh;
-				overflow-y: scroll;
-
 				li {
 					background-color: darken($primaryColor, 2%);
 					padding: 3px 8px;
