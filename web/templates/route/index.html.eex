@@ -72,13 +72,15 @@
 			<div class="modal-body">
 				<p>Select a route to view its path</p>
 
-				<ul class="list-group">
-					<li 
-						class="list-group-item" 
-						v-bind:class="{ active: activeRouteId == route.id }"
-						v-for="route in routes"
-						v-on:click="selectRoute(route.id)">{{route.description}}</li>
-				</ul>
+				<div class="list-group-container">
+					<ul class="list-group">
+						<li 
+							class="list-group-item" 
+							v-bind:class="{ active: activeRouteId == route.id }"
+							v-for="route in routes"
+							v-on:click="selectRoute(route.id)">{{route.description}}</li>
+					</ul>
+				</div>
 			</div>
 			<footer>
 				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>

@@ -44,20 +44,25 @@ $routesHeight: 70px;
 			flex-shrink: 2;
 			flex-grow: 1;
 			
-			.hlist li {
-				background-color: darken($primaryColor, 2%);
-				padding: 3px 8px;
-				border-radius: 3px;
-				font-size: 0.8em;
-				cursor: pointer;
-				
-				&:hover {
-					background-color: darken($primaryColor, 3.5%);
+			.hlist {
+				height: 50vh;
+				overflow-y: scroll;
+
+				li {
+					background-color: darken($primaryColor, 2%);
+					padding: 3px 8px;
+					border-radius: 3px;
+					font-size: 0.8em;
+					cursor: pointer;
+					
+					&:hover {
+						background-color: darken($primaryColor, 3.5%);
+					}
+					
+					&.active, &:hover.active {
+						background-color: darken($primaryColor, 7%);
+					}			
 				}
-				
-				&.active, &:hover.active {
-					background-color: darken($primaryColor, 7%);
-				}			
 			}
 		}
 	}
@@ -66,19 +71,26 @@ $routesHeight: 70px;
 		height: calc(100vh - #{$routesHeight});
 	}
 
-	#route-select-modal .list-group {
-		.list-group-item {
-			&:hover {
-				background-color: #fbfbfb;
-				cursor: pointer;
-			}
+	#route-select-modal {
+		.list-group-container {
+			overflow-y: scroll;
+			height: 45vh;
 
-			// TODO: remove this if bootstrap scss default variables is overriden
-			&.active {
-				background-color: $primaryColor;
-				border-color: $primaryColor;
+			.list-group {
+				.list-group-item {
+					&:hover {
+						background-color: #fbfbfb;
+						cursor: pointer;
+					}
+		
+					// TODO: remove this if bootstrap scss default variables is overriden
+					&.active {
+						background-color: $primaryColor;
+						border-color: $primaryColor;
+					}
+				}	
 			}
-		}	
+		}
 	}
 
 	@media (max-width: 450px) {
