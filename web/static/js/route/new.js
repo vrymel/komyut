@@ -61,6 +61,14 @@ const initWaypointList = () => {
 function attachEventHandlers() {
     map.addListener("dblclick", function(event) {
         const rPath = routhPath.getPath();
+        const waypointsLimit = 100; // google's snap-to-road api limits 100 waypoints per request
+        const waypointsLimitReached = rPath.getLength() === waypointsLimit;
+
+        if (waypointsLimitReached) {
+            alert("Waypoints limit reached! You can only create 100 waypoints for a given route.");
+            return;
+        }
+
         rPath.push(event.latLng);
         
         
