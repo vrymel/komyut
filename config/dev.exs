@@ -38,6 +38,6 @@ config :waypoints_direct, WaypointsDirect.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "vrymel",
   password: "",
-  database: "hello_phoenix_dev",
+  database: "waypoints_direct_dev",
   hostname: "localhost",
   pool_size: 10

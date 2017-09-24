@@ -85,6 +85,10 @@
 	</div>
 </div>
 
+<!-- TODO: get api key on an envinronment basis -->
+<script>
+	API_KEY = "AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4";
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
 
 <script>

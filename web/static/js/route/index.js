@@ -1,5 +1,11 @@
-import { origin, destination, between } from "./helper";
+import {
+	origin,
+	destination,
+	between
+} from "./helper";
 import Vue from "vue/dist/vue";
+import _ from "lodash";
+import qs from "query-string";
 
 let routePath;
 let map;
@@ -120,8 +126,6 @@ const initRouteContextPanel = () => {
 			}
 		}
 	});
-
-	window.routesPanel = routesPanel;
 };
 
 const initMap = (mapContainer) => {
@@ -132,8 +136,8 @@ const initMap = (mapContainer) => {
 
 	routePath = new google.maps.Polyline({
 		"strokeColor": '#FF0000',
-		"strokeOpacity": 1.0,
-		"strokeWeight": 2
+		"strokeOpacity": 0.5,
+		"strokeWeight": 5
 	});
 
 	routePath.setMap(map);
@@ -166,20 +170,40 @@ const setMarkers = (waypoints) => {
 	}
 };
 
-const getRouteData = (routeId) => {
-};
+const getRouteData = (routeId) => {};
 
 const setWaypoints = (waypoints) => {
 	const path = routePath.getPath();
 	while (path.length)
 		path.removeAt(0);
 
-	for (var i = 0; i < waypoints.length; i++) {
-		const { lat, lng } = waypoints[i];
-		const mapLatLng = new google.maps.LatLng(lat, lng)
+	var pathValues = _.map(waypoints, (w) => {
+		const {
+			lat,
+			lng
+		} = w;
 
-		path.push(mapLatLng);
-	}
+		return `${lat},${lng}`;
+	});
+
+	const params = {
+		interpolate: true,
+		key: API_KEY,
+		path: pathValues.join('|')
+	};
+	const url = `https://roads.googleapis.com/v1/snapToRoads?${qs.stringify(params)}`;
+
+	fetch(url)
+		.then((response) => response.json())
+		.then((data) => {
+			for (var i = 0; i < data.snappedPoints.length; i++) {
+				var latlng = new google.maps.LatLng(
+					data.snappedPoints[i].location.latitude,
+					data.snappedPoints[i].location.longitude);
+
+				path.push(latlng);
+			}
+		});
 };
 
 
