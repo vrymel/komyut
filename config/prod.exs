@@ -17,7 +17,7 @@ config :waypoints_direct, WaypointsDirect.Endpoint,
           certfile: System.get_env("WAYPOINTS_DIRECT_CERT_FILE")],
   # http: [port: "${PORT}"],
   url: [host: "${HOST}", port: "${PORT}"],
-  cache_static_manifest: "priv/static/manifest.json",
+  cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
   version: Application.spec(:waypoints_direct, :vsn)
