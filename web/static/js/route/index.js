@@ -188,7 +188,7 @@ const setWaypoints = (waypoints) => {
 
 	const params = {
 		interpolate: true,
-		key: API_KEY,
+		key: GOOGLE_MAP_API_KEY,
 		path: pathValues.join('|')
 	};
 	const url = `https://roads.googleapis.com/v1/snapToRoads?${qs.stringify(params)}`;
