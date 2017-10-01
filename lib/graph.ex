@@ -3,7 +3,7 @@ defmodule WaypointsDirect.Graph do
     def new(vertices) do
         bags = init_bag(vertices)
 
-        %{vertices_count: 0, edges_count: 0, bags: bags}
+        %{:vertices_count => vertices, :edges_count => 0, :bags => bags}
     end
 
     defp init_bag(vertices) do
@@ -18,11 +18,14 @@ defmodule WaypointsDirect.Graph do
         end
     end
 
-    def adjacent do
-        
+    def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, v, w) do
+        %{^v => v_bag, ^w => w_bag} = bags
+        bags = bags |> put_in([v], [w | v_bag]) |> put_in([w], [v | w_bag])
+
+        %{graph | :bags => bags, :edges_count => edges_count + 1}
     end
 
-    def add_edge do
+    def adjacent(graph, vertex) do
         
     end
 
