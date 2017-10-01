@@ -25,8 +25,8 @@ defmodule WaypointsDirect.Graph do
         %{graph | :bags => bags, :edges_count => edges_count + 1}
     end
 
-    def adjacent(graph, vertex) do
-        
+    def adjacent(%{:bags => bags}, vertex) do
+        bags[vertex]
     end
 
 end
