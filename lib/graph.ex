@@ -19,8 +19,8 @@ defmodule WaypointsDirect.Graph do
     end
 
     def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, v, w) do
-        %{^v => v_bag, ^w => w_bag} = bags
-        bags = bags |> put_in([v], [w | v_bag]) |> put_in([w], [v | w_bag])
+        %{^v => v_bag} = bags
+        bags = bags |> put_in([v], [w | v_bag])
 
         %{graph | :bags => bags, :edges_count => edges_count + 1}
     end
