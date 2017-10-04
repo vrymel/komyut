@@ -23,26 +23,24 @@ defmodule WaypointsDirect.DirectedDFS do
     defp dfs(graph, vertex, %{:marked => marked} = marker) do
         marker = %{:marked => %{marked | vertex => true}}
         adjacent = Graph.adjacent(graph, vertex)
-        [head | tail] = adjacent
 
-        if !marked[head] do
-            dfs(graph, head, marker)
-        else
-            do_dfs(graph, tail, marker)
+        case adjacent do
+            [] -> 
+                marker
+            _ -> 
+                # TODO: find out why pattern matching is not working here. instead of calling arity [head | tail], this call itself.
+                do_dfs(graph, adjacent, marker)
         end
     end
 
-    defp do_dfs(graph, adjacent, %{:marked => marked} = marker) do
-        [head | tail] = adjacent
+    defp do_dfs(graph, [head | tail], %{:marked => _} = marker) do
+        marker = dfs(graph, head, marker)
 
-        if !marked[head] do
-            dfs(graph, head, marker)
+        case tail do
+            [] ->
+                marker
+            _ ->
+                do_dfs(graph, tail, marker)
         end
-
-        if Enum.empty? tail do
-            marker
-        end
-
-        do_dfs(graph, tail, marker)
     end
 end
