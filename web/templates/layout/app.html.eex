@@ -18,6 +18,9 @@
 
   <title>Waypoints Direct</title>
 
+  <%# TODO: find a way to make this load only in the homepage using "partial" since this is only used there #%>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa:700" rel="stylesheet"> 
+  
   <link rel="icon" href="<%= static_path(@conn, "/images/favicon.ico") %>">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
@@ -41,7 +44,5 @@
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
     </main>
-
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
   </html>

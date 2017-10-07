@@ -89,6 +89,7 @@
 	GOOGLE_MAP_API_KEY = "<%= googleMapApiKey %>";
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey %>"></script>
+<script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 
 <script>
     PAGE_ROUTES = {

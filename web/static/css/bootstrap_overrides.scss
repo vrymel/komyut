@@ -1,0 +1,11 @@
+@import "_variables.scss";
+
+.btn-primary {
+    background-color: $primaryColor;
+    border-color: $primaryColor;
+    
+    &:hover {
+        background-color: darken($primaryColor, 2.5%);
+        border-color: darken($primaryColor, 2.5%);
+    }
+}
