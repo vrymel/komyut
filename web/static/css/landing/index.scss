@@ -26,6 +26,12 @@
 
                 .go-to-routes {
                     padding-bottom: 6px;
+                    background-color: rgba(0, 150, 136, 0.75);
+                    border: 0;
+
+                    &:hover {
+                        background-color: $primaryColor;
+                    }
 
                     img {
                         width: 35px;
