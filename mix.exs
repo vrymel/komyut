@@ -3,7 +3,7 @@ defmodule WaypointsDirect.Mixfile do
 
   def project do
     [app: :waypoints_direct,
-     version: "0.2.0-beta",
+     version: "0.3.0-beta",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
