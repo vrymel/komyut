@@ -74,7 +74,10 @@
 							class="list-group-item" 
 							v-bind:class="{ active: activeRouteId == route.id }"
 							v-for="route in routes"
-							v-on:click="selectRoute(route.id)">{{route.description}}</li>
+							v-on:click="selectRoute(route.id)">
+								<span class="description">{{route.description}}</span>
+								<span v-if="!route.is_active" class="data-not-available-yet">data not available yet</span>
+							</li>
 					</ul>
 				</div>
 			</div>

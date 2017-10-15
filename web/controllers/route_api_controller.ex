@@ -29,7 +29,7 @@ defmodule WaypointsDirect.RouteApiController do
         routes = Repo.all(query)
         |> Enum.map fn(route) ->
             Map.from_struct(route)
-            |> Map.take [:description, :id]
+            |> Map.take [:description, :id, :is_active]
         end
 
         json conn, routes

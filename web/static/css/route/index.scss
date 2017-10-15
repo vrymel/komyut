@@ -75,6 +75,10 @@ $routesHeight: 70px;
 
 			.list-group {
 				.list-group-item {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+
 					&:hover {
 						background-color: #fbfbfb;
 						cursor: pointer;
@@ -84,6 +88,15 @@ $routesHeight: 70px;
 					&.active {
 						background-color: $primaryColor;
 						border-color: $primaryColor;
+					}
+
+					.data-not-available-yet {
+						font-size: 0.5em;
+						background-color: #efefef;
+						padding: 3px 6px;
+						border-radius: 3px;
+						color: #989898;
+						margin-left: 8px;
 					}
 				}	
 			}
