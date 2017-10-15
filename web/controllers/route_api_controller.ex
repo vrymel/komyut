@@ -24,13 +24,13 @@ defmodule WaypointsDirect.RouteApiController do
         json conn, payload
     end
 
-    def get_city_routes(conn, %{"city_id" => city_id}) do
+    def get_city_routes(conn, _params) do
         query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
         routes = Repo.all(query)
-        |> Enum.map fn(route) ->
-            Map.from_struct(route)
-            |> Map.take [:description, :id, :is_active]
-        end
+        |> Enum.map(fn(route) ->
+                Map.from_struct(route)
+                |> Map.take([:description, :id, :is_active])
+            end)
 
         json conn, routes
     end
