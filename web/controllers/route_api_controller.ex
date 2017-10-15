@@ -25,7 +25,7 @@ defmodule WaypointsDirect.RouteApiController do
     end
 
     def get_city_routes(conn, %{"city_id" => city_id}) do
-        query = from r in Route, order_by: r.description
+        query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
         routes = Repo.all(query)
         |> Enum.map fn(route) ->
             Map.from_struct(route)
