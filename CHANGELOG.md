@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.0-beta] - 2017-10-15
+### Added
+- Added "data not available yet" badge in route listing if route is inactive
+- Added help us out link
+
 ## [0.3.0-beta] - 2017-10-08
 ### Added
 - Landing page
