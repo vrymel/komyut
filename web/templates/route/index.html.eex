@@ -82,6 +82,8 @@
 				</div>
 			</div>
 			<footer>
+				<a href="https://goo.gl/forms/FYTKd2Lt1EiZuiiH3" target="_blank" class="btn btn-info">Help us out!</a>
+				&nbsp;
 				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
  			</footer>
 		</div>
