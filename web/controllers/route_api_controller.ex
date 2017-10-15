@@ -7,7 +7,7 @@ defmodule WaypointsDirect.RouteApiController do
     
     def show(conn, %{"id" => route_id}) do
         route = Repo.get(Route, route_id)
-        |> Repo.preload(:segments)
+        |> Repo.preload(segments: from(s in RouteSegment, order_by: s.description))
 
         new_segments = Enum.map route.segments, 
         fn(segment) -> 
