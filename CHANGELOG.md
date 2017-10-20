@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.1-beta] - 2017-10-20
+### Changes
+- Updated meta description and title tag for SEO
+- Fixed iex variables not used warnings
+
 ## [0.4.0-beta] - 2017-10-15
 ### Added
 - Added "data not available yet" badge in route listing if route is inactive
