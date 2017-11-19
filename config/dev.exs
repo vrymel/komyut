@@ -36,8 +36,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :waypoints_direct, WaypointsDirect.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "vrymel",
-  password: "",
+  username: "postgres",
+  password: "secretpassword",
   database: "waypoints_direct_dev",
-  hostname: "localhost",
+  hostname: "0.0.0.0",
   pool_size: 10
