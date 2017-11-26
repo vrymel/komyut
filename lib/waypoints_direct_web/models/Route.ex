@@ -5,6 +5,7 @@ defmodule WaypointsDirect.Route do
         field :description, :string
         field :is_active, :boolean, default: false
         has_many :segments, WaypointsDirect.RouteSegment
+        has_many :route_edges, WaypointsDirect.RouteEdge
 
         timestamps()
     end
