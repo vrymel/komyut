@@ -7,4 +7,10 @@ defmodule WaypointsDirect.Intersection do
 
         timestamps()
     end
+
+    def changeset(intersection, params \\ %{}) do
+        intersection
+        |> cast(params, [:lat, :lng])
+        # |> validate_required([:lat, :lng]) # temporarily disable validation for testing
+    end
 end
