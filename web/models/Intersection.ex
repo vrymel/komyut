@@ -4,6 +4,7 @@ defmodule WaypointsDirect.Intersection do
     alias WaypointsDirect.RouteEdge
 
     schema "intersection" do
+        field :description, :string
         field :lat, :float
         field :lng, :float
 
@@ -19,7 +20,7 @@ defmodule WaypointsDirect.Intersection do
 
     def changeset(intersection, params \\ %{}) do
         intersection
-        |> cast(params, [:lat, :lng])
+        |> cast(params, [:description, :lat, :lng])
         # |> validate_required([:lat, :lng]) # temporarily disable validation for testing
     end
 end
