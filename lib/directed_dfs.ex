@@ -7,21 +7,23 @@ defmodule WaypointsDirect.DirectedDFS do
     end
 
     defp dfs(graph, vertex, %{:marked => marked} = marker) do
-        # TODO: do not process vertex if it is already marked as visited
-
         marked = unless Map.get(marked, vertex), do: Map.put(marked, vertex, false), else: marked
 
-        marker = %{:marked => %{marked | vertex => true}}
-        adjacent = Graph.adjacent(graph, vertex)
+        unless marked[vertex] do
+            marker = %{:marked => %{marked | vertex => true}}
+            adjacent = Graph.adjacent(graph, vertex)
 
-        case adjacent do
-            [] -> 
-                marker
-            nil ->
-                marker
-            _ -> 
-                # TODO: find out why pattern matching is not working here. instead of calling arity [head | tail], this call itself.
-                do_dfs(graph, adjacent, marker)
+            case adjacent do
+                [] -> 
+                    marker
+                nil ->
+                    marker
+                _ -> 
+                    # TODO: find out why pattern matching is not working here. instead of calling arity [head | tail], this call itself.
+                    do_dfs(graph, adjacent, marker)
+            end
+        else
+            marker
         end
     end
 
