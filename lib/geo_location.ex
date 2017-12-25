@@ -1,10 +1,17 @@
 defmodule WaypointsDirect.GeoLocation do
+    @moduledoc """
+    Provides calculation of a source geo-point
+
+    Reference: 
+        Source: http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        Mirror: https://docs.google.com/document/d/1a6ZCIJyK1ZpEmD33tamfqzVpqN6Fcanxm1CENfeoKm0/edit?usp=drive_web
+    """
     alias WaypointsDirect.GeoPoint
 
     # approximate radius of the Earth in km
     @earth_radius 6371
 
-    def calculate_bounding_coordinates(geo_point, distance) do
+    def calculate_bounding_coordinates(%GeoPoint{latitude: _, longitude: _} = geo_point, distance) do
         radius = angular_radius distance
 
         latitude_bounds = get_latitude_bounds(geo_point, radius)
