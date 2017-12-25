@@ -1,5 +1,5 @@
 defmodule WaypointsDirect.Intersection do
-    use WaypointsDirect.Web, :model
+    use WaypointsDirectWeb, :model
 
     alias WaypointsDirect.RouteEdge
 
