@@ -10,10 +10,10 @@ config :waypoints_direct,
   ecto_repos: [WaypointsDirect.Repo]
 
 # Configures the endpoint
-config :waypoints_direct, WaypointsDirect.Endpoint,
+config :waypoints_direct, WaypointsDirectWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "79y/sq7ZjDjlnbYicNmzdwcaSTPB0wZjS+tMDtyNp6U18d12Hnu/PB/L5SlJWsoE",
-  render_errors: [view: WaypointsDirect.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: WaypointsDirectWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: WaypointsDirect.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

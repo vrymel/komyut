@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.ErrorHelpers do
+defmodule WaypointsDirectWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """

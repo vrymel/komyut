@@ -22,3 +22,5 @@ import "phoenix_html"
 
 import "./route/index"
 import "./route/new"
+
+console.log("im here");

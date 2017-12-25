@@ -1,5 +1,5 @@
-defmodule WaypointsDirect.RouteApiController do
-    use WaypointsDirect.Web, :controller
+defmodule WaypointsDirectWeb.RouteApiController do
+    use WaypointsDirectWeb, :controller
     
     alias WaypointsDirect.Route
     alias WaypointsDirect.RouteSegment

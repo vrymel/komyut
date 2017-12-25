@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.ChannelCase do
+defmodule WaypointsDirectWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -27,7 +27,7 @@ defmodule WaypointsDirect.ChannelCase do
 
 
       # The default endpoint for testing
-      @endpoint WaypointsDirect.Endpoint
+      @endpoint WaypointsDirectWeb.Endpoint
     end
   end
 

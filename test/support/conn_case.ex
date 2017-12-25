@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.ConnCase do
+defmodule WaypointsDirectWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,10 +25,10 @@ defmodule WaypointsDirect.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      import WaypointsDirect.Router.Helpers
+      import WaypointsDirectWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint WaypointsDirect.Endpoint
+      @endpoint WaypointsDirectWeb.Endpoint
     end
   end
 

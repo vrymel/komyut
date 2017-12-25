@@ -1,5 +1,5 @@
 defmodule WaypointsDirect.RouteWaypoint do
-    use WaypointsDirect.Web, :model
+    use WaypointsDirectWeb, :model
 
     schema "route_waypoints" do
         field :lat, :float

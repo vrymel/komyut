@@ -1,4 +1,4 @@
-defmodule WaypointsDirect do
+defmodule WaypointsDirect.Application do
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -11,7 +11,7 @@ defmodule WaypointsDirect do
       # Start the Ecto repository
       supervisor(WaypointsDirect.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(WaypointsDirect.Endpoint, []),
+      supervisor(WaypointsDirectWeb.Endpoint, []),
       # Start your own worker by calling: WaypointsDirect.Worker.start_link(arg1, arg2, arg3)
       # worker(WaypointsDirect.Worker, [arg1, arg2, arg3]),
     ]

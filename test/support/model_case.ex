@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.ModelCase do
+defmodule WaypointsDirectWeb.ModelCase do
   @moduledoc """
   This module defines the test case to be used by
   model tests.
@@ -21,7 +21,7 @@ defmodule WaypointsDirect.ModelCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import WaypointsDirect.ModelCase
+      import WaypointsDirectWeb.ModelCase
     end
   end
 

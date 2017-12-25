@@ -1,5 +1,5 @@
 defmodule WaypointsDirect.Route do
-    use WaypointsDirect.Web, :model
+    use WaypointsDirectWeb, :model
 
     schema "routes" do
         field :description, :string

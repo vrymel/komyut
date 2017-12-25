@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.Gettext do
+defmodule WaypointsDirectWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 

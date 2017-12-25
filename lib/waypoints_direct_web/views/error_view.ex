@@ -1,5 +1,5 @@
-defmodule WaypointsDirect.ErrorView do
-  use WaypointsDirect.Web, :view
+defmodule WaypointsDirectWeb.ErrorView do
+  use WaypointsDirectWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"

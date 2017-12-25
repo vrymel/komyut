@@ -1,7 +1,7 @@
-defmodule WaypointsDirect.Endpoint do
+defmodule WaypointsDirectWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :waypoints_direct
 
-  socket "/socket", WaypointsDirect.UserSocket
+  socket "/socket", WaypointsDirectWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -38,5 +38,5 @@ defmodule WaypointsDirect.Endpoint do
     key: "_waypoints_direct_key",
     signing_salt: "w/Hmi6FD"
 
-  plug WaypointsDirect.Router
+  plug WaypointsDirectWeb.Router
 end

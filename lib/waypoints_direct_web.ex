@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.Web do
+defmodule WaypointsDirectWeb do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
@@ -28,20 +28,21 @@ defmodule WaypointsDirect.Web do
 
   def controller do
     quote do
-      use Phoenix.Controller
+      use Phoenix.Controller, namespace: WaypointsDirectWeb
 
       alias WaypointsDirect.Repo
       import Ecto
       import Ecto.Query
 
-      import WaypointsDirect.Router.Helpers
-      import WaypointsDirect.Gettext
+      import WaypointsDirectWeb.Router.Helpers
+      import WaypointsDirectWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "web/templates"
+      use Phoenix.View, root: "lib/waypoints_direct_web/templates",
+                        namespace: WaypointsDirectWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
@@ -49,9 +50,9 @@ defmodule WaypointsDirect.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import WaypointsDirect.Router.Helpers
-      import WaypointsDirect.ErrorHelpers
-      import WaypointsDirect.Gettext
+      import WaypointsDirectWeb.Router.Helpers
+      import WaypointsDirectWeb.ErrorHelpers
+      import WaypointsDirectWeb.Gettext
     end
   end
 
@@ -68,7 +69,7 @@ defmodule WaypointsDirect.Web do
       alias WaypointsDirect.Repo
       import Ecto
       import Ecto.Query
-      import WaypointsDirect.Gettext
+      import WaypointsDirectWeb.Gettext
     end
   end
 

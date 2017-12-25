@@ -1,5 +1,5 @@
 defmodule WaypointsDirect.RouteSegment do
-    use WaypointsDirect.Web, :model
+    use WaypointsDirectWeb, :model
 
     schema "route_segments" do
         field :description, :string

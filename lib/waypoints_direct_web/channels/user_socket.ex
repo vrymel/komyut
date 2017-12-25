@@ -1,4 +1,4 @@
-defmodule WaypointsDirect.UserSocket do
+defmodule WaypointsDirectWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels

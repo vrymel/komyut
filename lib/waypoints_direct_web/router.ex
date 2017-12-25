@@ -1,5 +1,5 @@
-defmodule WaypointsDirect.Router do
-  use WaypointsDirect.Web, :router
+defmodule WaypointsDirectWeb.Router do
+  use WaypointsDirectWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,13 +13,13 @@ defmodule WaypointsDirect.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", WaypointsDirect do
+  scope "/", WaypointsDirectWeb do
     pipe_through :browser
 
     get "/", LandingController, :index
   end
 
-  scope "/routes", WaypointsDirect do
+  scope "/routes", WaypointsDirectWeb do
     pipe_through :browser
 
     # Temporary comment this so we can restrict index and the new route
@@ -30,7 +30,7 @@ defmodule WaypointsDirect.Router do
     get "/22af645d1859cb5ca6da0c484f1f37ea", RouteController, :new
   end
 
-  scope "/api/routes", WaypointsDirect do
+  scope "/api/routes", WaypointsDirectWeb do
     pipe_through :browser
 
     resources "/", RouteApiController
