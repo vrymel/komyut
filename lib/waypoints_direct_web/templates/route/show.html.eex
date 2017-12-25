@@ -1,0 +1,27 @@
+<div class="show">
+    <div class="columns">
+        <div class="column">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h1 class="title"><%= @route.description %></h1>
+        </div>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4"></script>
+
+<script>
+    function ready() {
+        require("route/show.js").default(<%= @route.id %>)
+    }
+
+    if (document.readyState === "complete" || document.readyState !== "loading") {
+        ready();
+    } else {
+        document.addEventListener("DOMContentLoaded", ready);
+    }
+</script>
