@@ -45,7 +45,7 @@
     };
 
     function ready() {
-        require("route/new.js").default(PAGE_ROUTES)
+        require("js/route/new.js").default(PAGE_ROUTES)
     }
 
 

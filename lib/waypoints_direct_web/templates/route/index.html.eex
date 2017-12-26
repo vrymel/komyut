@@ -102,7 +102,7 @@
     };
 
 	function ready() {
-		var index = require("route/index.js");
+		var index = require("js/route/index.js");
 
 		index.init(PAGE_ROUTES);
 	}
