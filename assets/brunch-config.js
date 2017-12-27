@@ -1,3 +1,5 @@
+var outputPath = "../priv/static";
+
 exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
@@ -43,7 +45,7 @@ exports.config = {
     watched: ["static", "css", "js", "vendor"],
 
     // Where to compile files to
-    public: "../priv/static"
+    public: outputPath
   },
 
   // Configure your plugins
@@ -57,6 +59,12 @@ exports.config = {
         includePaths: ["node_modules/bootstrap/scss"],
         precision: 8
       }
+    },
+    vue: {
+      // all <style> from single file components will be dump here
+      // so /css/components.css will need to be included in the page manually
+      extractCSS: true,
+      out: outputPath + '/css/components.css'
     }
   },
 
