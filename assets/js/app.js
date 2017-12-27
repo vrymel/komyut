@@ -21,4 +21,4 @@ import "phoenix_html"
 // import socket from "./socket"
 
 import "./route/index"
-import "./route/new"
+import "./route/new/main"
