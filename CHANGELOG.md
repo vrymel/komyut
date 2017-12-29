@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.0-beta] - 2017-12-29
+### Changes
+- Upgrade Phoenix to 1.3
+- Bump minimum Elixir requirement
+
 ## [0.4.1-beta] - 2017-10-20
 ### Changes
 - Updated meta description and title tag for SEO
