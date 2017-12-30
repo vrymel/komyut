@@ -51,6 +51,7 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
+      pattern: /\.(js|vue)$/,
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
     },

@@ -14,7 +14,6 @@
     "query-string": "5.0.0"
   },
   "devDependencies": {
-    "babel-brunch": "~6.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "brunch": "^2.10.12",
     "clean-css-brunch": "~2.0.0",
@@ -24,6 +23,7 @@
     "sass-brunch": "^2.10.4",
     "uglify-js-brunch": "~2.0.1",
     "vue": "^2.5.13",
-    "vue-brunch": "^2.0.1"
+    "vue-brunch": "^2.0.1",
+    "babel-brunch": "~6.0.0"
   }
 }
