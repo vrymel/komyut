@@ -2,17 +2,18 @@
 </template>
 
 <script>
-import Element from "./mixins/Element";
-import Ready from "./mixins/Ready";
-
 export default {
   name: "google-map-circle",
-  mixins: [Element, Ready],
 
-  initComponent: function() {
-    console.log("Circle initComponent", this.mapParent);
+  created() {
+    if (this.$parent) {
+      this.mapParent = this.$parent;
+    }
+  },
 
-    this.mapParent.getMap().then(function(map) {
+  async mounted() {
+      const map = await this.mapParent.getMap();
+
       var cityCircle = new google.maps.Circle({
         strokeColor: "#FF0000",
         strokeOpacity: 0.8,
@@ -23,7 +24,6 @@ export default {
         center: { lat: 8.48379, lng: 124.6509111 },
         radius: 15
       });
-    });
   }
 };
 </script>

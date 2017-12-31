@@ -6,33 +6,29 @@
 </template>
 
 <script>
-import Element from "./mixins/Element";
-import Ready from "./mixins/Ready";
-
 export default {
   name: "google-map",
-  mixins: [Element, Ready],
 
-  beforeCreate: function() {
+  beforeCreate() {
     this._getMapPromises = [];
   },
 
-  initComponent: function() {
+  mounted() {
     const map = new google.maps.Map(this.$refs.map, {
       center: new google.maps.LatLng(8.48379, 124.6509111),
       zoom: 16
     });
     map.setOptions({ disableDoubleClickZoom: true });
 
-    this.mapInstance = map;
+    this._mapInstance = map;
 
     this._getMapPromises.forEach(resolve => resolve(map));
   },
 
   methods: {
-    getMap: function() {
-      if (this.mapInstance) {
-        return Promise.resolve(this.mapInstance);
+    getMap() {
+      if (this._mapInstance) {
+        return Promise.resolve(this._mapInstance);
       } else {
         return new Promise(resolve => this._getMapPromises.push(resolve));
       }
