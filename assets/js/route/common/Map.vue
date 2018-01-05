@@ -25,6 +25,7 @@ export default {
         this._getMapPromises.forEach(resolve => resolve(map));
 
         this._mapInstance = map;
+        this._mapInstance.addListener("click", (...args) => this.$emit("click", ...args));
     },
 
     methods: {
