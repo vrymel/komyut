@@ -1,39 +1,41 @@
 <template>
   <div class="map-component-root">
-    <div ref="map" class="map-container"></div>
-    <slot></slot>
+    <div 
+      ref="map" 
+      class="map-container"/>
+    <slot/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "google-map",
+    name: "GoogleMap",
 
-  beforeCreate() {
-    this._getMapPromises = [];
-  },
+    beforeCreate() {
+        this._getMapPromises = [];
+    },
 
-  mounted() {
-    const map = new google.maps.Map(this.$refs.map, {
-      center: new google.maps.LatLng(8.48379, 124.6509111),
-      zoom: 16
-    });
-    map.setOptions({ disableDoubleClickZoom: true });
+    mounted() {
+        const map = new google.maps.Map(this.$refs.map, {
+            center: new google.maps.LatLng(8.48379, 124.6509111),
+            zoom: 16
+        });
+        map.setOptions({ disableDoubleClickZoom: true });
 
-    this._mapInstance = map;
+        this._getMapPromises.forEach(resolve => resolve(map));
 
-    this._getMapPromises.forEach(resolve => resolve(map));
-  },
+        this._mapInstance = map;
+    },
 
-  methods: {
-    getMap() {
-      if (this._mapInstance) {
-        return Promise.resolve(this._mapInstance);
-      } else {
-        return new Promise(resolve => this._getMapPromises.push(resolve));
-      }
+    methods: {
+        getMap() {
+            if (this._mapInstance) {
+                return Promise.resolve(this._mapInstance);
+            } else {
+                return new Promise(resolve => this._getMapPromises.push(resolve));
+            }
+        }
     }
-  }
 };
 </script>
 
