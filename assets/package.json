@@ -6,6 +6,7 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
+    "axios": "0.17.1",
     "bootstrap": "4.0.0-beta",
     "jquery": "3.2.1",
     "lodash": "4.17.4",
