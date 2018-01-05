@@ -38,6 +38,12 @@ defmodule WaypointsDirectWeb.Router do
     get "/get_city_routes/:city_id", RouteApiController, :get_city_routes
   end
 
+  scope "/api/intersections", WaypointsDirectWeb do
+    pipe_through :api
+
+    resources "/", IntersectionApiController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", WaypointsDirect do
   #   pipe_through :api

@@ -16,8 +16,21 @@
 </template>
 
 <script>
-import Map from "../common/Map.vue";
-import Circle from "../common/Circle.vue";
+import axios from "axios";
+
+import api_paths from "../api_paths";
+import Map from "../common/Map";
+import Circle from "../common/Circle";
+
+const persistIntersection = (intersection) => {
+    axios.post(api_paths.CREATE, intersection)
+        .then(({data}) => {
+            if (!data.success) {
+                // TODO: use something beautiful
+                alert("Could not add intersection");
+            }
+        })
+};
 
 export default {
     name: "AppNewRoute",
@@ -39,6 +52,8 @@ export default {
             const lng = latLng.lng();
 
             this.intersections.push({lat, lng});
+
+            persistIntersection({lat, lng});
         }
     }
 };
