@@ -17,9 +17,12 @@
           <div class="my-3">
             <p class="card-subtitle text-muted font-weight-light">Intersection</p>
             <button 
-              class="btn btn-secondary" 
+              class="btn"
+              :class="{ 'btn-dark': show_intersections, 'btn-secondary': !show_intersections }" 
               @click="onShowIntersections">
-              <i class="fa fa-eye"/>
+              <i 
+                class="fa"
+                :class="{ 'fa-eye-slash': !show_intersections, 'fa-eye': show_intersections }"/>
             </button>
             <div class="btn-group">
               <button
@@ -83,7 +86,8 @@ export default {
         "google-map-circle": Circle
     },
     data() {
-        return { 
+        return {
+            show_intersections: false,
             intersections: []
         };
     },
@@ -100,13 +104,19 @@ export default {
             persistIntersection({lat, lng});
         },
         async onShowIntersections() {
-            const result = await getIntersections();
-            if (!result.success) {
-                alert("Could not fetch intersections at this time."); // TODO: use something beautiful
-                return false;
-            }
+            if (this.show_intersections) {
+                this.intersections = [];
+                this.show_intersections = false;
+            } else {
+                const result = await getIntersections();
+                if (!result.success) {
+                    alert("Could not fetch intersections at this time."); // TODO: use something beautiful
+                    return false;
+                }
             
-            this.intersections = result.intersections;
+                this.intersections = result.intersections;
+                this.show_intersections = true;
+            }
         }
     }
 };
