@@ -128,6 +128,45 @@ export default {
                 this.persistIntersection(googleData);
             }
         },
+        onCircleClick(googleData) {
+            const isAddEdgeMode = this.isActiveControlMode(controlModes.addEdge);
+            const isRemoveEdgeMode = this.isActiveControlMode(controlModes.removeEdge);
+
+            if (isAddEdgeMode) {
+                this.storeIntersectionPoint(googleData);
+            } else if (isRemoveEdgeMode) {
+                this.removeStoredIntersectionPoint(googleData);
+            }
+        },
+        storeIntersectionPoint({lat, lng}) {
+            const intersection = {lat, lng};
+            const arrayLength = this.selectedIntersectionPoints.length;
+            const arrayNotEmpty = !!arrayLength;
+            let notDuplicateFromLastItemAdded = true;
+
+            // check if the last item added is not the same
+            // with the currently clicked circle
+            if (arrayNotEmpty) {
+                const lastIndex = arrayLength - 1;
+                const lastIntersectionItem = this.selectedIntersectionPoints[lastIndex];
+
+                const sameLat = lastIntersectionItem.lat === lat;
+                const sameLng = lastIntersectionItem.lng === lng;
+                notDuplicateFromLastItemAdded = !sameLat && !sameLng;
+            } 
+
+            if (notDuplicateFromLastItemAdded) {
+                this.selectedIntersectionPoints.push(intersection);
+            } 
+        },
+        removeStoredIntersectionPoint({lat, lng}) {
+            this.selectedIntersectionPoints = this.selectedIntersectionPoints.filter((intersection) => {
+                const sameLat = intersection.lat === lat;
+                const sameLng = intersection.lng === lng;
+
+                return !(sameLat && sameLng);
+            });
+        },
         async persistIntersection({ latLng }) {
             const lat = latLng.lat();
             const lng = latLng.lng();
@@ -166,27 +205,6 @@ export default {
         },
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
-        },
-        onCircleClick({lat, lng}) {
-            const intersection = {lat, lng};
-            const arrayLength = this.selectedIntersectionPoints.length;
-            const arrayNotEmpty = !!arrayLength;
-            let notDuplicateFromLastItemAdded = true;
-
-            // check if the last item added is not the same
-            // with the currently clicked circle
-            if (arrayNotEmpty) {
-                const lastIndex = arrayLength - 1;
-                const lastIntersectionItem = this.selectedIntersectionPoints[lastIndex];
-
-                const sameLat = lastIntersectionItem.lat === lat;
-                const sameLng = lastIntersectionItem.lng === lng;
-                notDuplicateFromLastItemAdded = !sameLat && !sameLng;
-            } 
-
-            if (notDuplicateFromLastItemAdded) {
-                this.selectedIntersectionPoints.push(intersection);
-            } 
         }
     }
 };
