@@ -8,6 +8,10 @@
           :key="index"
           :center="intersection"
           @click="onCircleClick"/>
+
+        <google-map-polyline 
+          v-if="selectedIntersectionPoints.length"
+          :path="selectedIntersectionPoints" />
       </google-map>
     </div>
     <div class="sidebar">
@@ -69,9 +73,12 @@
 import axios from "axios";
 
 import api_paths from "../api_paths";
+import ToggleButton from "./ToggleButton";
+
+// google map components
 import Map from "../common/Map";
 import Circle from "../common/Circle";
-import ToggleButton from "./ToggleButton";
+import Polyline from "../common/Polyline";
 
 const doPersistIntersection = async (intersection) => {
     const response = await axios.post(api_paths.CREATE, intersection);
@@ -93,13 +100,12 @@ const controlModes = {
     removeEdge: 40
 };
 
-const selectedIntersectionPoints = [];
-
 export default {
     name: "AppNewRoute",
     components: {
         "google-map": Map,
         "google-map-circle": Circle,
+        "google-map-polyline": Polyline,
         "toggle-button": ToggleButton
     },
     data() {
@@ -107,7 +113,8 @@ export default {
             showIntersections: false,
             intersections: [],
             controlModes: controlModes,
-            activeControlMode: null
+            activeControlMode: null,
+            selectedIntersectionPoints: []
         };
     },
     methods: {
@@ -162,7 +169,7 @@ export default {
         },
         onCircleClick({lat, lng}) {
             const intersection = {lat, lng};
-            const arrayLength = selectedIntersectionPoints.length;
+            const arrayLength = this.selectedIntersectionPoints.length;
             const arrayNotEmpty = !!arrayLength;
             let notDuplicateFromLastItemAdded = true;
 
@@ -170,7 +177,7 @@ export default {
             // with the currently clicked circle
             if (arrayNotEmpty) {
                 const lastIndex = arrayLength - 1;
-                const lastIntersectionItem = selectedIntersectionPoints[lastIndex];
+                const lastIntersectionItem = this.selectedIntersectionPoints[lastIndex];
 
                 const sameLat = lastIntersectionItem.lat === lat;
                 const sameLng = lastIntersectionItem.lng === lng;
@@ -178,7 +185,7 @@ export default {
             } 
 
             if (notDuplicateFromLastItemAdded) {
-                selectedIntersectionPoints.push(intersection);
+                this.selectedIntersectionPoints.push(intersection);
             } 
         }
     }
