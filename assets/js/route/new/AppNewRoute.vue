@@ -63,14 +63,11 @@ import api_paths from "../api_paths";
 import Map from "../common/Map";
 import Circle from "../common/Circle";
 
-const persistIntersection = (intersection) => {
-    axios.post(api_paths.CREATE, intersection)
-        .then(({data}) => {
-            if (!data.success) {
-                // TODO: use something beautiful
-                alert("Could not add intersection");
-            }
-        })
+const persistIntersection = async (intersection) => {
+    const response = await axios.post(api_paths.CREATE, intersection);
+    const {data} = response;
+    
+    return data;
 };
 
 const getIntersections = async () => {
@@ -95,13 +92,17 @@ export default {
         remove() {
             this.attach = !this.attach;
         },
-        onMapClick({ latLng }) {
+        async onMapClick({ latLng }) {
             const lat = latLng.lat();
             const lng = latLng.lng();
 
-            this.intersections.push({lat, lng});
-
-            persistIntersection({lat, lng});
+            const result = await persistIntersection({lat, lng});
+            if (!result.success) {
+                // TODO: use something beautiful
+                alert("Could not add intersection");
+            } else {
+                this.intersections.push({lat, lng});
+            }
         },
         async onShowIntersections() {
             if (this.show_intersections) {
