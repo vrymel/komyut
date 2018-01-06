@@ -72,7 +72,7 @@ import Map from "../common/Map";
 import Circle from "../common/Circle";
 import ToggleButton from "./ToggleButton";
 
-const persistIntersection = async (intersection) => {
+const doPersistIntersection = async (intersection) => {
     const response = await axios.post(api_paths.CREATE, intersection);
     const {data} = response;
     
@@ -111,11 +111,18 @@ export default {
         remove() {
             this.attach = !this.attach;
         },
-        async onMapClick({ latLng }) {
+        onMapClick(googleData) {
+            const isAddIntersectionMode = this.isActiveControlMode(controlModes.addIntersection);
+
+            if (isAddIntersectionMode) {
+                this.persistIntersection(googleData);
+            }
+        },
+        async persistIntersection({ latLng }) {
             const lat = latLng.lat();
             const lng = latLng.lng();
 
-            const result = await persistIntersection({lat, lng});
+            const result = await doPersistIntersection({lat, lng});
             if (!result.success) {
                 // TODO: use something beautiful
                 alert("Could not add intersection");
@@ -139,7 +146,13 @@ export default {
             }
         },
         onControlModeChange(mode) {
-            this.activeControlMode = parseInt(mode);
+            const _mode = parseInt(mode);
+            // turn off active state if button is clicked again
+            if (this.isActiveControlMode(_mode)) {
+                this.activeControlMode = null;
+            } else {
+                this.activeControlMode = _mode;
+            }
         },
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
