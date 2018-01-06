@@ -6,7 +6,8 @@
         <google-map-circle 
           v-for="(intersection, index) in intersections"
           :key="index"
-          :center="intersection"/>
+          :center="intersection"
+          @click="onCircleClick"/>
       </google-map>
     </div>
     <div class="sidebar">
@@ -92,6 +93,8 @@ const controlModes = {
     removeEdge: 40
 };
 
+const selectedIntersectionPoints = [];
+
 export default {
     name: "AppNewRoute",
     components: {
@@ -156,6 +159,27 @@ export default {
         },
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
+        },
+        onCircleClick({lat, lng}) {
+            const intersection = {lat, lng};
+            const arrayLength = selectedIntersectionPoints.length;
+            const arrayNotEmpty = !!arrayLength;
+            let notDuplicateFromLastItemAdded = true;
+
+            // check if the last item added is not the same
+            // with the currently clicked circle
+            if (arrayNotEmpty) {
+                const lastIndex = arrayLength - 1;
+                const lastIntersectionItem = selectedIntersectionPoints[lastIndex];
+
+                const sameLat = lastIntersectionItem.lat === lat;
+                const sameLng = lastIntersectionItem.lng === lng;
+                notDuplicateFromLastItemAdded = !sameLat && !sameLng;
+            } 
+
+            if (notDuplicateFromLastItemAdded) {
+                selectedIntersectionPoints.push(intersection);
+            } 
         }
     }
 };

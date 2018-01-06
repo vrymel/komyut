@@ -27,6 +27,8 @@ export default {
             center: this.center,
             radius: 15
         });
+
+        this._circle.addListener("click", (...args) => this.$emit("click", this.center, ...args));
     },
 
     beforeDestroy() {
