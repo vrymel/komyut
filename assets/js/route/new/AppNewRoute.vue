@@ -10,9 +10,45 @@
       </google-map>
     </div>
     <div class="sidebar">
-      <button 
-        class="btn btn-light" 
-        @click="onShowIntersections">Show intersections</button>
+      <div class="m-2 card">
+        <div class="card-body">
+          <h6 class="card-title">Control Modes</h6>
+          
+          <div class="my-3">
+            <p class="card-subtitle text-muted font-weight-light">Intersection</p>
+            <button 
+              class="btn btn-secondary" 
+              @click="onShowIntersections">
+              <i class="fa fa-eye"/>
+            </button>
+            <div class="btn-group">
+              <button
+              class="btn btn-secondary">
+                <i class="fa fa-plus"/>
+              </button>
+              <button
+              class="btn btn-secondary">
+                <i class="fa fa-minus"/>
+              </button>
+            </div>
+          </div>
+
+          <div class="my-3">
+            <p class="card-subtitle text-muted font-weight-light">Connect</p>
+            <div class="btn-group">
+              <button
+              class="btn btn-secondary">
+                <i class="fa fa-plus"/>
+              </button>
+              <button
+              class="btn btn-secondary">
+                <i class="fa fa-eraser"/>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </template>

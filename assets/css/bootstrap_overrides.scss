@@ -1,5 +1,9 @@
 @import "_variables.scss";
 
+html {
+    font-size: 14px; // set base font-size to 14px, default is 16px which is a bit large
+}
+
 .btn-primary {
     background-color: $primaryColor;
     border-color: $primaryColor;
