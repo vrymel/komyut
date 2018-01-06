@@ -6,6 +6,7 @@
 <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 <script>
     PAGE_ROUTES = {
+        "INDEX": "<%= intersection_api_path(@conn, :index) %>",
         "CREATE": "<%= intersection_api_path(@conn, :create) %>"
     };
 

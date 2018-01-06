@@ -3,6 +3,13 @@ defmodule WaypointsDirectWeb.IntersectionApiController do
 
     alias WaypointsDirect.Intersection
 
+    def index(conn, _params) do
+      intersections = Repo.all(Intersection) 
+      |> Enum.map(fn(intersection) -> intersection |> Map.from_struct |> Map.take [:lat, :lng] end)
+
+      json conn, %{success: true, intersections: intersections}
+    end
+
     def create(conn, %{"lat" => lat, "lng" => lng}) do
       changeset = Intersection.changeset(%Intersection{}, %{lat: lat, lng: lng})
 

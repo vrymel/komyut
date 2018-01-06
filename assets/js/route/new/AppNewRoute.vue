@@ -10,7 +10,9 @@
       </google-map>
     </div>
     <div class="sidebar">
-      <button @click="remove">Remove</button>
+      <button 
+        class="btn btn-light" 
+        @click="onShowIntersections">Show intersections</button>
     </div>
   </div>
 </template>
@@ -30,6 +32,12 @@ const persistIntersection = (intersection) => {
                 alert("Could not add intersection");
             }
         })
+};
+
+const getIntersections = async () => {
+    const response = await axios.get(api_paths.INDEX);
+
+    return response.data;
 };
 
 export default {
@@ -54,6 +62,15 @@ export default {
             this.intersections.push({lat, lng});
 
             persistIntersection({lat, lng});
+        },
+        async onShowIntersections() {
+            const result = await getIntersections();
+            if (!result.success) {
+                alert("Could not fetch intersections at this time."); // TODO: use something beautiful
+                return false;
+            }
+            
+            this.intersections = result.intersections;
         }
     }
 };
