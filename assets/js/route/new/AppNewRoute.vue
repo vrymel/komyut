@@ -18,36 +18,44 @@
             <p class="card-subtitle text-muted font-weight-light">Intersection</p>
             <button 
               class="btn"
-              :class="{ 'btn-dark': show_intersections, 'btn-secondary': !show_intersections }" 
+              :class="{ 'btn-dark': showIntersections, 'btn-secondary': !showIntersections }" 
               @click="onShowIntersections">
               <i 
                 class="fa"
-                :class="{ 'fa-eye-slash': !show_intersections, 'fa-eye': show_intersections }"/>
+                :class="{ 'fa-eye-slash': !showIntersections, 'fa-eye': showIntersections }"/>
             </button>
             <div class="btn-group">
-              <button
-              class="btn btn-secondary">
+              <toggle-button
+                :value="controlModes.addIntersection.toString()"
+                :active="isActiveControlMode(controlModes.addIntersection)"
+                @click="onControlModeChange">
                 <i class="fa fa-plus"/>
-              </button>
-              <button
-              class="btn btn-secondary">
-                <i class="fa fa-minus"/>
-              </button>
+              </toggle-button>
+              <toggle-button
+                :value="controlModes.removeIntersection.toString()"
+                :active="isActiveControlMode(controlModes.removeIntersection)"
+                @click="onControlModeChange">
+                <i class="fa fa-eraser"/>
+              </toggle-button>
             </div>
           </div>
 
           <div class="my-3">
             <p class="card-subtitle text-muted font-weight-light">Connect</p>
             <div class="btn-group">
-              <button
-              class="btn btn-secondary">
+              <toggle-button
+                :value="controlModes.addEdge.toString()"
+                :active="isActiveControlMode(controlModes.addEdge)"
+                @click="onControlModeChange">
                 <i class="fa fa-plus"/>
-              </button>
-              <button
-              class="btn btn-secondary">
+              </toggle-button>
+              <toggle-button
+                :value="controlModes.removeEdge.toString()"
+                :active="isActiveControlMode(controlModes.removeEdge)"
+                @click="onControlModeChange">
                 <i class="fa fa-eraser"/>
-              </button>
-            </div>
+              </toggle-button>
+            </div> 
           </div>
         </div>
       </div>
@@ -62,6 +70,7 @@ import axios from "axios";
 import api_paths from "../api_paths";
 import Map from "../common/Map";
 import Circle from "../common/Circle";
+import ToggleButton from "./ToggleButton";
 
 const persistIntersection = async (intersection) => {
     const response = await axios.post(api_paths.CREATE, intersection);
@@ -76,16 +85,26 @@ const getIntersections = async () => {
     return response.data;
 };
 
+const controlModes = {
+    addIntersection: 10,
+    removeIntersection: 20,
+    addEdge: 30,
+    removeEdge: 40
+};
+
 export default {
     name: "AppNewRoute",
     components: {
         "google-map": Map,
-        "google-map-circle": Circle
+        "google-map-circle": Circle,
+        "toggle-button": ToggleButton
     },
     data() {
         return {
-            show_intersections: false,
-            intersections: []
+            showIntersections: false,
+            intersections: [],
+            controlModes: controlModes,
+            activeControlMode: null
         };
     },
     methods: {
@@ -105,9 +124,9 @@ export default {
             }
         },
         async onShowIntersections() {
-            if (this.show_intersections) {
+            if (this.showIntersections) {
                 this.intersections = [];
-                this.show_intersections = false;
+                this.showIntersections = false;
             } else {
                 const result = await getIntersections();
                 if (!result.success) {
@@ -116,8 +135,14 @@ export default {
                 }
             
                 this.intersections = result.intersections;
-                this.show_intersections = true;
+                this.showIntersections = true;
             }
+        },
+        onControlModeChange(mode) {
+            this.activeControlMode = parseInt(mode);
+        },
+        isActiveControlMode(mode) {
+            return this.activeControlMode === mode;
         }
     }
 };
