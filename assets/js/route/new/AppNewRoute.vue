@@ -64,6 +64,17 @@
           </div>
         </div>
       </div>
+
+      <div class="m-2 card">
+        <div class="card-body">
+          <button class="btn btn-info">Snap to road</button>
+          <button 
+            class="btn btn-primary"
+            @click="formRouteEdges">
+            <i class="fa fa-save"/>
+          Save</button>
+        </div>
+      </div>
       
     </div>
   </div>
@@ -205,6 +216,29 @@ export default {
         },
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
+        },
+        formRouteEdges() {
+            const intersectionsLength = this.selectedIntersectionPoints.length;
+            const arrayLastIndex = intersectionsLength - 1;
+            const routeEdges = [];
+
+            let start = 0;
+            let end = 0;
+            for(let i = 0; (end < arrayLastIndex); i++) {
+                start = i;
+                end = i + 1;
+
+                // TODO: this will not work as we need the intersection_id so we
+                // can save it as part of the route_edge record change getIntersection
+                // API so it also returns intersection_id together with lat and lng
+                const startIntersection = Object.assign({}, this.selectedIntersectionPoints[start]);
+                const endIntersection = Object.assign({}, this.selectedIntersectionPoints[end]);
+
+                routeEdges.push({
+                    start: startIntersection,
+                    end: endIntersection
+                });
+            }
         }
     }
 };
