@@ -185,8 +185,7 @@ export default {
                 // TODO: use something beautiful
                 alert("Could not add intersection");
             } else {
-                // TODO: include the intersection `id` here
-                this.intersections.push({lat, lng});
+                this.intersections.push({lat, lng, id: result.intersection_id});
             }
         },
         async onShowIntersections() {
