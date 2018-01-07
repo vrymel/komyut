@@ -149,8 +149,8 @@ export default {
                 this.removeStoredIntersectionPoint(googleData);
             }
         },
-        storeIntersectionPoint({lat, lng}) {
-            const intersection = {lat, lng};
+        storeIntersectionPoint({id, lat, lng}) {
+            const intersection = {id, lat, lng};
             const arrayLength = this.selectedIntersectionPoints.length;
             const arrayNotEmpty = !!arrayLength;
             let notDuplicateFromLastItemAdded = true;
@@ -161,9 +161,7 @@ export default {
                 const lastIndex = arrayLength - 1;
                 const lastIntersectionItem = this.selectedIntersectionPoints[lastIndex];
 
-                const sameLat = lastIntersectionItem.lat === lat;
-                const sameLng = lastIntersectionItem.lng === lng;
-                notDuplicateFromLastItemAdded = !sameLat && !sameLng;
+                notDuplicateFromLastItemAdded = lastIntersectionItem.id !== id;
             } 
 
             if (notDuplicateFromLastItemAdded) {
@@ -187,6 +185,7 @@ export default {
                 // TODO: use something beautiful
                 alert("Could not add intersection");
             } else {
+                // TODO: include the intersection `id` here
                 this.intersections.push({lat, lng});
             }
         },

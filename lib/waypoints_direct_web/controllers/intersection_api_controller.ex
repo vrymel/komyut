@@ -5,7 +5,7 @@ defmodule WaypointsDirectWeb.IntersectionApiController do
 
     def index(conn, _params) do
       intersections = Repo.all(Intersection) 
-      |> Enum.map(fn(intersection) -> intersection |> Map.from_struct |> Map.take [:lat, :lng] end)
+      |> Enum.map(fn(intersection) -> intersection |> Map.from_struct |> Map.take [:id, :lat, :lng] end)
 
       json conn, %{success: true, intersections: intersections}
     end
