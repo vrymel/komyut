@@ -2,6 +2,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
     use WaypointsDirectWeb, :controller
     
     alias WaypointsDirect.Route
+    alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.RouteSegment
     alias WaypointsDirect.RouteWaypoint
     
@@ -47,25 +48,42 @@ defmodule WaypointsDirectWeb.RouteApiController do
 
         json conn, new_waypoints
     end
-    
-    def create(conn, %{"description" => route_description, "route_id" => route_id, "waypoints" => waypoints}) do
-        route = Repo.get!(Route, route_id)
-        route_segment_assoc = build_assoc(route, :segments, %{"description": route_description})
-        
-        case Repo.insert(route_segment_assoc) do
-            {:ok, route_segment} -> 
-                relate_waypoints(route_segment, waypoints)
-                json conn, %{
-                    "success": true
-                }
+
+    def create(conn, %{"route_name" => route_name, "raw_route_edges" => raw_route_edges}) do
+      route_changeset = Route.changeset(%Route{}, %{description: route_name})
+      success = false
+
+      if route_changeset.valid? do
+        case Repo.insert route_changeset do
+          {:ok, route} -> 
+            success = create_route_edges(route, raw_route_edges) == {:ok}
         end
+      end
+
+      json conn, %{"success" => success}
     end
 
-    def relate_waypoints(route_segment, waypoints) do
-        Enum.each waypoints, fn(%{"lat" => lat, "lng" => lng}) -> 
-            waypoint_assoc = build_assoc(route_segment, :waypoints, %{lat: lat, lng: lng})
+    defp create_route_edges(route, raw_route_edges) do
+      error = Enum.map(raw_route_edges, fn raw_re -> save_edge(route, raw_re) end)
+      |> Enum.filter(
+          fn(result) -> 
+            case result do
+              {:error, _} -> true
+              _ -> false
+            end
+      end)
 
-            Repo.insert(waypoint_assoc)
-        end
+      if Enum.empty?(error) do
+        {:ok}
+      else
+        {:error}
+      end
+    end
+
+    defp save_edge(route, %{"start" => %{"id" => start_intersection_id}, "end" => %{"id" => end_intersection_id}}) do
+      route_edge_map = %{from_intersection_id: start_intersection_id, to_intersection_id: end_intersection_id}
+      route_edge_assoc = build_assoc(route, :route_edges, route_edge_map)
+
+      Repo.insert route_edge_assoc
     end
 end

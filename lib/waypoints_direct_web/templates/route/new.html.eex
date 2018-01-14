@@ -8,7 +8,7 @@
     PAGE_ROUTES = {
         "INDEX": "<%= intersection_api_path(@conn, :index) %>",
         "CREATE": "<%= intersection_api_path(@conn, :create) %>",
-        "CREATE_ROUTE_EDGES": "<%= route_edge_api_path(@conn, :create) %>"
+        "CREATE_ROUTE": "<%= route_api_path(@conn, :create) %>"
     };
 
     function ready() {

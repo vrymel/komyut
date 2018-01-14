@@ -67,10 +67,22 @@
 
       <div class="m-2 card">
         <div class="card-body">
+          <h6 class="card-title">Route Name</h6>
+
+          <input 
+            v-model="routeName"
+            type="text" 
+            class="form-control"
+            placeholder="Enter route name">
+        </div>
+      </div>
+
+      <div class="m-2 card">
+        <div class="card-body">
           <button class="btn btn-info">Snap to road</button>
           <button 
             class="btn btn-primary"
-            @click="formRouteEdges">
+            @click="saveRoute">
             <i class="fa fa-save"/>
           Save</button>
         </div>
@@ -104,10 +116,42 @@ const getIntersections = async () => {
     return response.data;
 };
 
-const doPersistRouteEdges = async (routeEdges) => {
-    const response = await axios.post(api_paths.CREATE_ROUTE_EDGES, { raw_route_edges: routeEdges });
+const doPersistRoute = async ({routeName, routeEdges}) => {
+    const response = await axios.post(api_paths.CREATE_ROUTE, { 
+        route_name: routeName,
+        raw_route_edges: routeEdges 
+    });
 
     return response.data;
+};
+
+// form route edges based on the selected intersections array
+// the pairing of intersection to be the from and end intersections
+// is based on the array. `current index` will be paired with `currect index + 1`
+// last iteration will be whatever the `last index - 1` is. we stop before
+// the last index because that is our only last pair. if we stop ON the last index
+// itself, the last index will not have any pair
+const formRouteEdges = (selectedIntersectionPoints) => {
+    const intersectionsLength = selectedIntersectionPoints.length;
+    const arrayLastIndex = intersectionsLength - 1;
+    const routeEdges = [];
+
+    let start = 0;
+    let end = 0;
+    for(let i = 0; (end < arrayLastIndex); i++) {
+        start = i;
+        end = i + 1;
+                
+        const startIntersection = Object.assign({}, selectedIntersectionPoints[start]);
+        const endIntersection = Object.assign({}, selectedIntersectionPoints[end]);
+
+        routeEdges.push({
+            start: startIntersection,
+            end: endIntersection
+        });
+    }
+
+    return routeEdges;
 };
 
 const controlModes = {
@@ -131,7 +175,8 @@ export default {
             intersections: [],
             controlModes: controlModes,
             activeControlMode: null,
-            selectedIntersectionPoints: []
+            selectedIntersectionPoints: [],
+            routeName: ""
         };
     },
     methods: {
@@ -221,28 +266,13 @@ export default {
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
         },
-        formRouteEdges() {
-            const intersectionsLength = this.selectedIntersectionPoints.length;
-            const arrayLastIndex = intersectionsLength - 1;
-            const routeEdges = [];
+        saveRoute() {
+            const routeEdges = formRouteEdges(this.selectedIntersectionPoints);
 
-            let start = 0;
-            let end = 0;
-            for(let i = 0; (end < arrayLastIndex); i++) {
-                start = i;
-                end = i + 1;
-
-                // TODO: this will not work as we need the intersection_id so we
-                // can save it as part of the route_edge record change getIntersection
-                // API so it also returns intersection_id together with lat and lng
-                const startIntersection = Object.assign({}, this.selectedIntersectionPoints[start]);
-                const endIntersection = Object.assign({}, this.selectedIntersectionPoints[end]);
-
-                routeEdges.push({
-                    start: startIntersection,
-                    end: endIntersection
-                });
-            }
+            doPersistRoute({
+                routeEdges,
+                routeName: this.routeName
+            }).then(console.log)
         }
     }
 };

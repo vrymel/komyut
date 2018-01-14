@@ -31,7 +31,7 @@ defmodule WaypointsDirectWeb.Router do
   end
 
   scope "/api/routes", WaypointsDirectWeb do
-    pipe_through :browser
+    pipe_through :api
 
     resources "/", RouteApiController
     get "/get_segment_waypoints/:segment_id", RouteApiController, :get_segment_waypoints
@@ -42,12 +42,6 @@ defmodule WaypointsDirectWeb.Router do
     pipe_through :api
 
     resources "/", IntersectionApiController
-  end
-
-  scope "/api/route_edges", WaypointsDirectWeb do
-    pipe_through :api
-
-    resources "/", RouteEdgeApiController
   end
 
   # Other scopes may use custom stacks.
