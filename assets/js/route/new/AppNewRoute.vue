@@ -104,6 +104,12 @@ const getIntersections = async () => {
     return response.data;
 };
 
+const doPersistRouteEdges = async (routeEdges) => {
+    const response = await axios.post(api_paths.CREATE_ROUTE_EDGES, { raw_route_edges: routeEdges });
+
+    return response.data;
+};
+
 const controlModes = {
     addIntersection: 10,
     removeIntersection: 20,
