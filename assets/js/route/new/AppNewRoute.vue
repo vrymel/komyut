@@ -266,13 +266,23 @@ export default {
         isActiveControlMode(mode) {
             return this.activeControlMode === mode;
         },
-        saveRoute() {
+        async saveRoute() {
             const routeEdges = formRouteEdges(this.selectedIntersectionPoints);
 
-            doPersistRoute({
+            const result = await doPersistRoute({
                 routeEdges,
                 routeName: this.routeName
-            }).then(console.log)
+            });
+
+            if (result.success) {
+                this.resetForm();
+            } else {
+                alert("something wen't wrong while saving...");
+            }
+        },
+        resetForm() {
+            this.selectedIntersectionPoints = [];
+            this.routeName = "";
         }
     }
 };
