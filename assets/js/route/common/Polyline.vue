@@ -25,8 +25,8 @@ export default {
     },
 
     beforeDestroy() {
-        if (this._circle) {
-            this._circle.setMap(null);
+        if (this._polyline) {
+            this._polyline.setMap(null);
         }
     },
 
