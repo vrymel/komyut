@@ -5,6 +5,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey %>"></script>
 <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 <script>
+    GOOGLE_MAP_API_KEY= "<%= googleMapApiKey %>";
     PAGE_ROUTES = {
         "INDEX": "<%= intersection_api_path(@conn, :index) %>",
         "CREATE": "<%= intersection_api_path(@conn, :create) %>",

@@ -10,6 +10,7 @@ module.exports = {
         "indent": ["error", 4]
     },
     "globals": {
-        "google": true
+        "google": true,
+        "GOOGLE_MAP_API_KEY": true
     }
 };

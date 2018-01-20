@@ -11,7 +11,15 @@
 
         <google-map-polyline 
           v-if="selectedIntersectionPoints.length"
+          :name="'intersectionPath'"
+          :visible="!showRoutePath"
           :path="selectedIntersectionPoints" />
+
+        <google-map-polyline
+          v-if="routePath.length"
+          :name="'routePath'"
+          :visible="showRoutePath"
+          :path="routePath" />
       </google-map>
     </div>
     <div class="sidebar">
@@ -62,6 +70,20 @@
               </toggle-button>
             </div> 
           </div>
+
+          <div class="my-3">
+            <button
+              class="btn btn-light"
+              @click="resetForm">
+            Reset</button>
+            <toggle-button
+              :value="'value'"
+              :active="showRoutePath"
+              @click="snapToRoads">
+              <i class="fa fa-road"/>
+              Snap to road
+            </toggle-button>
+          </div>
         </div>
       </div>
 
@@ -79,7 +101,6 @@
 
       <div class="m-2 card">
         <div class="card-body">
-          <button class="btn btn-info">Snap to road</button>
           <button 
             class="btn btn-primary"
             @click="saveRoute">
@@ -94,6 +115,7 @@
 
 <script>
 import axios from "axios";
+import qs from "query-string";
 
 import api_paths from "../api_paths";
 import ToggleButton from "./ToggleButton";
@@ -154,6 +176,29 @@ const formRouteEdges = (selectedIntersectionPoints) => {
     return routeEdges;
 };
 
+const snapToRoads = async (waypoints) => {
+    var pathValues = waypoints.map((w) => {
+        const {lat, lng} = w;
+
+        return `${lat},${lng}`;
+    });
+
+    const params = {
+        interpolate: true,
+        key: GOOGLE_MAP_API_KEY,
+        path: pathValues.join('|')
+    };
+    const url = `https://roads.googleapis.com/v1/snapToRoads?${qs.stringify(params)}`;
+
+    return axios.get(url)
+        .then((response) => response.data)
+        .then(({snappedPoints}) => {
+            return snappedPoints.map((point) => {
+                return new google.maps.LatLng(point.location.latitude, point.location.longitude);
+            });
+        });
+};
+
 const controlModes = {
     addIntersection: 10,
     removeIntersection: 20,
@@ -176,6 +221,8 @@ export default {
             controlModes: controlModes,
             activeControlMode: null,
             selectedIntersectionPoints: [],
+            routePath: [],
+            showRoutePath: false,
             routeName: ""
         };
     },
@@ -283,6 +330,16 @@ export default {
         resetForm() {
             this.selectedIntersectionPoints = [];
             this.routeName = "";
+        },
+        async snapToRoads() {
+            if (!this.showRoutePath) {
+                const latlng = await snapToRoads(this.selectedIntersectionPoints);
+
+                this.routePath = latlng;
+                this.showRoutePath = true;
+            } else {
+                this.showRoutePath = false;
+            }
         }
     }
 };
