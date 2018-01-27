@@ -3,15 +3,15 @@ defmodule WaypointsDirect.Graph do
     alias WaypointsDirect.RouteEdge
 
     def new() do
-        %{:vertices_count => 0, :edges_count => 0, :bags => %{}}
+        %{:edges_count => 0, :bags => %{}}
     end
 
-    def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, %RouteEdge{from_intersection_id: from_id, to_intersection_id: to_id}) do
+    def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, %RouteEdge{from_intersection_id: from_id} = route_edge) do
         result = Map.get(bags, from_id)
         source_bag = unless result, do: [], else: result
 
-        proceed_add = Enum.member?(source_bag, to_id)
-        source_bag = unless proceed_add, do: [to_id | source_bag], else: source_bag
+        proceed_add = Enum.member?(source_bag, route_edge)
+        source_bag = unless proceed_add, do: [route_edge | source_bag], else: source_bag
 
         unless proceed_add do
             new_bags = Map.put(bags, from_id, source_bag)
