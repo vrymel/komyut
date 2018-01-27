@@ -12,6 +12,7 @@ defmodule WaypointsDirect.RouteEdge do
         belongs_to :from_intersection, Intersection, foreign_key: :from_intersection_id
         belongs_to :to_intersection, Intersection, foreign_key: :to_intersection_id
         belongs_to :route, Route # without defining foreign_key, it will default to the name with an _id suffix, in this case route_id
+        field :weight, :float
 
         timestamps()
     end
