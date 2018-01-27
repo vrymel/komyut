@@ -9,7 +9,9 @@ defmodule WaypointsDirect.IndexMinPQ do
       Enum.min_by pq, fn(%{:value => value}) -> value end 
     end
 
-    def del_min(pq, del_key_value) do
+    def remove(pq, del_key_value) do
       Enum.filter pq, fn(key_value) -> key_value !== del_key_value end
     end
+
+    def is_empty(pq) do Enum.empty?(pq) end
 end
