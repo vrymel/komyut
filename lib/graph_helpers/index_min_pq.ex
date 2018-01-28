@@ -13,5 +13,9 @@ defmodule WaypointsDirect.IndexMinPQ do
       Enum.filter pq, fn(key_value) -> key_value !== del_key_value end
     end
 
-    def is_empty(pq) do Enum.empty?(pq) end
+    def find_by_key(pq, find_key) do
+      Enum.find pq, fn(%{:key => key}) -> key === find_key end
+    end
+
+    def empty?(pq) do Enum.empty?(pq) end
 end
