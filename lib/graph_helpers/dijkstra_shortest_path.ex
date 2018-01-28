@@ -9,6 +9,20 @@ defmodule WaypointsDirect.DijkstraShortestPath do
     %{edge_to: %{}, dist_to: %{}, pq: pq}
   end
 
+  def path_to(%{:edge_to => edge_to} = tree, vertex, path \\ []) do
+    route_edge = Map.get(edge_to, vertex)
+
+    if route_edge do
+      path_to tree, Map.get(route_edge, :from_intersection_id), [route_edge | path]
+    else
+      path
+    end
+  end
+
+  def path_exist?(%{:edge_to => edge_to}, vertex) do
+    if Map.get(edge_to, vertex), do: true, else: false
+  end
+
   def build_tree(graph, %{:pq => pq} = tree) do
     lowest_weight = IndexMinPQ.get_min(pq)
     pq = IndexMinPQ.remove(pq, lowest_weight)
