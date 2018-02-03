@@ -81,7 +81,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
     end
 
     defp save_edge(route, %{"start" => %{"id" => start_intersection_id}, "end" => %{"id" => end_intersection_id}}) do
-      route_edge_map = %{from_intersection_id: start_intersection_id, to_intersection_id: end_intersection_id}
+      route_edge_map = %{from_intersection_id: start_intersection_id, to_intersection_id: end_intersection_id, weight: 1.0} # TODO: replace weight with something relevant to the actual edge, maybe distance between the points?
       route_edge_assoc = build_assoc(route, :route_edges, route_edge_map)
 
       Repo.insert route_edge_assoc
