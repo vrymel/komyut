@@ -3,7 +3,7 @@ defmodule WaypointsDirect.Intersection do
 
     alias WaypointsDirect.RouteEdge
 
-    schema "intersection" do
+    schema "intersections" do
         field :description, :string
         field :lat, :float
         field :lng, :float
