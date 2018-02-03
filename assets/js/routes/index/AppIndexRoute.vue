@@ -32,7 +32,13 @@
         </div>
       </div>
     </div>
-</div></template>
+
+    <route-select-dialog
+      v-show="showSelectRouteDialog"
+      :routes="routes"
+      @close="closeSelectRouteDialog"/>
+  </div>
+</template>
 
 <script>
 import axios from "axios";
@@ -42,6 +48,7 @@ import { APP_LOGO } from "../globals";
 
 import Map from "../common/Map";
 import Circle from "../common/Circle";
+import RouteSelectDialog from "./RouteSelectDialog";
 
 const getRoutes = async () => {
     try {
@@ -58,7 +65,8 @@ export default {
     name: "AppIndexRoute",
     components: {
         "google-map": Map,
-        "google-map-circle": Circle
+        "google-map-circle": Circle,
+        "route-select-dialog": RouteSelectDialog
     },
     data() {
         return {
@@ -76,6 +84,9 @@ export default {
     methods: {
         routeSelect() {
             this.showSelectRouteDialog = true;
+        },
+        closeSelectRouteDialog() {
+            this.showSelectRouteDialog = false;
         }
     }
 }
