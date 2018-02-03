@@ -344,6 +344,8 @@ export default {
         resetForm() {
             this.selectedIntersectionPoints = [];
             this.routeName = "";
+            this.routePath = [];
+            this.showRoutePath = false;
         },
         async snapToRoads() {
             if (!this.showRoutePath) {
