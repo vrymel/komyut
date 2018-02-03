@@ -13,7 +13,8 @@
               class="list-group-item" 
               :class="{ active: activeRouteId == route.id }"
               v-for="(route, index) in routes"
-              :key="index">
+              :key="index"
+              @click="selectRoute(route)">
               <span class="description">{{ route.description }}</span>
             </li>
           </ul>
@@ -51,7 +52,46 @@ export default {
     methods: {
         close() {
             this.$emit("close");
+        },
+        selectRoute(route) {
+            this.$emit("routeSelected", route);
         }
     }
 }
 </script>
+
+<style lang="sass" scoped>
+.route-select-dialog {
+    .list-group-container {
+        overflow-y: scroll;
+        height: 45vh;
+
+        .list-group {
+            .list-group-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                &:hover {
+                    background-color: #fbfbfb;
+                    cursor: pointer;
+                }
+    
+                &.active {
+                    background-color: whitesmoke;
+                }
+
+                .data-not-available-yet {
+                    font-size: 0.5em;
+                    background-color: #efefef;
+                    padding: 3px 6px;
+                    border-radius: 3px;
+                    color: #989898;
+                    margin-left: 8px;
+                }
+            }
+        }
+    }
+}
+</style>
+

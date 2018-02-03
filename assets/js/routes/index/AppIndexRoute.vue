@@ -23,11 +23,12 @@
 
             <div 
               class="card-text"
-              v-if="route">
-              {{ route.description }}
+              v-if="currentRoute">
+              {{ currentRoute.description }}
             </div>
-            <div
-            class="card-text no-route-selected">No route selected</div>
+            <div 
+              v-else
+              class="card-text no-route-selected">No route selected</div>
           </div>
         </div>
       </div>
@@ -36,7 +37,8 @@
     <route-select-dialog
       v-show="showSelectRouteDialog"
       :routes="routes"
-      @close="closeSelectRouteDialog"/>
+      @close="closeSelectRouteDialog"
+      @routeSelected="routeSelected"/>
   </div>
 </template>
 
@@ -71,7 +73,7 @@ export default {
     data() {
         return {
             app_logo: APP_LOGO,
-            route: null,
+            currentRoute: null,
             routes: [],
             showSelectRouteDialog: false
         };
@@ -87,6 +89,10 @@ export default {
         },
         closeSelectRouteDialog() {
             this.showSelectRouteDialog = false;
+        },
+        routeSelected(route) {
+            this.currentRoute = route;
+            this.closeSelectRouteDialog();
         }
     }
 }
