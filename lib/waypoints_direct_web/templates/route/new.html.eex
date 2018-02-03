@@ -13,7 +13,7 @@
     };
 
     function ready() {
-        require("js/route/new/main.js");
+        require("js/routes/new/main.js");
     }
 
 
