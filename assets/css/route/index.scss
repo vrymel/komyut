@@ -13,16 +13,18 @@ $routesHeight: 70px;
 			flex: 3;
 		}
 
-		.route-context {
+		.sidebar {
 			flex: 1;
 			height: 100vh;
 			padding: 12px 8px;
 			background-color: $primaryColor;
 			color: $primaryTextColor;
+			padding: 20px 7px;
 			
 			.header {
 				font-size: 0.8em;
 				color: transparentize($primaryTextColor, 0.3);
+				margin-bottom: 0;
 			}
 			
 			.app-logo {
@@ -32,6 +34,7 @@ $routesHeight: 70px;
 			.current {
 				flex-basis: 300px;
 				flex-shrink: 1;
+				margin-bottom: 20px;
 				
 				.description {
 					font-weight: bold;
@@ -39,6 +42,10 @@ $routesHeight: 70px;
 					&:hover {
 						color: transparentize($primaryTextColor, 0.1);
 					}
+				}
+
+				.no-route-selected {
+					font-style: italic;
 				}
 			}
 			
