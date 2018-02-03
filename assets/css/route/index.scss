@@ -3,102 +3,49 @@
 $routesHeight: 70px;
 
 .module-route-index {
-	.route-context {
+	display: flex;
+
+	.app-index-route {
 		display: flex;
-		padding: 12px 8px;
-		height: $routesHeight;
-		background-color: $primaryColor;
-		color: $primaryTextColor;
-		border-top: solid 2px lighten($primaryColor, 1%);
-		
-		.header {
-			font-size: 0.8em;
-			color: transparentize($primaryTextColor, 0.3);
+		width: 100%;
+
+		.map-container {
+			flex: 3;
 		}
-		
-		.app-logo {
-			flex-basis: 100px;
-		}
-		
-		.current {
-			flex-basis: 300px;
-			flex-shrink: 1;
+
+		.route-context {
+			flex: 1;
+			height: 100vh;
+			padding: 12px 8px;
+			background-color: $primaryColor;
+			color: $primaryTextColor;
 			
-			.description {
-				font-weight: bold;
+			.header {
+				font-size: 0.8em;
+				color: transparentize($primaryTextColor, 0.3);
+			}
+			
+			.app-logo {
+				flex-basis: 100px;
+			}
+			
+			.current {
+				flex-basis: 300px;
+				flex-shrink: 1;
 				
-				&:hover {
-					color: transparentize($primaryTextColor, 0.1);
+				.description {
+					font-weight: bold;
+					
+					&:hover {
+						color: transparentize($primaryTextColor, 0.1);
+					}
 				}
 			}
-		}
-		
-		.current.city, .current.route {
-			.description {
-				cursor: pointer;
-			}
-		}
-		
-		.segments {
-			flex-basis: 250px;
-			flex-shrink: 2;
-			flex-grow: 1;
 			
-			.hlist {
-				li {
-					background-color: darken($primaryColor, 2%);
-					padding: 3px 8px;
-					border-radius: 3px;
-					font-size: 0.8em;
+			.current.city, .current.route {
+				.description {
 					cursor: pointer;
-					
-					&:hover {
-						background-color: darken($primaryColor, 3.5%);
-					}
-					
-					&.active, &:hover.active {
-						background-color: darken($primaryColor, 7%);
-					}			
 				}
-			}
-		}
-	}
-	
-	#map {
-		height: calc(100vh - #{$routesHeight});
-	}
-
-	#route-select-modal {
-		.list-group-container {
-			overflow-y: scroll;
-			height: 45vh;
-
-			.list-group {
-				.list-group-item {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-
-					&:hover {
-						background-color: #fbfbfb;
-						cursor: pointer;
-					}
-		
-					// TODO: remove this if bootstrap scss default variables is overriden
-					&.active {
-						background-color: $primaryColor;
-						border-color: $primaryColor;
-					}
-
-					.data-not-available-yet {
-						font-size: 0.5em;
-						background-color: #efefef;
-						padding: 3px 6px;
-						border-radius: 3px;
-						color: #989898;
-						margin-left: 8px;
-					}
-				}	
 			}
 		}
 	}

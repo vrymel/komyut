@@ -1,93 +1,5 @@
 <div class="module-route-index">
-	<div id="map" ref="map"></div>
-
-	<div id="route-context" class="route-context">
-		<div class="app-logo">
-            <img src="<%= static_path(@conn, "/images/jeepney_logo_beta.png") %>" alt="">
-		</div>
-
-		<div class="current city">
-			<h6 class="header">City</h6>
-
-			<div class="description" v-on:click="showCitySelectModal">
-				Cagayan de Oro City
-			</div>
-		</div>
-
-
-		<div class="current route">
-			<h6 class="header">Route</h6>
-
-			<div class="description" v-on:click="showRouteSelectModal">
-				{{description}}
-			</div>
-		</div>
-
-		<div class="segments" v-if="segments.length">
-			<h6 class="header">Segments</h6>
-			
-			<ul class="hlist">
-				<li 
-					v-bind:class="{ active: loadedSegment && loadedSegment.id === segment.id }"
-					v-for="segment in segments" 
-					v-on:click="loadWaypoints(segment)">{{segment.description}}</li>
-			</ul>
-		</div>
-	</div>
-
-	<div id="city-select-modal" class="app-modal" v-show="visible">
-		<div class="modal-main">
-			<header>
-				City Select
-			</header>
-			<div class="modal-body">
-				<p>
-					We currently only have route information for the city of <strong>Cagayan de Oro</strong>. But rest assured, as support
-					of as many cities as possible is on our priority checklist. As of right now, we are on the constant
-					refinement phase of the application to make it stable and fully accomplish its designed purpose.
-				</p>
-				<p>
-					But we can't do it without your help! If you'd like to volunteer and help us map the route of different
-					cities that you are familiar with, send us a message at <a href="mailto:waypoints.direct@gmail.com">waypoints.direct@gmail.com</a>
-				</p>
-				<p>
-					We hope to hear from you soon!
-				</p>
-			</div>
-			<footer>
-				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
- 			</footer>
-		</div>
-	</div>
-
-	<div id="route-select-modal" class="app-modal" v-show="visible">
-		<div class="modal-main">
-			<header>
-				Route Select
-			</header>
-			<div class="modal-body">
-				<p>Select a route to view its path</p>
-
-				<div class="list-group-container">
-					<ul class="list-group">
-						<li 
-							class="list-group-item" 
-							v-bind:class="{ active: activeRouteId == route.id }"
-							v-for="route in routes"
-							v-on:click="selectRoute(route.id)">
-								<span class="description">{{route.description}}</span>
-								<span v-if="!route.is_active" class="data-not-available-yet">data not available yet</span>
-							</li>
-					</ul>
-				</div>
-			</div>
-			<footer>
-				<a href="https://goo.gl/forms/FYTKd2Lt1EiZuiiH3" target="_blank" class="btn btn-info">Help us out!</a>
-				&nbsp;
-				<button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
- 			</footer>
-		</div>
-	</div>
+    <div id="app-root"></div>
 </div>
 
 <script>
@@ -102,9 +14,7 @@
     };
 
 	function ready() {
-		var index = require("js/route/index.js");
-
-		index.init(PAGE_ROUTES);
+		require("js/routes/index/main.js");
 	}
 
 	if (document.readyState === "complete" || document.readyState !== "loading") {
