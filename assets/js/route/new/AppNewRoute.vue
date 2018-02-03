@@ -4,8 +4,8 @@
       <google-map
       @click="onMapClick">
         <google-map-circle 
-          v-for="(intersection, index) in intersections"
-          :key="index"
+          v-for="(intersection) in intersections"
+          :key="intersection.id"
           :center="intersection"
           @click="onCircleClick"/>
 
@@ -138,6 +138,17 @@ const getIntersections = async () => {
     return response.data;
 };
 
+const doRemoveIntersection = async (intersection) => {
+    try {
+        const response = await axios.delete(`${api_paths.INDEX}/${intersection.id}`);
+
+        return response.data;
+    } catch(e) {
+        // TODO: add sentry logging
+        return false;
+    }
+};
+
 const doPersistRoute = async ({routeName, routeEdges}) => {
     const response = await axios.post(api_paths.CREATE_ROUTE, { 
         route_name: routeName,
@@ -240,11 +251,14 @@ export default {
         onCircleClick(googleData) {
             const isAddEdgeMode = this.isActiveControlMode(controlModes.addEdge);
             const isRemoveEdgeMode = this.isActiveControlMode(controlModes.removeEdge);
+            const isRemoveIntersectionMode = this.isActiveControlMode(controlModes.removeIntersection);
 
             if (isAddEdgeMode) {
                 this.storeIntersectionPoint(googleData);
             } else if (isRemoveEdgeMode) {
                 this.removeStoredIntersectionPoint(googleData);
+            } else if (isRemoveIntersectionMode) {
+                this.removeIntersectionPoint(googleData);
             }
         },
         storeIntersectionPoint({id, lat, lng}) {
@@ -339,6 +353,16 @@ export default {
                 this.showRoutePath = true;
             } else {
                 this.showRoutePath = false;
+            }
+        },
+        async removeIntersectionPoint(intersectionData) {
+            const removeResult = await doRemoveIntersection(intersectionData);
+
+            if (removeResult) {
+                this.intersections = this.intersections.filter((intersection) => intersection.id !== intersectionData.id);
+            } else {
+                // TODO: use something beautiful
+                alert("Could not remove intersection. A route edge may be referencing the intersection.");
             }
         }
     }
