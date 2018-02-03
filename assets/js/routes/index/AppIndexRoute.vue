@@ -63,6 +63,17 @@ const getRoutes = async () => {
     }
 };
 
+const getRoute = async (routeId) => {
+    try {
+        const result = await axios.get(`${api_paths.ROUTE_API_INDEX}/${routeId}`);
+
+        return result.data;
+    } catch (e) {
+        // TODO: add sentry log
+        return false;
+    }
+};
+
 export default {
     name: "AppIndexRoute",
     components: {
@@ -92,6 +103,9 @@ export default {
         },
         routeSelected(route) {
             this.currentRoute = route;
+
+            getRoute(route.id);
+            
             this.closeSelectRouteDialog();
         }
     }

@@ -3,7 +3,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
     
     alias WaypointsDirect.Route
     alias WaypointsDirect.RouteEdge
-    alias WaypointsDirect.RouteSegment
+    alias WaypointsDirect.Intersection
     alias WaypointsDirect.RouteWaypoint
 
     def index(conn, _params) do
@@ -18,22 +18,35 @@ defmodule WaypointsDirectWeb.RouteApiController do
     end
     
     def show(conn, %{"id" => route_id}) do
-        route = Repo.get(Route, route_id)
-        |> Repo.preload(segments: from(s in RouteSegment, order_by: s.description))
+        query = from r in Route, 
+            where: r.id == ^route_id,
+            join: re in assoc(r, :route_edges), 
+            join: fi in assoc(re, :from_intersection),
+            join: ti in assoc(re, :to_intersection),
+            preload: [route_edges: {re, from_intersection: fi, to_intersection: ti}]
 
-        new_segments = Enum.map route.segments, 
-        fn(segment) -> 
-            Map.from_struct(segment) 
-            |> Map.take([:description, :id])
-        end
-        
-        payload = %{
-            id: route.id,
-            description: route.description,
-            segments: new_segments
-        }
-        
-        json conn, payload
+        route = Repo.one query
+
+        # we reverse the route_edges so when we append the intersections
+        # into a list using [new | old_list], it will be in order 
+        # also reverse is needed so we can easily get the last edge of the route edges of the route
+        [last_edge | preceding_edges] = Map.get(route, :route_edges) |> Enum.reverse
+
+        # we get to_intersection and from_intersection of the last edge
+        # and pre-populate the intersection list with them
+        # not doing so, will make it tricky to get the last intersection of the path
+        # since we are only appending the from_intersection of the other edges to the intersections list
+        %RouteEdge{:to_intersection => final_intersection, :from_intersection => leading_intersection } = last_edge
+
+        intersection_list = [leading_intersection, final_intersection]
+        intersection_list = Enum.reduce preceding_edges, intersection_list, fn(%RouteEdge{:from_intersection => fe}, acc) -> [fe | acc] end
+
+        intersection_list_encode_safe = Enum.map intersection_list, 
+            fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
+                %{id: id, lat: lat, lng: lng} 
+            end
+
+        json conn, %{success: true, intersection_list: intersection_list_encode_safe}
     end
 
     def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do
