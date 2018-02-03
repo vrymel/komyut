@@ -348,6 +348,10 @@ export default {
             this.showRoutePath = false;
         },
         async snapToRoads() {
+            if (!this.selectedIntersectionPoints.length) {
+                return;
+            }
+
             if (!this.showRoutePath) {
                 const latlng = await snapToRoads(this.selectedIntersectionPoints);
 
