@@ -2,7 +2,7 @@ defmodule WaypointsDirectWeb.GraphController do
     use WaypointsDirectWeb, :controller
 
     alias WaypointsDirect.Graph
-    alias WaypointsDirect.DirectedDFS
+    alias WaypointsDirect.DijkstraShortestPath
     alias WaypointsDirect.RouteEdge
 
     def search_possible_route(conn, %{"from_intersection_id" => from_intersection_id, "to_intersection_id" => to_intersection_id}) do
@@ -13,11 +13,18 @@ defmodule WaypointsDirectWeb.GraphController do
         json conn, %{success: false, error: "Invalid intersection source and destination"}
       else
         graph = build()
-        dfs = DirectedDFS.process_graph(graph, source)
 
-        has_path = Map.get(dfs.marked, destination)
+        tree = DijkstraShortestPath.init_tree source
+        tree = DijkstraShortestPath.build_tree graph, tree
 
-        json conn, %{has_path: has_path, marked: dfs, graph: graph} 
+        path_exist = DijkstraShortestPath.path_exist? tree, destination
+        path_to = DijkstraShortestPath.path_to tree, destination
+
+        path_to_clean = Enum.map path_to, fn(%RouteEdge{:from_intersection_id => fromid}) -> fromid end
+
+        IO.inspect path_to
+
+        json conn, %{exist: path_exist, path_to: path_to_clean}
       end
     end
 
