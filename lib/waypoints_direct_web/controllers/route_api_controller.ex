@@ -5,6 +5,17 @@ defmodule WaypointsDirectWeb.RouteApiController do
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.RouteSegment
     alias WaypointsDirect.RouteWaypoint
+
+    def index(conn, _params) do
+        query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
+        routes = Repo.all(query)
+        |> Enum.map(fn(route) ->
+                Map.from_struct(route)
+                |> Map.take([:description, :id, :is_active])
+            end)
+
+        json conn, routes
+    end
     
     def show(conn, %{"id" => route_id}) do
         route = Repo.get(Route, route_id)
@@ -23,17 +34,6 @@ defmodule WaypointsDirectWeb.RouteApiController do
         }
         
         json conn, payload
-    end
-
-    def get_city_routes(conn, _params) do
-        query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
-        routes = Repo.all(query)
-        |> Enum.map(fn(route) ->
-                Map.from_struct(route)
-                |> Map.take([:description, :id, :is_active])
-            end)
-
-        json conn, routes
     end
 
     def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do

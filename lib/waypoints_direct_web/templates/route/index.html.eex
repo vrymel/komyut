@@ -12,7 +12,7 @@
 
 <script>
     PAGE_ROUTES = {
-        "ROUTES_API": "<%= route_api_path(@conn, :index) %>"
+        "ROUTE_API_INDEX": "<%= route_api_path(@conn, :index) %>"
     };
 
 	function ready() {

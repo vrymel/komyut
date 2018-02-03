@@ -15,7 +15,9 @@
           </div>
         </div>
 
-        <div class="m-2 card route-select">
+        <div 
+          class="m-2 card route-select"
+          @click="routeSelect">
           <div class="card-body">
             <h6 class="card-title">Route</h6>
 
@@ -33,10 +35,24 @@
 </div></template>
 
 <script>
+import axios from "axios";
+
+import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
 
 import Map from "../common/Map";
 import Circle from "../common/Circle";
+
+const getRoutes = async () => {
+    try {
+        const result = await axios.get(api_paths.ROUTE_API_INDEX);
+
+        return result.data;
+    } catch (e) {
+        // TODO: add sentry log
+        return false;
+    }
+};
 
 export default {
     name: "AppIndexRoute",
@@ -47,11 +63,20 @@ export default {
     data() {
         return {
             app_logo: APP_LOGO,
-            route: null
+            route: null,
+            routes: [],
+            showSelectRouteDialog: false
         };
     },
-    methods: {
+    async mounted() {
+        const routes = await getRoutes();
 
+        this.routes = routes || [];
+    },
+    methods: {
+        routeSelect() {
+            this.showSelectRouteDialog = true;
+        }
     }
 }
 </script>
