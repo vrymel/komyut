@@ -49,19 +49,6 @@ defmodule WaypointsDirectWeb.RouteApiController do
         json conn, %{success: true, intersections: intersection_list_encode_safe}
     end
 
-    def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do
-        segment = Repo.get(RouteSegment, segment_id)
-        |> Repo.preload(waypoints: from(w in RouteWaypoint, order_by: w.id))
-
-        new_waypoints = Enum.map segment.waypoints, 
-        fn(waypoint) -> 
-            Map.from_struct(waypoint) 
-            |> Map.take([:id, :lat, :lng])
-        end
-
-        json conn, new_waypoints
-    end
-
     def create(conn, %{"route_name" => route_name, "raw_route_edges" => raw_route_edges}) do
       route_changeset = Route.changeset(%Route{}, %{description: route_name})
       success = false

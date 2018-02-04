@@ -34,10 +34,8 @@ defmodule WaypointsDirectWeb.Router do
     pipe_through :api
 
     resources "/", RouteApiController
-    get "/get_segment_waypoints/:segment_id", RouteApiController, :get_segment_waypoints
-    get "/get_city_routes/:city_id", RouteApiController, :get_city_routes
   end
-
+  
   scope "/api/intersections", WaypointsDirectWeb do
     pipe_through :api
 
