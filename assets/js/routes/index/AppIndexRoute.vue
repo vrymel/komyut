@@ -2,6 +2,11 @@
   <div class="app-index-route">
     <div class="map-container">
       <google-map>
+        <google-map-circle 
+          v-for="(intersection) in debugIntersections"
+          :key="intersection.id"
+          :center="intersection" />
+
         <google-map-polyline 
           v-if="routePath.length"
           :name="'routePath'"
@@ -11,6 +16,23 @@
 
     <div 
     class="sidebar">
+      <div class="m-2 card">
+        <div class="card-body">
+          <h6 class="card-title">Debug controls</h6>
+          
+          <div class="card-block">
+            <toggle-button
+              :value="'debugShowIntersections'"
+              :active="debugShowIntersections"
+              @click="debugOnShowIntersections">
+              <i 
+                class="fa"
+                :class="{ 'fa-eye-slash': !showIntersections, 'fa-eye': showIntersections }"/>
+            </toggle-button>
+          </div>
+        </div>
+      </div>
+
       <div class="m-2 card">
         <div class="card-body">
           <h6 class="card-title">City</h6>
@@ -53,6 +75,7 @@ import axios from "axios";
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
 import { snapToRoads } from "../services";
+import ToggleButton from "../common/ToggleButton";
 
 import Map from "../common/Map";
 import Circle from "../common/Circle";
@@ -82,13 +105,25 @@ const getRoute = async (routeId) => {
     }
 };
 
+const getIntersections = async () => {
+    try {
+        const response = await axios.get(api_paths.INTERSECTION_API_INDEX);
+
+        return response.data;
+    } catch (e) {
+        // TODO: add sentry log
+        return false;
+    }
+};
+
 export default {
     name: "AppIndexRoute",
     components: {
         "google-map": Map,
         "google-map-circle": Circle,
         "google-map-polyline": Polyline,
-        "route-select-dialog": RouteSelectDialog
+        "route-select-dialog": RouteSelectDialog,
+        "toggle-button": ToggleButton,
     },
     data() {
         return {
@@ -96,7 +131,8 @@ export default {
             currentRoute: null,
             routePath: [],
             routes: [],
-            showSelectRouteDialog: false
+            showSelectRouteDialog: false,
+            debugIntersections: [],
         };
     },
     async mounted() {
@@ -124,6 +160,21 @@ export default {
             }
             
             this.closeSelectRouteDialog();
+        },
+        async debugOnShowIntersections() {
+            if (this.debugShowIntersections) {
+                this.debugIntersections = [];
+                this.debugShowIntersections = false;
+            } else {
+                const result = await getIntersections();
+                if (!result.success) {
+                    alert("Could not fetch intersections at this time."); // TODO: use something beautiful
+                    return false;
+                }
+        
+                this.debugIntersections = result.intersections;
+                this.debugShowIntersections = true;
+            }
         }
     }
 }
