@@ -115,8 +115,8 @@
 
 <script>
 import axios from "axios";
-import qs from "query-string";
 
+import { snapToRoads } from "../services";
 import api_paths from "../api_paths";
 import ToggleButton from "./ToggleButton";
 
@@ -185,29 +185,6 @@ const formRouteEdges = (selectedIntersectionPoints) => {
     }
 
     return routeEdges;
-};
-
-const snapToRoads = async (waypoints) => {
-    var pathValues = waypoints.map((w) => {
-        const {lat, lng} = w;
-
-        return `${lat},${lng}`;
-    });
-
-    const params = {
-        interpolate: true,
-        key: GOOGLE_MAP_API_KEY,
-        path: pathValues.join('|')
-    };
-    const url = `https://roads.googleapis.com/v1/snapToRoads?${qs.stringify(params)}`;
-
-    return axios.get(url)
-        .then((response) => response.data)
-        .then(({snappedPoints}) => {
-            return snappedPoints.map((point) => {
-                return new google.maps.LatLng(point.location.latitude, point.location.longitude);
-            });
-        });
 };
 
 const controlModes = {
