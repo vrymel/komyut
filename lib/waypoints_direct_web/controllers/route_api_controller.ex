@@ -46,7 +46,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
                 %{id: id, lat: lat, lng: lng} 
             end
 
-        json conn, %{success: true, intersection_list: intersection_list_encode_safe}
+        json conn, %{success: true, intersections: intersection_list_encode_safe}
     end
 
     def get_segment_waypoints(conn, %{"segment_id" => segment_id}) do

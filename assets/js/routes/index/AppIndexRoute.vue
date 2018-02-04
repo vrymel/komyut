@@ -1,7 +1,12 @@
 <template>
   <div class="app-index-route">
     <div class="map-container">
-      <google-map />
+      <google-map>
+        <google-map-polyline 
+          v-if="routePath.length"
+          :name="'routePath'"
+          :path="routePath" />
+      </google-map>
     </div>
 
     <div 
@@ -47,9 +52,12 @@ import axios from "axios";
 
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
+import { snapToRoads } from "../services";
 
 import Map from "../common/Map";
 import Circle from "../common/Circle";
+import Polyline from "../common/Polyline";
+
 import RouteSelectDialog from "./RouteSelectDialog";
 
 const getRoutes = async () => {
@@ -79,12 +87,14 @@ export default {
     components: {
         "google-map": Map,
         "google-map-circle": Circle,
+        "google-map-polyline": Polyline,
         "route-select-dialog": RouteSelectDialog
     },
     data() {
         return {
             app_logo: APP_LOGO,
             currentRoute: null,
+            routePath: [],
             routes: [],
             showSelectRouteDialog: false
         };
@@ -101,10 +111,17 @@ export default {
         closeSelectRouteDialog() {
             this.showSelectRouteDialog = false;
         },
-        routeSelected(route) {
+        async routeSelected(route) {
             this.currentRoute = route;
 
-            getRoute(route.id);
+            const routeDetails = await getRoute(route.id);
+            if (routeDetails) {
+                const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+
+                this.routePath = snapToRoadPoints;
+            } else {
+                this.routePath = [];
+            }
             
             this.closeSelectRouteDialog();
         }
