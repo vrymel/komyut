@@ -5,7 +5,8 @@
         <google-map-circle 
           v-for="(intersection) in debugIntersections"
           :key="intersection.id"
-          :center="intersection" />
+          :center="intersection"
+          @click="debugIntersectionClick" />
 
         <google-map-polyline 
           v-if="routePath.length"
@@ -65,11 +66,11 @@
           <h6 class="card-title">Search route</h6>
           
           <div class="card-block my-2">
-            <div>Intersection #1</div>
+            <div>{{ searchStartIntersection }}</div>
           </div>
 
           <div class="card-block my-2">
-            <div>Intersection #2</div>
+            <div>{{ searchToIntersecton }}</div>
           </div>
 
           <div class="card-block mt-4">
@@ -151,7 +152,16 @@ export default {
             routes: [],
             showSelectRouteDialog: false,
             debugIntersections: [],
+            debugSelectIntersectionStack: [],
         };
+    },
+    computed: {
+        searchStartIntersection() {
+            return this.debugSelectIntersectionStack[0];
+        },
+        searchToIntersecton() {
+            return this.debugSelectIntersectionStack[1];
+        },
     },
     async mounted() {
         const routes = await getRoutes();
@@ -192,6 +202,14 @@ export default {
         
                 this.debugIntersections = result.intersections;
                 this.debugShowIntersections = true;
+            }
+        },
+        debugIntersectionClick(googleData) {
+            const stackLimit = 2;
+            this.debugSelectIntersectionStack.push(googleData);
+
+            if (this.debugSelectIntersectionStack.length > stackLimit) {
+                this.debugSelectIntersectionStack = this.debugSelectIntersectionStack.splice(1);
             }
         }
     }
