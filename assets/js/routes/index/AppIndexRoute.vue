@@ -59,6 +59,24 @@
           </div>
         </div>
       </div>
+
+      <div class="m-2 card">
+        <div class="card-body">
+          <h6 class="card-title">Search route</h6>
+          
+          <div class="card-block my-2">
+            <div>Intersection #1</div>
+          </div>
+
+          <div class="card-block my-2">
+            <div>Intersection #2</div>
+          </div>
+
+          <div class="card-block mt-4">
+            <button class="btn btn-primary">Search</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <route-select-dialog
