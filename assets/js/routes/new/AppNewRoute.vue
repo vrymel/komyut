@@ -118,7 +118,7 @@ import axios from "axios";
 
 import { snapToRoads } from "../services";
 import api_paths from "../api_paths";
-import ToggleButton from "./ToggleButton";
+import ToggleButton from "../common/ToggleButton";
 
 // google map components
 import Map from "../common/Map";
