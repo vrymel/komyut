@@ -70,11 +70,13 @@
           </div>
 
           <div class="card-block my-2">
-            <div>{{ searchToIntersecton }}</div>
+            <div>{{ searchToIntersection }}</div>
           </div>
 
           <div class="card-block mt-4">
-            <button class="btn btn-primary">Search</button>
+            <button 
+              class="btn btn-primary"
+              @click="searchPath">Search</button>
           </div>
         </div>
       </div>
@@ -135,6 +137,12 @@ const getIntersections = async () => {
     }
 };
 
+const doSearchPath = async (params) => {
+    const response = await axios.get(api_paths.GRAPH_API_SEARCH_PATH, {params});
+
+    return response.data;
+};
+
 export default {
     name: "AppIndexRoute",
     components: {
@@ -164,7 +172,7 @@ export default {
             // in the app, that will be the time to replace this (searchStartIntersection, searchToIntersection)
             return this.debugSelectIntersectionStack[0];
         },
-        searchToIntersecton() {
+        searchToIntersection() {
             return this.debugSelectIntersectionStack[1];
         },
     },
@@ -216,6 +224,13 @@ export default {
             if (this.debugSelectIntersectionStack.length > stackLimit) {
                 this.debugSelectIntersectionStack = this.debugSelectIntersectionStack.splice(1);
             }
+        },
+        async searchPath() {
+            const params = {
+                from_intersection_id: this.searchStartIntersection.id,
+                to_intersection_id: this.searchToIntersection.id
+            };
+            const response = await doSearchPath(params);
         }
     }
 }

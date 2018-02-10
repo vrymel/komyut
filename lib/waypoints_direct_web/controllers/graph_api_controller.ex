@@ -1,11 +1,11 @@
-defmodule WaypointsDirectWeb.GraphController do
+defmodule WaypointsDirectWeb.GraphApiController do
     use WaypointsDirectWeb, :controller
 
     alias WaypointsDirect.Graph
     alias WaypointsDirect.DijkstraShortestPath
     alias WaypointsDirect.RouteEdge
 
-    def search_possible_route(conn, %{"from_intersection_id" => from_intersection_id, "to_intersection_id" => to_intersection_id}) do
+    def search_path(conn, %{"from_intersection_id" => from_intersection_id, "to_intersection_id" => to_intersection_id}) do
       {source, _} = Integer.parse(from_intersection_id)
       {destination, _} = Integer.parse(to_intersection_id)
 

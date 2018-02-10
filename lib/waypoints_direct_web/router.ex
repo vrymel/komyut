@@ -45,7 +45,7 @@ defmodule WaypointsDirectWeb.Router do
   scope "/api/graph", WaypointsDirectWeb do
     pipe_through :api
 
-    get "/search", GraphController, :search_possible_route
+    get "/search_path", GraphApiController, :search_path
   end
 
   # Other scopes may use custom stacks.

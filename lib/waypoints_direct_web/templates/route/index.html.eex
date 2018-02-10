@@ -13,6 +13,7 @@
     PAGE_ROUTES = {
         "ROUTE_API_INDEX": "<%= route_api_path(@conn, :index) %>",
         "INTERSECTION_API_INDEX": "<%= intersection_api_path(@conn, :index) %>",
+		"GRAPH_API_SEARCH_PATH": "<%= graph_api_path(@conn, :search_path) %>",
     };
 
 	function ready() {
