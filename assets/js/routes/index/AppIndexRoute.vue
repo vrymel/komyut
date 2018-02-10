@@ -157,6 +157,11 @@ export default {
     },
     computed: {
         searchStartIntersection() {
+            // TODO: Replace this with actual an actual coordinate that the user
+            // clicked on the page, right now, we just return the clicked
+            // intersection. 
+            // When we incorporate the nearest intersection calculation
+            // in the app, that will be the time to replace this (searchStartIntersection, searchToIntersection)
             return this.debugSelectIntersectionStack[0];
         },
         searchToIntersecton() {
