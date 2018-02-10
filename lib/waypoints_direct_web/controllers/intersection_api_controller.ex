@@ -2,6 +2,7 @@ defmodule WaypointsDirectWeb.IntersectionApiController do
     use WaypointsDirectWeb, :controller
 
     alias WaypointsDirect.Intersection
+    alias WaypointsDirect.GeoPoint
 
     def index(conn, _params) do
       intersections = Repo.all(Intersection) 
@@ -11,7 +12,8 @@ defmodule WaypointsDirectWeb.IntersectionApiController do
     end
 
     def create(conn, %{"lat" => lat, "lng" => lng}) do
-      changeset = Intersection.changeset(%Intersection{}, %{lat: lat, lng: lng})
+      %GeoPoint{:lat => lat_radian, :lng => lng_radian} = GeoPoint.from_degrees(%GeoPoint{lat: lat, lng: lng})
+      changeset = Intersection.changeset(%Intersection{}, %{lat: lat, lng: lng, lat_radian: lat_radian, lng_radian: lng_radian})
 
       case Repo.insert(changeset) do
         {:ok, intersection} -> 
