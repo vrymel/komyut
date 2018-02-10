@@ -25,7 +25,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
           from_intersection |> Map.take([:id, :lat, :lng])
         end
 
-        json conn, %{exist: path_exist, path_to: path_to_clean}
+        json conn, %{exist: path_exist, path: path_to_clean}
       end
     end
 

@@ -231,6 +231,12 @@ export default {
                 to_intersection_id: this.searchToIntersection.id
             };
             const response = await doSearchPath(params);
+
+            if (response.exist) {
+                const snapToRoadPoints = await snapToRoads(response.path);
+
+                this.routePath = snapToRoadPoints;
+            }
         }
     }
 }
