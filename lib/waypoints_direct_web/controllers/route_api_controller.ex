@@ -5,6 +5,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
     alias WaypointsDirect.RouteWaypoint
+    alias WaypointsDirect.GraphUtils
 
     def index(conn, _params) do
         query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
@@ -27,20 +28,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
 
         route = Repo.one query
 
-        # we reverse the route_edges so when we append the intersections
-        # into a list using [new | old_list], it will be in order 
-        # also reverse is needed so we can easily get the last edge of the route edges of the route
-        [last_edge | preceding_edges] = Map.get(route, :route_edges) |> Enum.reverse
-
-        # we get to_intersection and from_intersection of the last edge
-        # and pre-populate the intersection list with them
-        # not doing so, will make it tricky to get the last intersection of the path
-        # since we are only appending the from_intersection of the other edges to the intersections list
-        %RouteEdge{:to_intersection => final_intersection, :from_intersection => leading_intersection } = last_edge
-
-        intersection_list = [leading_intersection, final_intersection]
-        intersection_list = Enum.reduce preceding_edges, intersection_list, fn(%RouteEdge{:from_intersection => fe}, acc) -> [fe | acc] end
-
+        intersection_list = GraphUtils.route_edges_to_intersection_list(Map.get(route, :route_edges))
         intersection_list_encode_safe = Enum.map intersection_list, 
             fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
                 %{id: id, lat: lat, lng: lng} 
