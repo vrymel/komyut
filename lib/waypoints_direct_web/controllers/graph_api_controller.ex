@@ -3,9 +3,47 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     alias WaypointsDirect.Graph
     alias WaypointsDirect.GraphUtils
+    alias WaypointsDirect.GeoPoint
     alias WaypointsDirect.DijkstraShortestPath
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
+
+    def search_path_near(conn, _params) do
+      # TODO: 
+      # get source intersection and destination intersection
+      source = GeoPoint.from_degrees(%GeoPoint{lat: 80.485273, lng: 124.646718})
+      result = get_nearest_intersection(source, (0.137/6371))
+
+      # TODO:
+      # after we have the source and destination intersection 
+      # use search_path to get the path
+
+      json conn, %{success: true}
+    end
+
+    defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
+      distance_formula = "acos(sin($1::float) * sin(lat_radian) + cos($1::float) * cos(lat_radian) * cos(lng_radian - ($2::float)))"
+ 
+      query_result = Repo.query("
+        SELECT 
+        id, 
+        #{distance_formula} AS relative_distance 
+        FROM intersections 
+        WHERE #{distance_formula} <= $3::float", [lat, lng, radius])
+
+      case query_result do
+        {:ok, result} ->
+          %{:rows => rows } = Map.take(result, [:rows])
+
+          unless rows == [] do
+            Enum.reduce rows, fn([r_id, r_distance] = row, [acc_id, acc_distance] = acc) ->
+              if r_distance < acc_distance, do: row, else: acc
+            end
+          end
+        _ -> 
+          nil
+      end
+    end
 
     def search_path(conn, %{"from_intersection_id" => from_intersection_id, "to_intersection_id" => to_intersection_id}) do
       {source, _} = Integer.parse(from_intersection_id)
