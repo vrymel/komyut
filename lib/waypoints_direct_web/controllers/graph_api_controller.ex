@@ -11,7 +11,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
     @within_radius 0.200 # within 200 meters radius
     @earth_radius 6371 # approximate radius of the Earth in km
 
-    def search_path_near(conn, %{"from" => from_coordinates, "to" => to_coordinates}) do
+    def search_path(conn, %{"from" => from_coordinates, "to" => to_coordinates}) do
       %{"lat" => from_lat, "lng" => from_lng} = Poison.decode! from_coordinates
       %{"lat" => to_lat, "lng" => to_lng} = Poison.decode! to_coordinates
 
@@ -54,23 +54,6 @@ defmodule WaypointsDirectWeb.GraphApiController do
           end
         _ -> 
           nil
-      end
-    end
-
-    def search_path(conn, %{"from_intersection_id" => from_intersection_id, "to_intersection_id" => to_intersection_id}) do
-      {source, _} = Integer.parse(from_intersection_id)
-      {destination, _} = Integer.parse(to_intersection_id)
-
-      if source == :error or destination == :error do
-        json conn, %{success: false, error: "Invalid intersection source and destination"}
-      else
-        %{:path_exist => path_exist, :path => path} = do_search_path build(), source, destination
-
-        path_to_clean = Enum.map path, fn(from_intersection) -> 
-          from_intersection |> Map.take([:id, :lat, :lng])
-        end
-
-        json conn, %{exist: path_exist, path: path_to_clean}
       end
     end
 
