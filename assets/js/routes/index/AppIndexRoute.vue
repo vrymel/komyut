@@ -1,12 +1,12 @@
 <template>
   <div class="app-index-route">
     <div class="map-container">
-      <google-map>
+      <google-map
+      @click="mapClick">
         <google-map-circle 
           v-for="(intersection) in debugIntersections"
           :key="intersection.id"
-          :center="intersection"
-          @click="debugIntersectionClick" />
+          :center="intersection"/>
 
         <google-map-polyline 
           v-if="routePath.length"
@@ -66,11 +66,11 @@
           <h6 class="card-title">Search route</h6>
           
           <div class="card-block my-2">
-            <div>{{ searchStartIntersection }}</div>
+            <div>{{ searchFromCoordinate }}</div>
           </div>
 
           <div class="card-block my-2">
-            <div>{{ searchToIntersection }}</div>
+            <div>{{ searchToCoordinate }}</div>
           </div>
 
           <div class="card-block mt-4">
@@ -137,8 +137,8 @@ const getIntersections = async () => {
     }
 };
 
-const doSearchPath = async (params) => {
-    const response = await axios.get(api_paths.GRAPH_API_SEARCH_PATH, {params});
+const doSearchPath = async (searchCoordinates) => {
+    const response = await axios.get(api_paths.GRAPH_API_SEARCH_PATH, {params: searchCoordinates});
 
     return response.data;
 };
@@ -160,20 +160,15 @@ export default {
             routes: [],
             showSelectRouteDialog: false,
             debugIntersections: [],
-            debugSelectIntersectionStack: [],
+            clickedCoordinatesStack: []
         };
     },
     computed: {
-        searchStartIntersection() {
-            // TODO: Replace this with actual an actual coordinate that the user
-            // clicked on the page, right now, we just return the clicked
-            // intersection. 
-            // When we incorporate the nearest intersection calculation
-            // in the app, that will be the time to replace this (searchStartIntersection, searchToIntersection)
-            return this.debugSelectIntersectionStack[0];
+        searchFromCoordinate() {
+            return this.clickedCoordinatesStack[0];
         },
-        searchToIntersection() {
-            return this.debugSelectIntersectionStack[1];
+        searchToCoordinate() {
+            return this.clickedCoordinatesStack[1];
         },
     },
     async mounted() {
@@ -217,18 +212,19 @@ export default {
                 this.debugShowIntersections = true;
             }
         },
-        debugIntersectionClick(googleData) {
+        mapClick({latLng}) {
+            const coordinate = { lat: latLng.lat(), lng: latLng.lng() };
             const stackLimit = 2;
-            this.debugSelectIntersectionStack.push(googleData);
+            this.clickedCoordinatesStack.push(coordinate);
 
-            if (this.debugSelectIntersectionStack.length > stackLimit) {
-                this.debugSelectIntersectionStack = this.debugSelectIntersectionStack.splice(1);
+            if (this.clickedCoordinatesStack.length > stackLimit) {
+                this.clickedCoordinatesStack = this.clickedCoordinatesStack.splice(1);
             }
         },
         async searchPath() {
             const params = {
-                from_intersection_id: this.searchStartIntersection.id,
-                to_intersection_id: this.searchToIntersection.id
+                from: this.searchFromCoordinate,
+                to: this.searchToCoordinate
             };
             const response = await doSearchPath(params);
 

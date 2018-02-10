@@ -226,8 +226,6 @@ export default {
             }
         },
         onCircleClick(googleData) {
-            console.log(googleData.id);
-
             const isAddEdgeMode = this.isActiveControlMode(controlModes.addEdge);
             const isRemoveEdgeMode = this.isActiveControlMode(controlModes.removeEdge);
             const isRemoveIntersectionMode = this.isActiveControlMode(controlModes.removeIntersection);
