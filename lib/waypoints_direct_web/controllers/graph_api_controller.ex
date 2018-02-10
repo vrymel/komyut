@@ -8,17 +8,27 @@ defmodule WaypointsDirectWeb.GraphApiController do
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
 
-    def search_path_near(conn, _params) do
-      # TODO: 
-      # get source intersection and destination intersection
-      source = GeoPoint.from_degrees(%GeoPoint{lat: 80.485273, lng: 124.646718})
-      result = get_nearest_intersection(source, (0.137/6371))
+    @within_radius 0.200 # within 200 meters radius
+    @earth_radius 6371 # approximate radius of the Earth in km
 
-      # TODO:
-      # after we have the source and destination intersection 
-      # use search_path to get the path
+    def search_path_near(conn, %{"from" => from_coordinates, "to" => to_coordinates}) do
+      %{"lat" => from_lat, "lng" => from_lng} = Poison.decode! from_coordinates
+      %{"lat" => to_lat, "lng" => to_lng} = Poison.decode! to_coordinates
 
-      json conn, %{success: true}
+      within = @within_radius / @earth_radius
+      from_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: from_lat, lng: from_lng})
+      to_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: to_lat, lng: to_lng})
+
+      %Intersection{:id => from_intersection_id} = get_nearest_intersection(from_geopoint, within)
+      %Intersection{:id => to_intersection_id} = get_nearest_intersection(to_geopoint, within)
+
+      %{:path_exist => path_exist, :path => path} = do_search_path build(), from_intersection_id, to_intersection_id
+
+      path_to_clean = Enum.map path, fn(from_intersection) -> 
+        from_intersection |> Map.take([:id, :lat, :lng])
+      end
+
+      json conn, %{exist: path_exist, path: path_to_clean}
     end
 
     defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
@@ -36,9 +46,11 @@ defmodule WaypointsDirectWeb.GraphApiController do
           %{:rows => rows } = Map.take(result, [:rows])
 
           unless rows == [] do
-            Enum.reduce rows, fn([r_id, r_distance] = row, [acc_id, acc_distance] = acc) ->
+            [nearest_id, _] = Enum.reduce rows, fn([r_id, r_distance] = row, [acc_id, acc_distance] = acc) ->
               if r_distance < acc_distance, do: row, else: acc
             end
+
+            Repo.get Intersection, nearest_id
           end
         _ -> 
           nil
