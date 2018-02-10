@@ -1,12 +1,12 @@
 defmodule WaypointsDirect.GeoPoint do
-    defstruct latitude: nil, longitude: nil
+    defstruct lat: nil, lng: nil
 
-    def from_degrees(%WaypointsDirect.GeoPoint{:latitude => lat, :longitude => lng}) do
-        %WaypointsDirect.GeoPoint{latitude: to_radian_value(lat), longitude: to_radian_value(lng)}
+    def from_degrees(%WaypointsDirect.GeoPoint{:lat => lat, :lng => lng}) do
+        %WaypointsDirect.GeoPoint{lat: to_radian_value(lat), lng: to_radian_value(lng)}
     end
 
-    def to_degrees(%WaypointsDirect.GeoPoint{:latitude => lat, :longitude => lng}) do
-        %WaypointsDirect.GeoPoint{latitude: to_degree_value(lat), longitude: to_degree_value(lng)}
+    def to_degrees(%WaypointsDirect.GeoPoint{:lat => lat, :lng => lng}) do
+        %WaypointsDirect.GeoPoint{lat: to_degree_value(lat), lng: to_degree_value(lng)}
     end
 
     defp to_radian_value(degrees) do 
