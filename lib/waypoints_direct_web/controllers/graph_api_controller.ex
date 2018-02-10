@@ -2,6 +2,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
     use WaypointsDirectWeb, :controller
 
     alias WaypointsDirect.Graph
+    alias WaypointsDirect.GraphUtils
     alias WaypointsDirect.DijkstraShortestPath
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
@@ -21,7 +22,12 @@ defmodule WaypointsDirectWeb.GraphApiController do
         path_exist = DijkstraShortestPath.path_exist? tree, destination
         path_to = DijkstraShortestPath.path_to tree, destination
 
-        path_to_clean = Enum.map path_to, fn(%RouteEdge{:from_intersection => from_intersection}) -> 
+        # path_to is a list of route_edges, we need to translate it to
+        # an intersection list so we end up with a complete path from
+        # source to destination
+        intersection_list = GraphUtils.route_edges_to_intersection_list path_to
+
+        path_to_clean = Enum.map intersection_list, fn(from_intersection) -> 
           from_intersection |> Map.take([:id, :lat, :lng])
         end
 
@@ -32,7 +38,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
     defp build() do
       query = from re in RouteEdge, 
         join: fi in assoc(re, :from_intersection),
-        preload: [from_intersection: fi]
+        join: ti in assoc(re, :to_intersection),
+        preload: [from_intersection: fi, to_intersection: ti]
       route_edges = Repo.all query
 
       Enum.reduce route_edges, Graph.new, 
