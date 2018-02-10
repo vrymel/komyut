@@ -7,6 +7,8 @@ defmodule WaypointsDirect.Intersection do
         field :description, :string
         field :lat, :float
         field :lng, :float
+        field :lat_radian, :float
+        field :lng_radian, :float
 
         # we need to define the column of a referencing model here
         # in this case, we define that the model `RouteEdge` has two columns
@@ -20,7 +22,7 @@ defmodule WaypointsDirect.Intersection do
 
     def changeset(intersection, params \\ %{}) do
         intersection
-        |> cast(params, [:description, :lat, :lng])
+        |> cast(params, [:description, :lat, :lng, :lat_radian, :lng_radian])
         # |> validate_required([:lat, :lng]) # temporarily disable validation for testing
     end
 end
