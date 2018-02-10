@@ -52,25 +52,29 @@ defmodule WaypointsDirectWeb.GraphApiController do
       if source == :error or destination == :error do
         json conn, %{success: false, error: "Invalid intersection source and destination"}
       else
-        graph = build()
+        %{:path_exist => path_exist, :path => path} = do_search_path build(), source, destination
 
-        tree = DijkstraShortestPath.init_tree source
-        tree = DijkstraShortestPath.build_tree graph, tree
-
-        path_exist = DijkstraShortestPath.path_exist? tree, destination
-        path_to = DijkstraShortestPath.path_to tree, destination
-
-        # path_to is a list of route_edges, we need to translate it to
-        # an intersection list so we end up with a complete path from
-        # source to destination
-        intersection_list = GraphUtils.route_edges_to_intersection_list path_to
-
-        path_to_clean = Enum.map intersection_list, fn(from_intersection) -> 
+        path_to_clean = Enum.map path, fn(from_intersection) -> 
           from_intersection |> Map.take([:id, :lat, :lng])
         end
 
         json conn, %{exist: path_exist, path: path_to_clean}
       end
+    end
+
+    defp do_search_path(graph, source, destination) do
+      tree = DijkstraShortestPath.init_tree source
+      tree = DijkstraShortestPath.build_tree graph, tree
+
+      path_exist = DijkstraShortestPath.path_exist? tree, destination
+      path_to = DijkstraShortestPath.path_to tree, destination
+
+      # path_to is a list of route_edges, we need to translate it to
+      # an intersection list so we end up with a complete path from
+      # source to destination
+      intersection_list = GraphUtils.route_edges_to_intersection_list path_to
+
+      %{path_exist: path_exist, path: intersection_list}
     end
 
     defp build() do
