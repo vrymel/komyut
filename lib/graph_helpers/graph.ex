@@ -6,11 +6,11 @@ defmodule WaypointsDirect.Graph do
         %{:edges_count => 0, :bags => %{}}
     end
 
-    def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, %RouteEdge{from_intersection_id: from_id} = route_edge) do
+    def add_edge(%{:bags => bags, :edges_count => edges_count} = graph, %RouteEdge{from_intersection_id: from_id, to_intersection_id: to_id} = route_edge) do
         result = Map.get(bags, from_id)
         source_bag = unless result, do: [], else: result
 
-        proceed_add = Enum.member?(source_bag, route_edge)
+        proceed_add = Enum.find source_bag, fn(%RouteEdge{:to_intersection_id => tid}) -> tid === to_id  end
         source_bag = unless proceed_add, do: [route_edge | source_bag], else: source_bag
 
         unless proceed_add do
