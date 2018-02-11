@@ -9,17 +9,14 @@ import { reverseGeocode } from "../services";
 
 const getCoordinateAddress = async (coordinate) => {
     if (coordinate) {
-        const geocodeResponse = await reverseGeocode(coordinate);
+        const geocodeResponse = await reverseGeocode(coordinate.lat, coordinate.lng);
+        if (geocodeResponse && geocodeResponse.length) {
+            const firstAddress = geocodeResponse[0];
 
-        if (geocodeResponse) {
-            const { results } = geocodeResponse;
-
-            if (results.length) {
-                const firstAddress = results.shift();
-
-                return firstAddress.formatted_address;
-            }
+            return firstAddress.formatted_address;
         }
+
+        return null;
     }
 
     return null;

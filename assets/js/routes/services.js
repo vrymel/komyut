@@ -3,6 +3,8 @@ import qs from "query-string";
 import { memoize } from "lodash";
 import { GOOGLE_MAP_API_KEY as api_key } from "./globals";
 
+const geocoder = new google.maps.Geocoder;
+
 /**
  * @param {array} waypoints - an array of objects with shape of { lat, lng }
  */
@@ -32,16 +34,16 @@ const snapToRoads = async (waypoints) => {
     }
 };
 
-const _reverseGeocode = async ({lat, lng}) => {
-    const url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&sensor=false`;
-
-    try {
-        const response = await axios.get(url);
-
-        return response.data;
-    } catch (e) {
-        return false;
-    }
+const _reverseGeocode = (lat, lng) => {
+    return new Promise((resolve, reject) => {
+        geocoder.geocode({"location": new google.maps.LatLng(lat, lng)}, (results, status) => {
+            if (status === "OK") {
+                resolve(results);
+            } else {
+                reject();
+            }
+        });
+    });
 };
 const reverseGeocode = memoize(_reverseGeocode);
 
