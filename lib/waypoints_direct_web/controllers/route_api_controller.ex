@@ -24,6 +24,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
             join: re in assoc(r, :route_edges), 
             join: fi in assoc(re, :from_intersection),
             join: ti in assoc(re, :to_intersection),
+            order_by: re.id,
             preload: [route_edges: {re, from_intersection: fi, to_intersection: ti}]
 
         route = Repo.one query
