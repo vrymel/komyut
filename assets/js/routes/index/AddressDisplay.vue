@@ -1,6 +1,11 @@
 <template>
   <div class="address-display">
-    {{ address }}
+    <div v-if="address">
+      {{ address }}
+    </div>
+    <div v-else>
+      <span>No location selected</span>
+    </div>
   </div>
 </template>
 
@@ -32,7 +37,7 @@ export default {
     },
     data() {
         return {
-            address: "Not defined"
+            address: null
         };
     },
     watch: {

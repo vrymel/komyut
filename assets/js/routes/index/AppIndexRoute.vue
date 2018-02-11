@@ -66,11 +66,21 @@
           <h6 class="card-title">Search route</h6>
           
           <div class="card-block my-2">
-            <address-display :coordinates="searchFromCoordinate"/>
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">From</h6>
+                <address-display :coordinates="searchFromCoordinate"/>
+              </div>
+            </div>
           </div>
 
           <div class="card-block my-2">
-            <address-display :coordinates="searchToCoordinate"/>
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">To</h6>
+                <address-display :coordinates="searchToCoordinate"/>
+              </div>
+            </div>
           </div>
 
           <div class="card-block mt-4">
