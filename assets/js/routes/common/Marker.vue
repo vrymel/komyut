@@ -5,6 +5,10 @@ export default {
         position: {
             type: Object,
             required: true
+        },
+        label: {
+            type: String,
+            default: null
         }
     },
 
@@ -12,6 +16,11 @@ export default {
         position: function() {
             if (this._marker) {
                 this._marker.setOptions({ position: this.position });
+            }
+        },
+        label: function() {
+            if (this._marker) {
+                this._marker.setOptions({ label: this.label });
             }
         }
     },
@@ -25,11 +34,15 @@ export default {
     async mounted() {
         const map = await this._mapParent.getMap();
 
-        this._marker = new google.maps.Marker({
+        const options = {
             position: this.position,
-            map: map,
-            title: 'Hello World!'
-        });
+            map: map
+        };
+        if (this.label) {
+            options.label = this.label;
+        }
+
+        this._marker = new google.maps.Marker(options);
     },
 
     beforeDestroy() {

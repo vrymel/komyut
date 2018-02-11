@@ -15,11 +15,13 @@
 
         <google-map-marker
           v-if="!isObjectEmpty(searchFromCoordinate)"
-          :position="searchFromCoordinate" />
+          :position="searchFromCoordinate"
+          :label="'A'" />
 
         <google-map-marker
           v-if="!isObjectEmpty(searchToCoordinate)"
-          :position="searchToCoordinate" />
+          :position="searchToCoordinate"
+          :label="'B'" />
       </google-map>
     </div>
 
@@ -76,7 +78,7 @@
           <div class="card-block my-2">
             <div class="card">
               <div class="card-body">
-                <h6 class="card-title">From</h6>
+                <h6 class="card-title">From (A)</h6>
                 <address-display :coordinates="searchFromCoordinate"/>
               </div>
             </div>
@@ -85,7 +87,7 @@
           <div class="card-block my-2">
             <div class="card">
               <div class="card-body">
-                <h6 class="card-title">To</h6>
+                <h6 class="card-title">To (B)</h6>
                 <address-display :coordinates="searchToCoordinate"/>
               </div>
             </div>
