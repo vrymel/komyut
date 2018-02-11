@@ -12,6 +12,14 @@
           v-if="routePath.length"
           :name="'routePath'"
           :path="routePath" />
+
+        <google-map-marker
+          v-if="!isObjectEmpty(searchFromCoordinate)"
+          :position="searchFromCoordinate" />
+
+        <google-map-marker
+          v-if="!isObjectEmpty(searchToCoordinate)"
+          :position="searchToCoordinate" />
       </google-map>
     </div>
 
@@ -102,6 +110,7 @@
 
 <script>
 import axios from "axios";
+import { isEmpty } from "lodash";
 
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
@@ -111,6 +120,7 @@ import ToggleButton from "../common/ToggleButton";
 import Map from "../common/Map";
 import Circle from "../common/Circle";
 import Polyline from "../common/Polyline";
+import Marker from "../common/Marker";
 
 import RouteSelectDialog from "./RouteSelectDialog";
 import AddressDisplay from "./AddressDisplay";
@@ -160,6 +170,7 @@ export default {
         "google-map": Map,
         "google-map-circle": Circle,
         "google-map-polyline": Polyline,
+        "google-map-marker": Marker,
         "route-select-dialog": RouteSelectDialog,
         "toggle-button": ToggleButton,
         "address-display": AddressDisplay
@@ -245,6 +256,9 @@ export default {
 
                 this.routePath = snapToRoadPoints;
             }
+        },
+        isObjectEmpty(value) {
+            return isEmpty(value);
         }
     }
 }
