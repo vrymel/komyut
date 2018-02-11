@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "query-string";
+import { memoize } from "lodash";
 import { GOOGLE_MAP_API_KEY as api_key } from "./globals";
 
 /**
@@ -31,4 +32,17 @@ const snapToRoads = async (waypoints) => {
     }
 };
 
-export { snapToRoads }
+const _reverseGeocode = async ({lat, lng}) => {
+    const url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&sensor=false`;
+
+    try {
+        const response = await axios.get(url);
+
+        return response.data;
+    } catch (e) {
+        return false;
+    }
+};
+const reverseGeocode = memoize(_reverseGeocode);
+
+export { snapToRoads, reverseGeocode }

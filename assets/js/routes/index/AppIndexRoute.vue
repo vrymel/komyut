@@ -66,11 +66,11 @@
           <h6 class="card-title">Search route</h6>
           
           <div class="card-block my-2">
-            <div>{{ searchFromCoordinate }}</div>
+            <address-display :coordinates="searchFromCoordinate"/>
           </div>
 
           <div class="card-block my-2">
-            <div>{{ searchToCoordinate }}</div>
+            <address-display :coordinates="searchToCoordinate"/>
           </div>
 
           <div class="card-block mt-4">
@@ -103,6 +103,7 @@ import Circle from "../common/Circle";
 import Polyline from "../common/Polyline";
 
 import RouteSelectDialog from "./RouteSelectDialog";
+import AddressDisplay from "./AddressDisplay";
 
 const getRoutes = async () => {
     try {
@@ -151,6 +152,7 @@ export default {
         "google-map-polyline": Polyline,
         "route-select-dialog": RouteSelectDialog,
         "toggle-button": ToggleButton,
+        "address-display": AddressDisplay
     },
     data() {
         return {
@@ -165,11 +167,11 @@ export default {
     },
     computed: {
         searchFromCoordinate() {
-            return this.clickedCoordinatesStack[0];
+            return this.clickedCoordinatesStack[0] || {};
         },
         searchToCoordinate() {
-            return this.clickedCoordinatesStack[1];
-        },
+            return this.clickedCoordinatesStack[1] || {};
+        }
     },
     async mounted() {
         const routes = await getRoutes();
