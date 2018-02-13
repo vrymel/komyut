@@ -81,10 +81,27 @@ defmodule WaypointsDirectWeb.GraphApiController do
       Repo.all(query)
     end
 
-    defp build_graph() do
+    defp build_graph do
       get_route_edges() |> Enum.reduce(Graph.new(), 
         fn(re, graph) -> 
           graph = Graph.add_edge(graph, re)
         end)
+    end
+
+    defp build_table do
+      route_edges = get_route_edges()
+
+      route_edges |> Enum.reduce(%{}, fn(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid, :route_id => route_id}, table) -> 
+            key = {fid, tid}
+            bag = Map.get(table, key)
+
+            if bag do
+              bag = [route_id | bag]
+            else
+              bag = [route_id]
+            end
+
+            Map.put(table, {fid, tid}, bag)
+      end)
     end
 end
