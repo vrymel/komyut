@@ -22,7 +22,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
       %Intersection{:id => from_intersection_id} = get_nearest_intersection(from_geopoint, within)
       %Intersection{:id => to_intersection_id} = get_nearest_intersection(to_geopoint, within)
 
-      %{:path_exist => path_exist, :path => path} = do_search_path build(), from_intersection_id, to_intersection_id
+      %{:path_exist => path_exist, :path => path} = do_search_path build_graph(), from_intersection_id, to_intersection_id
 
       path_to_clean = Enum.map path, fn(from_intersection) -> 
         from_intersection |> Map.take([:id, :lat, :lng])
@@ -72,16 +72,19 @@ defmodule WaypointsDirectWeb.GraphApiController do
       %{path_exist: path_exist, path: intersection_list}
     end
 
-    defp build() do
+    defp get_route_edges do
       query = from re in RouteEdge, 
         join: fi in assoc(re, :from_intersection),
         join: ti in assoc(re, :to_intersection),
         preload: [from_intersection: fi, to_intersection: ti]
-      route_edges = Repo.all query
 
-      Enum.reduce route_edges, Graph.new, 
+      Repo.all(query)
+    end
+
+    defp build_graph() do
+      get_route_edges() |> Enum.reduce(Graph.new(), 
         fn(re, graph) -> 
-          graph = Graph.add_edge graph, re 
-        end
+          graph = Graph.add_edge(graph, re)
+        end)
     end
 end
