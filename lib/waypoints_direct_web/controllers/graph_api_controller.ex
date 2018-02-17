@@ -98,4 +98,35 @@ defmodule WaypointsDirectWeb.GraphApiController do
             Map.put(table, intersection_pair, bag)
       end)
     end
+
+    def intersection_pair(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid}), do: {fid, tid}
+
+    defp get_route_sequence([first_re | next_res], lookup) do
+      pair = intersection_pair(first_re)
+      initial_set = Map.get(lookup, pair)
+      initial_acc = %{ acc: initial_set, list: [] }
+
+      %{acc: acc, list: list} = Enum.reduce(next_res, initial_acc, fn(current_route_edge, %{:acc => acc, :list => list}) -> 
+        current_pair = intersection_pair(current_route_edge)
+        set = Map.get(lookup, current_pair)
+
+        intersection = MapSet.intersection(acc, set)
+
+        case MapSet.size(intersection) do
+          0 -> 
+            [previous_route_id | _] = MapSet.to_list(acc)
+
+            %{acc: set, list: [previous_route_id | list]}
+
+          _ -> 
+            [first_route_id | _] = MapSet.to_list(intersection)
+
+            %{acc: intersection, list: [first_route_id | list]}
+        end
+      end)
+
+      last_route_id = acc |> MapSet.to_list() |> Enum.random()
+
+      Enum.reverse([last_route_id | list])
+    end
 end
