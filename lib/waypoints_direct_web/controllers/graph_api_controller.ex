@@ -24,12 +24,31 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       %{:path_exist => path_exist, :path => path} = do_search_path build_graph(), from_intersection_id, to_intersection_id
 
-      path_to_clean = Enum.map path, fn(from_intersection) -> 
-        from_intersection |> Map.take([:id, :lat, :lng])
-      end
+      # path is a list of route_edges, we need to translate it to
+      # an intersection list so we end up with a complete path from
+      # source to destination
+      intersection_list = GraphUtils.route_edges_to_intersection_list(path)
+      route_sequence = get_route_sequence(path, build_route_edge_lookup_table())
 
-      json conn, %{exist: path_exist, path: path_to_clean}
+      path_to_clean = Enum.map(
+        intersection_list, 
+        fn(from_intersection) -> 
+          from_intersection |> Map.take([:id, :lat, :lng])
+        end
+      )
+
+      final_path_list = tag_route_intersections(path_to_clean, route_sequence)
+
+      json conn, %{exist: path_exist, path: final_path_list}
     end
+
+    defp tag_route_intersections([intersection | intersection_list], [route_id | route_sequence], list \\ []) do
+      intersection = Map.put(intersection, :route_id, route_id)
+
+      tag_route_intersections(intersection_list, route_sequence, [intersection | list])
+    end
+
+    defp tag_route_intersections([], [], list), do: Enum.reverse(list)
 
     defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
       distance_formula = "acos(sin($1::float) * sin(lat_radian) + cos($1::float) * cos(lat_radian) * cos(lng_radian - ($2::float)))"
@@ -63,13 +82,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       path_exist = DijkstraShortestPath.path_exist? tree, destination
       path_to = DijkstraShortestPath.path_to tree, destination
-
-      # path_to is a list of route_edges, we need to translate it to
-      # an intersection list so we end up with a complete path from
-      # source to destination
-      intersection_list = GraphUtils.route_edges_to_intersection_list path_to
-
-      %{path_exist: path_exist, path: intersection_list}
+      
+      %{path_exist: path_exist, path: path_to}
     end
 
     defp get_route_edges do
@@ -125,8 +139,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
         end
       end)
 
-      last_route_id = acc |> MapSet.to_list() |> Enum.random()
+      [last_route_id | _ ] = acc |> MapSet.to_list()
+      list = [ last_route_id | [ last_route_id | list ] ]
 
-      Enum.reverse([last_route_id | list])
+      Enum.reverse(list)
     end
 end
