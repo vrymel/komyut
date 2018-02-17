@@ -2,7 +2,6 @@ defmodule WaypointsDirectWeb.GraphApiController do
     use WaypointsDirectWeb, :controller
 
     alias WaypointsDirect.Graph
-    alias WaypointsDirect.GraphUtils
     alias WaypointsDirect.GeoPoint
     alias WaypointsDirect.DijkstraShortestPath
     alias WaypointsDirect.RouteEdge
@@ -27,17 +26,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
       # path is a list of route_edges, we need to translate it to
       # an intersection list so we end up with a complete path from
       # source to destination
-      intersection_list = GraphUtils.route_edges_to_intersection_list(path)
-      route_sequence = sequence(path, build_route_edge_lookup_table())
+      intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
 
-      route_clean = Enum.map(
-        route_sequence, 
-        fn(from_intersection) -> 
-          Map.drop(from_intersection, [:intersection_pair])
-        end
-      )
-
-      json conn, %{exist: path_exist, path: route_clean}
+      json conn, %{exist: path_exist, path: intersection_sequence}
     end
 
     defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
@@ -93,25 +84,28 @@ defmodule WaypointsDirectWeb.GraphApiController do
     end
 
     defp build_route_edge_lookup_table do
-      get_route_edges() |> Enum.reduce(%{}, fn(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid, :route_id => route_id}, table) -> 
-            intersection_pair = {fid, tid}
-            bag = Map.get(table, intersection_pair)
+      get_route_edges() |> Enum.reduce(%{}, fn(%RouteEdge{:route_id => route_id} = re, table) -> 
+          intersection_pair = intersection_pair(re)
+          bag = Map.get(table, intersection_pair)
 
-            bag = if bag, do: MapSet.put(bag, route_id), else: MapSet.new() |> MapSet.put(route_id) 
+          bag = if bag, do: MapSet.put(bag, route_id), else: MapSet.new() |> MapSet.put(route_id) 
 
-            Map.put(table, intersection_pair, bag)
+          Map.put(table, intersection_pair, bag)
       end)
     end
 
-    def intersection_pair(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid}), do: {fid, tid}
+    defp intersection_pair(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid}), do: {fid, tid}
 
-    def sequence(route_edge_path, lookup) do
+    defp route_edge_path_to_intersection_sequence(route_edge_path, lookup) do
+      accumulator = %{previous_intersect: MapSet.new(), intersections: [] }
+
+      # this intersections list only containers every :from_intersections of the route_edge list
       %{intersections: intersections} = Enum.reduce(
         route_edge_path, 
-        %{previous_intersect: MapSet.new(), intersections: [] }, 
+        accumulator, 
         fn(re, %{:previous_intersect => previous_intersect, :intersections => intersections}) -> 
           intersection_map = to_intersection_map(re, :from_intersection)
-          route_ids = Map.get(lookup, intersection_map.intersection_pair)
+          route_ids = Map.get(lookup, intersection_pair(re))
 
           intersecting_route_ids = MapSet.intersection(previous_intersect, route_ids)
 
@@ -130,6 +124,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
         end
       )
 
+      # finally we add the destination intersection to the intersections list
       [ %{route_id: last_intersection_route_id} | _] = intersections
       [last_route_edge | _] = Enum.reverse(route_edge_path)
       last_intersection_map = to_intersection_map(last_route_edge, :to_intersection) |> Map.put(:route_id, last_intersection_route_id)
@@ -137,10 +132,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
       Enum.reverse([last_intersection_map | intersections])
     end
 
-    defp to_intersection_map(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid} = route_edge, target_intersection_key) do
+    defp to_intersection_map(route_edge, target_intersection_key) do
       %{:lat => lat, :lng => lng, :id => id} = Map.get(route_edge, target_intersection_key)
-      intersection_pair = {fid, tid} 
     
-      %{ intersection_id: id, lat: lat, lng: lng, intersection_pair: intersection_pair }
+      %{ intersection_id: id, lat: lat, lng: lng }
     end
 end
