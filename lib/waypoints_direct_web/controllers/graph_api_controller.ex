@@ -46,7 +46,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
           %{:rows => rows } = Map.take(result, [:rows])
 
           unless rows == [] do
-            [nearest_id, _] = Enum.reduce rows, fn([r_id, r_distance] = row, [acc_id, acc_distance] = acc) ->
+            [nearest_id, _] = Enum.reduce rows, fn([_r_id, r_distance] = row, [_acc_id, acc_distance] = acc) ->
               if r_distance < acc_distance, do: row, else: acc
             end
 
@@ -82,26 +82,20 @@ defmodule WaypointsDirectWeb.GraphApiController do
     end
 
     defp build_graph do
-      get_route_edges() |> Enum.reduce(Graph.new(), 
-        fn(re, graph) -> 
-          graph = Graph.add_edge(graph, re)
-        end)
+      get_route_edges() |> Enum.reduce(
+          Graph.new(), 
+          fn(re, graph) -> Graph.add_edge(graph, re) end
+        )
     end
 
-    defp build_table do
-      route_edges = get_route_edges()
+    defp build_route_edge_lookup_table do
+      get_route_edges() |> Enum.reduce(%{}, fn(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid, :route_id => route_id}, table) -> 
+            intersection_pair = {fid, tid}
+            bag = Map.get(table, intersection_pair)
 
-      route_edges |> Enum.reduce(%{}, fn(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid, :route_id => route_id}, table) -> 
-            key = {fid, tid}
-            bag = Map.get(table, key)
+            bag = if bag, do: [route_id | bag], else: [route_id]
 
-            if bag do
-              bag = [route_id | bag]
-            else
-              bag = [route_id]
-            end
-
-            Map.put(table, {fid, tid}, bag)
+            Map.put(table, intersection_pair, bag)
       end)
     end
 end
