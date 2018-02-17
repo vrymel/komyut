@@ -93,7 +93,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
             intersection_pair = {fid, tid}
             bag = Map.get(table, intersection_pair)
 
-            bag = if bag, do: [route_id | bag], else: [route_id]
+            bag = if bag, do: MapSet.put(bag, route_id), else: MapSet.new() |> MapSet.put(route_id) 
 
             Map.put(table, intersection_pair, bag)
       end)
