@@ -22,33 +22,23 @@ defmodule WaypointsDirectWeb.GraphApiController do
       %Intersection{:id => from_intersection_id} = get_nearest_intersection(from_geopoint, within)
       %Intersection{:id => to_intersection_id} = get_nearest_intersection(to_geopoint, within)
 
-      %{:path_exist => path_exist, :path => path} = do_search_path build_graph(), from_intersection_id, to_intersection_id
+      %{:path_exist => path_exist, :path => path} = do_search_path(build_graph(), from_intersection_id, to_intersection_id)
 
       # path is a list of route_edges, we need to translate it to
       # an intersection list so we end up with a complete path from
       # source to destination
       intersection_list = GraphUtils.route_edges_to_intersection_list(path)
-      route_sequence = get_route_sequence(path, build_route_edge_lookup_table())
+      route_sequence = sequence(path, build_route_edge_lookup_table())
 
-      path_to_clean = Enum.map(
-        intersection_list, 
+      route_clean = Enum.map(
+        route_sequence, 
         fn(from_intersection) -> 
-          from_intersection |> Map.take([:id, :lat, :lng])
+          Map.drop(from_intersection, [:intersection_pair])
         end
       )
 
-      final_path_list = tag_route_intersections(path_to_clean, route_sequence)
-
-      json conn, %{exist: path_exist, path: final_path_list}
+      json conn, %{exist: path_exist, path: route_clean}
     end
-
-    defp tag_route_intersections([intersection | intersection_list], [route_id | route_sequence], list \\ []) do
-      intersection = Map.put(intersection, :route_id, route_id)
-
-      tag_route_intersections(intersection_list, route_sequence, [intersection | list])
-    end
-
-    defp tag_route_intersections([], [], list), do: Enum.reverse(list)
 
     defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
       distance_formula = "acos(sin($1::float) * sin(lat_radian) + cos($1::float) * cos(lat_radian) * cos(lng_radian - ($2::float)))"
@@ -115,33 +105,42 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     def intersection_pair(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid}), do: {fid, tid}
 
-    defp get_route_sequence([first_re | next_res], lookup) do
-      pair = intersection_pair(first_re)
-      initial_set = Map.get(lookup, pair)
-      initial_acc = %{ acc: initial_set, list: [] }
+    def sequence(route_edge_path, lookup) do
+      %{intersections: intersections} = Enum.reduce(
+        route_edge_path, 
+        %{previous_intersect: MapSet.new(), intersections: [] }, 
+        fn(re, %{:previous_intersect => previous_intersect, :intersections => intersections}) -> 
+          intersection_map = to_intersection_map(re, :from_intersection)
+          route_ids = Map.get(lookup, intersection_map.intersection_pair)
 
-      %{acc: acc, list: list} = Enum.reduce(next_res, initial_acc, fn(current_route_edge, %{:acc => acc, :list => list}) -> 
-        current_pair = intersection_pair(current_route_edge)
-        set = Map.get(lookup, current_pair)
+          intersecting_route_ids = MapSet.intersection(previous_intersect, route_ids)
 
-        intersection = MapSet.intersection(acc, set)
+          case MapSet.size(intersecting_route_ids) do
+            0 -> 
+              [first_route_id | _] = MapSet.to_list(route_ids)
+              intersection_map = Map.put(intersection_map, :route_id, first_route_id)
 
-        case MapSet.size(intersection) do
-          0 -> 
-            [previous_route_id | _] = MapSet.to_list(acc)
+              %{previous_intersect: route_ids, intersections: [intersection_map | intersections]}
+            _ -> 
+              [first_route_id | _] = MapSet.to_list(intersecting_route_ids)
+              intersection_map = Map.put(intersection_map, :route_id, first_route_id)
 
-            %{acc: set, list: [previous_route_id | list]}
-
-          _ -> 
-            [first_route_id | _] = MapSet.to_list(intersection)
-
-            %{acc: intersection, list: [first_route_id | list]}
+              %{previous_intersect: intersecting_route_ids, intersections: [intersection_map | intersections]}
+          end
         end
-      end)
+      )
 
-      [last_route_id | _ ] = acc |> MapSet.to_list()
-      list = [ last_route_id | [ last_route_id | list ] ]
+      [ %{route_id: last_intersection_route_id} | _] = intersections
+      [last_route_edge | _] = Enum.reverse(route_edge_path)
+      last_intersection_map = to_intersection_map(last_route_edge, :to_intersection) |> Map.put(:route_id, last_intersection_route_id)
 
-      Enum.reverse(list)
+      Enum.reverse([last_intersection_map | intersections])
+    end
+
+    defp to_intersection_map(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid} = route_edge, target_intersection_key) do
+      %{:lat => lat, :lng => lng, :id => id} = Map.get(route_edge, target_intersection_key)
+      intersection_pair = {fid, tid} 
+    
+      %{ intersection_id: id, lat: lat, lng: lng, intersection_pair: intersection_pair }
     end
 end
