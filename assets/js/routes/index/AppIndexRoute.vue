@@ -13,6 +13,13 @@
           :name="'routePath'"
           :path="routePath" />
 
+        <google-map-polyline
+          v-for="(segment, index) in searchPathSegments"
+          :key="segment.id"
+          :name="'searchPathSegments'"
+          :path="segment.path"
+          :stroke-color="segmentColors[index]"/>
+
         <google-map-marker
           v-if="!isObjectEmpty(searchFromCoordinate)"
           :position="searchFromCoordinate"
@@ -166,6 +173,37 @@ const doSearchPath = async (searchCoordinates) => {
     return response.data;
 };
 
+const groupByRouteId = (pathList, previousElement = null, bag = []) => {
+    if (!pathList.length) {
+        return bag;
+    }
+
+    const arrCopy = Array.from(pathList);
+    const element = arrCopy.shift();
+
+    const sameRouteId = previousElement && (previousElement.route_id === element.route_id);
+    const chunk = sameRouteId ? bag.pop() : [];
+
+    // without this the resulting polyline will appear disconnected
+    // hence we need to include the current element (the connection to the previous chunk)
+    // to make it appear that the group is connected
+    // comment this block of code to see what I'm talking about
+    const addConnectingIntersection = !sameRouteId && previousElement;
+    if (addConnectingIntersection) {
+        const prevChunk = bag.pop();
+        const elementCopy = Object.assign({}, element);
+        elementCopy.connecting_intersection = true;
+
+        prevChunk.push(elementCopy);
+        bag.push(prevChunk);
+    }
+
+    chunk.push(element);
+    bag.push(chunk);
+
+    return groupByRouteId(arrCopy, element, bag);
+};
+
 export default {
     name: "AppIndexRoute",
     components: {
@@ -185,7 +223,15 @@ export default {
             routes: [],
             showSelectRouteDialog: false,
             debugIntersections: [],
-            clickedCoordinatesStack: []
+            clickedCoordinatesStack: [],
+            searchPathSegments: [],
+            segmentColors: [
+                "#052D3E",
+                "#A63305",
+                "#F4C127",
+                "#4D9BA6",
+                "#D87D0F",
+            ]
         };
     },
     computed: {
@@ -247,6 +293,7 @@ export default {
             }
         },
         async searchPath() {
+            this.searchPathSegments = [];
             const params = {
                 from: this.searchFromCoordinate,
                 to: this.searchToCoordinate
@@ -254,9 +301,17 @@ export default {
             const response = await doSearchPath(params);
 
             if (response.exist) {
-                const snapToRoadPoints = await snapToRoads(response.path);
+                const grouped = groupByRouteId(response.path);
 
-                this.routePath = snapToRoadPoints;
+                for (let group of grouped) {
+                    let groupMetadata = {
+                        id: group[0].route_id,
+                        group: group,
+                        path: await snapToRoads(group)
+                    };
+
+                    this.searchPathSegments.push(groupMetadata);
+                }
             }
         },
         isObjectEmpty(value) {
