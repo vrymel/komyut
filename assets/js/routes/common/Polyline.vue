@@ -13,6 +13,10 @@ export default {
         visible: {
             type: Boolean,
             default: true
+        },
+        strokeColor: {
+            type: String,
+            default: "#FF0000"
         }
     },
 
@@ -48,7 +52,7 @@ export default {
             this._polyline = new google.maps.Polyline({
                 path: this.path,
                 geodesic: true,
-                strokeColor: '#FF0000',
+                strokeColor: this.strokeColor,
                 strokeOpacity: 0.5,
                 strokeWeight: 5
             });
