@@ -18,7 +18,7 @@
           :key="segment.id"
           :name="'searchPathSegments'"
           :path="segment.path"
-          :stroke-color="segmentColors[index]"/>
+          :stroke-color="getSegmentColor(index)"/>
 
         <google-map-marker
           v-if="!isObjectEmpty(searchFromCoordinate)"
@@ -83,8 +83,22 @@
           <h6 class="card-title">Search route</h6>
           
           <search-route-select 
+            v-if="!searchPathSegments.length"
             :from-address="searchFromCoordinate"
             :to-address="searchToCoordinate" />
+          
+          <div 
+            class="search-route-results"
+            v-else>
+            <div 
+              class="route-segment"
+              v-for="(routeSegment, index) in routeSegmentsDisplay"
+              :key="routeSegment.id"
+              :style="{ borderColor: getSegmentColor(index), backgroundColor: getSegmentColor(index, 0.4) }"
+            >
+              {{ routeSegment.description }}
+            </div>
+          </div>
 
           <div class="card-block mt-4">
             <button 
@@ -190,6 +204,21 @@ const groupByRouteId = (pathList, previousElement = null, bag = []) => {
     return groupByRouteId(arrCopy, element, bag);
 };
 
+const segmentColors = [
+    [5, 45, 62],
+    [166, 51, 5],
+    [244, 193, 39],
+    [77, 155, 166],
+    [216, 125, 15],
+];
+
+const getSegmentColor = (segmentPosition, opacity = 1) => {
+    const segmentColor = segmentColors[segmentPosition];
+    const [red, green, blue] = segmentColor;
+
+    return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+};
+
 export default {
     name: "AppIndexRoute",
     components: {
@@ -207,17 +236,11 @@ export default {
             currentRoute: null,
             routePath: [],
             routes: [],
+            routesMap: {},
             showSelectRouteDialog: false,
             debugIntersections: [],
             clickedCoordinatesStack: [],
             searchPathSegments: [],
-            segmentColors: [
-                "#052D3E",
-                "#A63305",
-                "#F4C127",
-                "#4D9BA6",
-                "#D87D0F",
-            ]
         };
     },
     computed: {
@@ -226,14 +249,25 @@ export default {
         },
         searchToCoordinate() {
             return this.clickedCoordinatesStack[1] || {};
+        },
+        routeSegmentsDisplay() {
+            return this.searchPathSegments.map((segment) => {
+                return this.routesMap[segment.id];
+            });
         }
     },
     async mounted() {
         const routes = await getRoutes();
 
         this.routes = routes || [];
+        this.routesMap = this.routes.reduce((accumulator, route) => {
+            accumulator[route.id] = route;
+
+            return accumulator;
+        }, {});
     },
     methods: {
+        getSegmentColor,
         routeSelect() {
             this.showSelectRouteDialog = true;
         },
@@ -306,3 +340,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    .route-segment {
+        border-left: transparent 4px solid;
+        padding: 10px 0 10px 6px;
+        margin-bottom: 5px;
+    }
+</style>
