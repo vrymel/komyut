@@ -8,7 +8,7 @@ const geocoder = new google.maps.Geocoder;
 /**
  * @param {array} waypoints - an array of objects with shape of { lat, lng }
  */
-const snapToRoads = async (waypoints) => {
+const _snapToRoads = async (waypoints) => {
     var pathValues = waypoints.map((w) => {
         const {lat, lng} = w;
 
@@ -33,6 +33,11 @@ const snapToRoads = async (waypoints) => {
         return false;
     }
 };
+const snapToRoads = memoize(_snapToRoads, (waypoints) => {
+    return waypoints.reduce((accumulator, point) => {
+        return accumulator + point.route_id;
+    }, "");
+});
 
 const _reverseGeocode = (lat, lng) => {
     return new Promise((resolve, reject) => {
