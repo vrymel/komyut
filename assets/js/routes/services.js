@@ -34,9 +34,13 @@ const _snapToRoads = async (waypoints) => {
     }
 };
 const snapToRoads = memoize(_snapToRoads, (waypoints) => {
-    return waypoints.reduce((accumulator, point) => {
-        return accumulator + point.route_id;
+    const key = waypoints.reduce((accumulator, point) => {
+        const id = point.route_id || point.id;
+
+        return accumulator + id;
     }, "");
+
+    return key;
 });
 
 const _reverseGeocode = (lat, lng) => {
