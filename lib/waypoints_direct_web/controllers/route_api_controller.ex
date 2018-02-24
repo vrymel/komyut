@@ -4,7 +4,6 @@ defmodule WaypointsDirectWeb.RouteApiController do
     alias WaypointsDirect.Route
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
-    alias WaypointsDirect.RouteWaypoint
     alias WaypointsDirect.GraphUtils
 
     def index(conn, _params) do

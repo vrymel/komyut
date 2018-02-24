@@ -4,7 +4,6 @@ defmodule WaypointsDirect.Route do
     schema "routes" do
         field :description, :string
         field :is_active, :boolean, default: false
-        has_many :segments, WaypointsDirect.RouteSegment
         has_many :route_edges, WaypointsDirect.RouteEdge
 
         timestamps()
