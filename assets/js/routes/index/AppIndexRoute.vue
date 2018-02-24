@@ -221,14 +221,23 @@ const groupByRouteId = (pathList, previousElement = null, bag = []) => {
 };
 
 const segmentColors = [
+    [10, 58, 130],
+    [204, 34, 159],
+    [216, 125, 15],
+    [245, 91, 89],
+    [77, 155, 166],
     [5, 45, 62],
     [166, 51, 5],
     [244, 193, 39],
-    [77, 155, 166],
-    [216, 125, 15],
 ];
 
 const getSegmentColor = (segmentPosition, opacity = 1) => {
+    // handle overflow segmentPosition
+    const segmentPositionOverflow = segmentPosition >= segmentColors.length;
+    if (segmentPositionOverflow) {
+        return getSegmentColor(segmentPosition - segmentColors.length, opacity);
+    }
+
     const segmentColor = segmentColors[segmentPosition];
     const [red, green, blue] = segmentColor;
 
