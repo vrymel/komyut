@@ -2,7 +2,6 @@ defmodule WaypointsDirectWeb.RouteApiController do
     use WaypointsDirectWeb, :controller
     
     alias WaypointsDirect.Route
-    alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
     alias WaypointsDirect.GraphUtils
 
@@ -39,14 +38,15 @@ defmodule WaypointsDirectWeb.RouteApiController do
 
     def create(conn, %{"route_name" => route_name, "raw_route_edges" => raw_route_edges}) do
       route_changeset = Route.changeset(%Route{}, %{description: route_name})
-      success = false
-
-      if route_changeset.valid? do
-        case Repo.insert route_changeset do
-          {:ok, route} -> 
-            success = create_route_edges(route, raw_route_edges) == {:ok}
+      success = 
+        if route_changeset.valid? do
+          case Repo.insert route_changeset do
+            {:ok, route} -> create_route_edges(route, raw_route_edges) == {:ok}
+            _ -> false
+          end
+        else
+          false
         end
-      end
 
       json conn, %{"success" => success}
     end
