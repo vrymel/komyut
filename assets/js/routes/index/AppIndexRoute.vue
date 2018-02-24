@@ -82,23 +82,9 @@
         <div class="card-body">
           <h6 class="card-title">Search route</h6>
           
-          <div class="card-block my-2">
-            <div class="card">
-              <div class="card-body">
-                <h6 class="card-title">From (A)</h6>
-                <address-display :coordinates="searchFromCoordinate"/>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-block my-2">
-            <div class="card">
-              <div class="card-body">
-                <h6 class="card-title">To (B)</h6>
-                <address-display :coordinates="searchToCoordinate"/>
-              </div>
-            </div>
-          </div>
+          <search-route-select 
+            :from-address="searchFromCoordinate"
+            :to-address="searchToCoordinate" />
 
           <div class="card-block mt-4">
             <button 
@@ -132,7 +118,7 @@ import Polyline from "../common/Polyline";
 import Marker from "../common/Marker";
 
 import RouteSelectDialog from "./RouteSelectDialog";
-import AddressDisplay from "./AddressDisplay";
+import SearchRouteSelect from "./SearchRouteSelect";
 
 const getRoutes = async () => {
     try {
@@ -213,7 +199,7 @@ export default {
         "google-map-marker": Marker,
         "route-select-dialog": RouteSelectDialog,
         "toggle-button": ToggleButton,
-        "address-display": AddressDisplay
+        "search-route-select": SearchRouteSelect
     },
     data() {
         return {
