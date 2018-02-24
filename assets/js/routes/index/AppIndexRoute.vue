@@ -80,16 +80,30 @@
 
       <div class="m-2 card">
         <div class="card-body">
-          <h6 class="card-title">Search route</h6>
+          <h6 
+            v-show="!showSearchResult" 
+            class="card-title">Search route</h6>
+          <div
+          v-show="showSearchResult">
+            <h6 class="card-title">
+              <a 
+                href="#" 
+                @click.prevent="backToSearch">
+                <i class="fa fa-chevron-left"/>
+                Search result
+              </a>
+            </h6>
+            <span class="card-subtitle">Route sequence</span>
+          </div>
           
           <search-route-select 
-            v-if="!searchPathSegments.length"
+            v-show="!showSearchResult"
             :from-address="searchFromCoordinate"
             :to-address="searchToCoordinate" />
           
           <div 
-            class="search-route-results"
-            v-else>
+            v-show="showSearchResult"
+            class="search-route-results">
             <div 
               class="route-segment"
               v-for="(routeSegment, index) in routeSegmentsDisplay"
@@ -100,7 +114,9 @@
             </div>
           </div>
 
-          <div class="card-block mt-4">
+          <div 
+            v-show="!showSearchResult"
+            class="card-block mt-4">
             <button 
               class="btn btn-primary"
               @click="searchPath">Search</button>
@@ -241,6 +257,7 @@ export default {
             debugIntersections: [],
             clickedCoordinatesStack: [],
             searchPathSegments: [],
+            showSearchResult: false,
         };
     },
     computed: {
@@ -332,7 +349,14 @@ export default {
 
                     this.searchPathSegments.push(groupMetadata);
                 }
+
+                this.showSearchResult = true;
+            } else {
+                this.showSearchResult = false;
             }
+        },
+        backToSearch() {
+            this.showSearchResult = false;
         },
         isObjectEmpty(value) {
             return isEmpty(value);
