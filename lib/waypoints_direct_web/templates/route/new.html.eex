@@ -2,7 +2,9 @@
     <div id="app-root"></div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey %>"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey() %>"></script>
+<script src="<%= static_path(@conn, "/lib/raven-3.22.3.min.js") %>"></script>
+
 <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 <script>
     GOOGLE_MAP_API_KEY= "<%= googleMapApiKey %>";
@@ -12,8 +14,12 @@
         "CREATE_ROUTE": "<%= route_api_path(@conn, :create) %>"
     };
 
+    Raven.config('<%= sentryClientDsn() %>').install()
+
     function ready() {
-        require("js/routes/new/main.js");
+		Raven.context(function () {
+            require("js/routes/new/main.js");
+        });
     }
 
 

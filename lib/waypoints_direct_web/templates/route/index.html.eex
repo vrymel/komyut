@@ -6,7 +6,8 @@
 	GOOGLE_MAP_API_KEY = "<%= googleMapApiKey %>";
 	APP_LOGO = "<%= static_path(@conn, "/images/jeepney_logo_beta.png") %>";
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey %>"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapApiKey() %>"></script>
+<script src="<%= static_path(@conn, "/lib/raven-3.22.3.min.js") %>"></script>
 <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 
 <script>
@@ -16,8 +17,12 @@
 		"GRAPH_API_SEARCH_PATH": "<%= graph_api_path(@conn, :search_path) %>",
     };
 
+	Raven.config('<%= sentryClientDsn() %>').install()
+
 	function ready() {
-		require("js/routes/index/main.js");
+		Raven.context(function () {
+			require("js/routes/index/main.js");
+		});
 	}
 
 	if (document.readyState === "complete" || document.readyState !== "loading") {
