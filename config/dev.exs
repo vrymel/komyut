@@ -41,3 +41,13 @@ config :waypoints_direct, WaypointsDirect.Repo,
   database: "waypoints_direct_dev",
   hostname: "0.0.0.0",
   pool_size: 10
+
+config :sentry,
+  dsn: "https://2a7117de9ab04e0faf325c15d760128b:f5d5aea8d8db447e962da878313e60ca@sentry.io/293948",
+  environment_name: :dev,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!,
+  tags: %{
+    env: "development"
+  },
+  included_environments: [:dev]

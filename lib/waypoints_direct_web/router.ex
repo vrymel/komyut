@@ -1,5 +1,7 @@
 defmodule WaypointsDirectWeb.Router do
   use WaypointsDirectWeb, :router
+  use Plug.ErrorHandler
+  use Sentry.Plug
 
   pipeline :browser do
     plug :accepts, ["html"]

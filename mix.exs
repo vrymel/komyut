@@ -19,7 +19,7 @@ defmodule WaypointsDirect.Mixfile do
   def application do
     [mod: {WaypointsDirect.Application, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :sentry]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,7 +39,8 @@ defmodule WaypointsDirect.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:distillery, "~> 1.4", runtime: false},
-     {:poison, "~> 3.1"}]
+     {:poison, "~> 3.1"},
+     {:sentry, "~> 6.1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

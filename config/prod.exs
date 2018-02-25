@@ -25,6 +25,16 @@ config :waypoints_direct, WaypointsDirectWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :sentry,
+  dsn: "https://4e191bd891144a858533ccbe40456c19:3030fafb86dd4e61ad29b3520634ff16@sentry.io/293949",
+  environment_name: :prod,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!,
+  tags: %{
+    env: "production"
+  },
+  included_environments: [:prod]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
