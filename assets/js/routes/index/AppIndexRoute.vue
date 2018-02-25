@@ -275,6 +275,11 @@ export default {
             }
             
             this.closeSelectRouteDialog();
+            this.postRouteSelected();
+        },
+        postRouteSelected() {
+            this.searchPathSegments = [];
+            this.showSearchResult = false;
         },
         mapClick({latLng}) {
             const coordinate = { lat: latLng.lat(), lng: latLng.lng() };
@@ -310,6 +315,12 @@ export default {
             } else {
                 this.showSearchResult = false;
             }
+
+            this.postSearchPath();
+        },
+        postSearchPath() {
+            this.routePath = [];
+            this.currentRoute = null;
         },
         backToSearch() {
             this.showSearchResult = false;
