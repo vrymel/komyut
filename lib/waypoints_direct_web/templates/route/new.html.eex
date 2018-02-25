@@ -7,14 +7,14 @@
 
 <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
 <script>
-    GOOGLE_MAP_API_KEY= "<%= googleMapApiKey %>";
+    GOOGLE_MAP_API_KEY= "<%= googleMapApiKey() %>";
     PAGE_ROUTES = {
         "INDEX": "<%= intersection_api_path(@conn, :index) %>",
         "CREATE": "<%= intersection_api_path(@conn, :create) %>",
         "CREATE_ROUTE": "<%= route_api_path(@conn, :create) %>"
     };
 
-    Raven.config('<%= sentryClientDsn() %>').install()
+    Raven.config('<%= sentryFrontendDsn() %>').install()
 
     function ready() {
 		Raven.context(function () {

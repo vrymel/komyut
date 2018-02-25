@@ -5,7 +5,7 @@ defmodule WaypointsDirectWeb.RouteView do
         System.get_env("GOOGLE_MAP_API_KEY")
     end
 
-    def sentryClientDsn do
-        System.get_env("SENTRY_CLIENT_DSN")
+    def sentryFrontendDsn do
+        System.get_env("SENTRY_FRONTEND_DSN")
     end
 end
