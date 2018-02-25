@@ -3,6 +3,8 @@ defmodule WaypointsDirectWeb.Router do
   use Plug.ErrorHandler
   use Sentry.Plug
 
+  require Ueberauth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -19,6 +21,15 @@ defmodule WaypointsDirectWeb.Router do
     pipe_through :browser
 
     get "/", LandingController, :index
+    get "/logout", AuthController, :logout
+  end
+
+  scope "/auth", WaypointsDirectWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
   end
 
   scope "/routes", WaypointsDirectWeb do
