@@ -26,7 +26,7 @@ config :waypoints_direct, WaypointsDirectWeb.Endpoint,
 config :logger, level: :info
 
 config :sentry,
-  dsn: "https://4e191bd891144a858533ccbe40456c19:3030fafb86dd4e61ad29b3520634ff16@sentry.io/293949",
+  dsn: System.get_env("SENTRY_BACKEND_DSN"),
   environment_name: :prod,
   enable_source_code_context: true,
   root_source_code_path: File.cwd!,

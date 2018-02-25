@@ -43,7 +43,7 @@ config :waypoints_direct, WaypointsDirect.Repo,
   pool_size: 10
 
 config :sentry,
-  dsn: "https://2a7117de9ab04e0faf325c15d760128b:f5d5aea8d8db447e962da878313e60ca@sentry.io/293948",
+  dsn: System.get_env("SENTRY_BACKEND_DSN"),
   environment_name: :dev,
   enable_source_code_context: true,
   root_source_code_path: File.cwd!,
