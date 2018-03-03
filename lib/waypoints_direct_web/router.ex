@@ -17,6 +17,10 @@ defmodule WaypointsDirectWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :secure do
+    plug WaypointsDirect.Plug.Secure
+  end
+
   scope "/", WaypointsDirectWeb do
     pipe_through :browser
 
@@ -35,10 +39,13 @@ defmodule WaypointsDirectWeb.Router do
   scope "/routes", WaypointsDirectWeb do
     pipe_through :browser
 
-    # Temporary comment this so we can restrict index and the new route
-    # resources "/", RouteController
     get "/", RouteController, :index
-    get "/new", RouteController, :new
+  end
+
+  scope "/management/routes", WaypointsDirectWeb do
+    pipe_through [:browser, :secure]
+
+    get "/new", RouteManagementController, :new
   end
 
   scope "/api/routes", WaypointsDirectWeb do

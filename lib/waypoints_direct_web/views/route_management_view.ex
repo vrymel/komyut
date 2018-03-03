@@ -1,4 +1,4 @@
-defmodule WaypointsDirectWeb.RouteView do
+defmodule WaypointsDirectWeb.RouteManagementView do
     use WaypointsDirectWeb, :view
 
     import WaypointsDirectWeb.BaseViewHelper
