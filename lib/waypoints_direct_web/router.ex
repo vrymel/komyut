@@ -25,7 +25,6 @@ defmodule WaypointsDirectWeb.Router do
     pipe_through :browser
 
     get "/", LandingController, :index
-    get "/logout", AuthController, :logout
   end
 
   scope "/auth", WaypointsDirectWeb do
@@ -40,6 +39,12 @@ defmodule WaypointsDirectWeb.Router do
     pipe_through :browser
 
     get "/", RouteController, :index
+  end
+
+  scope "/management", WaypointsDirectWeb do
+    pipe_through [:browser, :secure]
+
+    get "/logout", AuthController, :logout
   end
 
   scope "/management/routes", WaypointsDirectWeb do
