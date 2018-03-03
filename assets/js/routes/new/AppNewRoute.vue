@@ -211,7 +211,8 @@ export default {
             selectedIntersectionPoints: [],
             routePath: [],
             showRoutePath: false,
-            routeName: ""
+            routeName: "",
+            saving: false
         };
     },
     methods: {
@@ -305,13 +306,21 @@ export default {
             return this.activeControlMode === mode;
         },
         async saveRoute() {
-            const routeEdges = formRouteEdges(this.selectedIntersectionPoints);
+            if (this.saving) return;
+            if (!this.selectedIntersectionPoints.length) {
+                alert("No route edge created.");
+                return;
+            }
+            
+            this.saving = true;
 
+            const routeEdges = formRouteEdges(this.selectedIntersectionPoints);
             const result = await doPersistRoute({
                 routeEdges,
                 routeName: this.routeName
             });
 
+            this.saving = false;
             if (result.success) {
                 this.resetForm();
             } else {
