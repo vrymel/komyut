@@ -20,10 +20,4 @@ defmodule WaypointsDirectWeb.RouteController do
 
         render conn, :index, routes: routes
     end
-
-    def new(conn, _params) do
-        changeset = Route.changeset(%Route{})
-
-        render conn, :new, changeset: changeset
-    end
 end
