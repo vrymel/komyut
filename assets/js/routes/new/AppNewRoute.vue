@@ -9,6 +9,12 @@
           :center="intersection"
           @click="onCircleClick"/>
 
+        <google-map-marker
+          v-for="(intersection, index) in selectedIntersectionPoints"
+          :key="index + '' + intersection.lat + '' + intersection.lng"
+          :position="intersection"
+          :label="1 + index + ''" />
+
         <google-map-polyline 
           v-if="selectedIntersectionPoints.length"
           :name="'intersectionPath'"
@@ -124,6 +130,7 @@ import ToggleButton from "../common/ToggleButton";
 import Map from "../common/Map";
 import Circle from "../common/Circle";
 import Polyline from "../common/Polyline";
+import Marker from "../common/Marker";
 
 const doPersistIntersection = async (intersection) => {
     const response = await axios.post(api_paths.CREATE, intersection);
@@ -200,6 +207,7 @@ export default {
         "google-map": Map,
         "google-map-circle": Circle,
         "google-map-polyline": Polyline,
+        "google-map-marker": Marker,
         "toggle-button": ToggleButton
     },
     data() {
