@@ -67,7 +67,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
       %{path_exist: path_exist, path: path_to}
     end
 
-    def get_route_edges do
+    defp get_route_edges do
       query = from re in RouteEdge, 
         join: r in assoc(re, :route),
         join: fi in assoc(re, :from_intersection),

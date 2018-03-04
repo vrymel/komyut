@@ -5,8 +5,9 @@ defmodule WaypointsDirect.DijkstraShortestPath do
 
   def init_tree(source) do
     pq = IndexMinPQ.new |> IndexMinPQ.insert(%{key: source, value: 0.0})
+    dist_to = Map.put(%{}, source, 0.0)
 
-    %{edge_to: %{}, dist_to: %{}, pq: pq}
+    %{edge_to: %{}, dist_to: dist_to, pq: pq}
   end
 
   def path_to(%{:edge_to => edge_to} = tree, vertex, path \\ []) do
