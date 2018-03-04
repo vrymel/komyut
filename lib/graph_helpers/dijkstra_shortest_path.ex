@@ -31,11 +31,14 @@ defmodule WaypointsDirect.DijkstraShortestPath do
 
     adjacent = Graph.adjacent(graph, Map.get(lowest_weight, :key))
 
-    if adjacent do
-      tree = Enum.reduce adjacent, tree, fn(route_edge, acc) ->
-        relax(acc, route_edge)
+    tree = 
+      if adjacent do
+        Enum.reduce adjacent, tree, fn(route_edge, acc) ->
+          relax(acc, route_edge)
+        end
+      else 
+        tree
       end
-    end
 
     pq = Map.get(tree, :pq)
 
@@ -47,34 +50,26 @@ defmodule WaypointsDirect.DijkstraShortestPath do
     v_weight = Map.get(dist_to, v)
     w_weight = Map.get(dist_to, w)
 
-    # if w_weight is null
-    unless w_weight do
-      w_weight_new = unless v_weight, do: edge_weight, else: edge_weight + v_weight
+    next_vertex_weight = v_weight + edge_weight
 
-      # assign to tree
-      dist_to = Map.put(dist_to, w, w_weight_new)
-      edge_to = Map.put(edge_to, w, route_edge)
-      pq = assign_pq pq, %{key: w, value: w_weight_new}
-    else
-      if w_weight > (v_weight + edge_weight) do
-        # assign to tree
-        dist_to = Map.put(dist_to, w, (v_weight + edge_weight) )
-        edge_to = Map.put(edge_to, w, route_edge) 
-        pq = assign_pq pq, %{key: w, value: (v_weight + edge_weight)}
-      end
+    # elixir/erlang term ordering evaluates nil to be greater than any number
+    # hence even if we have a w_weight=nil this statement would be true and no need
+    # to trap if w_weight == nil
+    if w_weight > next_vertex_weight do
+      dist_to = Map.put(dist_to, w, next_vertex_weight)
+      edge_to = Map.put(edge_to, w, route_edge) 
+      pq = assign_pq pq, %{key: w, value: next_vertex_weight}
     end
 
     tree |> Map.put(:dist_to, dist_to) |> Map.put(:edge_to, edge_to) |> Map.put(:pq, pq)
   end
 
   defp assign_pq(pq, %{:key => key, :value => _} = key_value) do
-    find = IndexMinPQ.find_by_key pq, key
+    find = IndexMinPQ.find_by_key(pq, key)
 
-    if find do
-      pq = IndexMinPQ.remove pq, find
-    end
+    pq = if find, do: IndexMinPQ.remove(pq, find), else: pq
 
-    IndexMinPQ.insert pq, key_value
+    IndexMinPQ.insert(pq, key_value)
   end
 
 end
