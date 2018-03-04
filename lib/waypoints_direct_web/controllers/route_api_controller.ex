@@ -6,7 +6,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
     alias WaypointsDirect.GraphUtils
 
     def index(conn, _params) do
-        query = from r in Route, order_by: [desc: r.is_active, asc: r.description]
+        query = from r in Route, where: r.is_active == true, order_by: [desc: r.is_active, asc: r.description]
         routes = Repo.all(query)
         |> Enum.map(fn(route) ->
                 Map.from_struct(route)
