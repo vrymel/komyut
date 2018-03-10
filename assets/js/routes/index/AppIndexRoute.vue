@@ -9,12 +9,18 @@
           :path="routePath" />
 
         <google-map-polyline
+          v-if="focusOnSegmentIndex !== null"
+          :name="'focusSearchPathSegment'"
+          :path="searchPathSegments[focusOnSegmentIndex].path"
+          :stroke-color="getSegmentColor(focusOnSegmentIndex)" />
+        <google-map-polyline
+          v-else
           v-for="(segment, index) in searchPathSegments"
           :key="segment.id + '' + index"
           :name="'searchPathSegments'"
           :path="segment.path"
           :stroke-color="getSegmentColor(index)"/>
-
+        
         <google-map-marker
           v-if="!isObjectEmpty(searchFromCoordinate)"
           :position="searchFromCoordinate"
@@ -85,6 +91,7 @@
             <div 
               class="route-segment"
               v-for="(routeSegment, index) in routeSegmentsDisplay"
+              @click="segmentFocus(index)"
               :key="routeSegment.id + '' + index"
               :style="{ borderColor: getSegmentColor(index), backgroundColor: getSegmentColor(index, 0.4) }"
             >
@@ -236,6 +243,7 @@ export default {
             clickedCoordinatesStack: [],
             searchPathSegments: [],
             showSearchResult: false,
+            focusOnSegmentIndex: null
         };
     },
     computed: {
@@ -339,14 +347,29 @@ export default {
         isObjectEmpty(value) {
             return isEmpty(value);
         },
+        segmentFocus(index) {
+            const hideIfTheSameIndex = index === this.focusOnSegmentIndex;
+            this.focusOnSegmentIndex = hideIfTheSameIndex ? null : index;
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .route-segment {
-        border-left: transparent 4px solid;
-        padding: 10px 0 10px 6px;
-        margin-bottom: 5px;
+    .search-route-results {
+        .route-segment {
+            border-left: transparent 4px solid;
+            padding: 10px 0 10px 6px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        &:hover .route-segment {
+            opacity: 0.6;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
     }
 </style>
