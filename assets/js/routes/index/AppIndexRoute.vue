@@ -10,7 +10,7 @@
 
         <google-map-polyline
           v-for="(segment, index) in searchPathSegments"
-          :key="segment.id"
+          :key="segment.id + '' + index"
           :name="'searchPathSegments'"
           :path="segment.path"
           :stroke-color="getSegmentColor(index)"/>
@@ -85,7 +85,7 @@
             <div 
               class="route-segment"
               v-for="(routeSegment, index) in routeSegmentsDisplay"
-              :key="routeSegment.id"
+              :key="routeSegment.id + '' + index"
               :style="{ borderColor: getSegmentColor(index), backgroundColor: getSegmentColor(index, 0.4) }"
             >
               {{ routeSegment.description }}
