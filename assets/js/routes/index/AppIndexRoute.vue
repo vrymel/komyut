@@ -87,15 +87,18 @@
           
           <div 
             v-show="showSearchResult"
-            class="search-route-results">
+            class="search-route-results"
+            :class="{ 'has-focused': focusOnSegmentIndex !== null }">
             <div 
               class="route-segment"
               v-for="(routeSegment, index) in routeSegmentsDisplay"
+              :class="{ 'focused': index === focusOnSegmentIndex }"
               @click="segmentFocus(index)"
               :key="routeSegment.id + '' + index"
               :style="{ borderColor: getSegmentColor(index), backgroundColor: getSegmentColor(index, 0.4) }"
             >
-              {{ routeSegment.description }}
+              <span class="description">{{ routeSegment.description }}</span>
+              <i class="fa fa-eye"/>
             </div>
           </div>
 
@@ -359,16 +362,36 @@ export default {
     .search-route-results {
         .route-segment {
             border-left: transparent 4px solid;
-            padding: 10px 0 10px 6px;
+            padding: 10px 12px 10px 6px;
             margin-bottom: 5px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            .description {
+                flex: 1;
+            }
+
+            .fa {
+                display: none;
+            }
         }
 
         &:hover .route-segment {
-            opacity: 0.6;
+            opacity: 0.75;
 
-            &:hover {
-                opacity: 1;
+            &:hover { opacity: 1; }
+        }
+
+        &.has-focused .route-segment {
+            opacity: 0.75;
+
+            &.focused { 
+                opacity: 1; 
+
+                .fa {
+                    display: inline-block;
+                }
             }
         }
     }
