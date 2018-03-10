@@ -18,20 +18,32 @@ defmodule WaypointsDirectWeb.GraphApiController do
       from_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: from_lat, lng: from_lng})
       to_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: to_lat, lng: to_lng})
 
-      %Intersection{:id => from_intersection_id} = get_nearest_intersection(from_geopoint, within)
-      %Intersection{:id => to_intersection_id} = get_nearest_intersection(to_geopoint, within)
+      nearest_of_from = get_nearest_intersection(from_geopoint, within)
+      nearest_of_to = get_nearest_intersection(to_geopoint, within)
 
-      %{:path_exist => path_exist, :path => path} = do_search_path(build_graph(), from_intersection_id, to_intersection_id)
-
-      # path is a list of route_edges, we need to translate it to
-      # an intersection list so we end up with a complete path from
-      # source to destination
-      intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
-
-      json conn, %{exist: path_exist, path: intersection_sequence}
+      response_search_path(conn, nearest_of_from, nearest_of_to)
     end
 
-    defp get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
+    defp response_search_path(conn, %Intersection{:id => from_intersection_id}, %Intersection{:id => to_intersection_id}) do
+        %{:path_exist => path_exist, :path => path} = do_search_path(build_graph(), from_intersection_id, to_intersection_id)
+
+        # path is a list of route_edges, we need to translate it to
+        # an intersection list so we end up with a complete path from
+        # source to destination
+        intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
+
+        json conn, %{exist: path_exist, path: intersection_sequence}
+    end
+
+    defp response_search_path(conn, :empty, :empty) do
+        json conn, %{exist: false, path: []}
+    end
+
+    defp response_search_path(conn, _, _) do
+        json conn, %{exist: false, path: []}
+    end
+
+    def get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
       distance_formula = "acos(sin($1::float) * sin(lat_radian) + cos($1::float) * cos(lat_radian) * cos(lng_radian - ($2::float)))"
  
       query_result = Repo.query("
@@ -42,6 +54,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
         WHERE #{distance_formula} <= $3::float", [lat, lng, radius])
 
       case query_result do
+        {:ok, %{num_rows: 0}} -> :empty
         {:ok, result} ->
           %{:rows => rows } = Map.take(result, [:rows])
 
@@ -50,10 +63,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
               if r_distance < acc_distance, do: row, else: acc
             end
 
-            Repo.get Intersection, nearest_id
+            Repo.get(Intersection, nearest_id)
           end
-        _ -> 
-          nil
+        _ -> :empty
       end
     end
 
