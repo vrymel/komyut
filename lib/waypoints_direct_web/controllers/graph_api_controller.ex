@@ -27,12 +27,16 @@ defmodule WaypointsDirectWeb.GraphApiController do
     defp response_search_path(conn, %Intersection{:id => from_intersection_id}, %Intersection{:id => to_intersection_id}) do
         %{:path_exist => path_exist, :path => path} = do_search_path(build_graph(), from_intersection_id, to_intersection_id)
 
-        # path is a list of route_edges, we need to translate it to
-        # an intersection list so we end up with a complete path from
-        # source to destination
-        intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
+        if path_exist do
+          # path is a list of route_edges, we need to translate it to
+          # an intersection list so we end up with a complete path from
+          # source to destination
+          intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
 
-        json conn, %{exist: path_exist, path: intersection_sequence}
+          json conn, %{exist: path_exist, path: intersection_sequence}
+        else
+          json conn, %{exist: path_exist, path: []}
+        end
     end
 
     defp response_search_path(conn, :empty, :empty) do
