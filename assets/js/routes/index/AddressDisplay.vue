@@ -10,10 +10,11 @@
 </template>
 
 <script>
+import { isEmpty } from "lodash";
 import { reverseGeocode } from "../services";
 
 const getCoordinateAddress = async (coordinate) => {
-    if (coordinate) {
+    if (!isEmpty(coordinate)) {
         const geocodeResponse = await reverseGeocode(coordinate.lat, coordinate.lng);
         if (geocodeResponse && geocodeResponse.length) {
             const firstAddress = geocodeResponse[0];

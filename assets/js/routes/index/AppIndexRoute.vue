@@ -97,7 +97,14 @@
             class="card-block mt-4">
             <button 
               class="btn btn-primary"
-              @click="searchPath">Search</button>
+              @click="searchPath">
+              <i class="fa fa-search"/>
+            Search</button>
+            <button
+              class="btn btn-link"
+              @click="clearSearchCoordinatesStack"
+            >
+            Clear</button>
           </div>
         </div>
       </div>
@@ -321,6 +328,10 @@ export default {
         postSearchPath() {
             this.routePath = [];
             this.currentRoute = null;
+        },
+        clearSearchCoordinatesStack() {
+            this.clickedCoordinatesStack = [];
+            this.searchPathSegments = [];
         },
         backToSearch() {
             this.showSearchResult = false;
