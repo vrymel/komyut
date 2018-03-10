@@ -14,12 +14,12 @@ defmodule WaypointsDirectWeb.GraphApiController do
       %{"lat" => from_lat, "lng" => from_lng} = Poison.decode! from_coordinates
       %{"lat" => to_lat, "lng" => to_lng} = Poison.decode! to_coordinates
 
-      within = @within_radius / @earth_radius
+      distance_limit = @within_radius * 3
       from_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: from_lat, lng: from_lng})
       to_geopoint = GeoPoint.from_degrees(%GeoPoint{lat: to_lat, lng: to_lng})
 
-      nearest_of_from = get_nearest_intersection(from_geopoint, within)
-      nearest_of_to = get_nearest_intersection(to_geopoint, within)
+      nearest_of_from = search_nearest_intersection(from_geopoint, @within_radius, distance_limit, @within_radius)
+      nearest_of_to = search_nearest_intersection(to_geopoint, @within_radius, distance_limit, @within_radius)
 
       response_search_path(conn, nearest_of_from, nearest_of_to)
     end
@@ -43,7 +43,23 @@ defmodule WaypointsDirectWeb.GraphApiController do
         json conn, %{exist: false, path: []}
     end
 
-    def get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, radius) do
+    def search_nearest_intersection(geopoint, distance_increment, distance_limit, distance \\ 0) do
+      within = distance / @earth_radius
+      next_distance = distance + distance_increment
+      result = get_nearest_intersection(geopoint, within)
+
+      is_empty = result == :empty
+      within_distance_limit = next_distance <= distance_limit
+      proceed_greedy_search = is_empty and within_distance_limit
+
+      if proceed_greedy_search do
+        search_nearest_intersection(geopoint, distance_increment, distance_limit, next_distance)
+      else
+        result
+      end
+    end
+
+    def get_nearest_intersection(%GeoPoint{:lat => lat, :lng => lng}, within_radius) do
       distance_formula = "acos(sin($1::float) * sin(lat_radian) + cos($1::float) * cos(lat_radian) * cos(lng_radian - ($2::float)))"
  
       query_result = Repo.query("
@@ -51,12 +67,12 @@ defmodule WaypointsDirectWeb.GraphApiController do
         id, 
         #{distance_formula} AS relative_distance 
         FROM intersections 
-        WHERE #{distance_formula} <= $3::float", [lat, lng, radius])
+        WHERE #{distance_formula} <= $3::float", [lat, lng, within_radius])
 
       case query_result do
         {:ok, %{num_rows: 0}} -> :empty
         {:ok, result} ->
-          %{:rows => rows } = Map.take(result, [:rows])
+          %{:rows => rows} = Map.take(result, [:rows])
 
           unless rows == [] do
             [nearest_id, _] = Enum.reduce rows, fn([_r_id, r_distance] = row, [_acc_id, acc_distance] = acc) ->
