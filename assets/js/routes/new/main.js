@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue from "../../vue-register";
 import AppNewRoute from "./AppNewRoute.vue";
 
 new Vue({

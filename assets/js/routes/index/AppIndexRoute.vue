@@ -136,10 +136,6 @@ import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
 import { snapToRoads } from "../services";
 
-import Map from "../common/Map";
-import Polyline from "../common/Polyline";
-import Marker from "../common/Marker";
-
 import RouteSelectDialog from "./RouteSelectDialog";
 import SearchRouteSelect from "./SearchRouteSelect";
 
@@ -229,9 +225,6 @@ const getSegmentColor = (segmentPosition, opacity = 1) => {
 export default {
     name: "AppIndexRoute",
     components: {
-        "google-map": Map,
-        "google-map-polyline": Polyline,
-        "google-map-marker": Marker,
         "route-select-dialog": RouteSelectDialog,
         "search-route-select": SearchRouteSelect,
     },

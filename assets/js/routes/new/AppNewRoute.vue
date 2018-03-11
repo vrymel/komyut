@@ -126,12 +126,6 @@ import { snapToRoads } from "../services";
 import api_paths from "../api_paths";
 import ToggleButton from "../common/ToggleButton";
 
-// google map components
-import Map from "../common/Map";
-import Circle from "../common/Circle";
-import Polyline from "../common/Polyline";
-import Marker from "../common/Marker";
-
 const doPersistIntersection = async (intersection) => {
     const response = await axios.post(api_paths.CREATE, intersection);
     const {data} = response;
@@ -204,11 +198,7 @@ const controlModes = {
 export default {
     name: "AppNewRoute",
     components: {
-        "google-map": Map,
-        "google-map-circle": Circle,
-        "google-map-polyline": Polyline,
-        "google-map-marker": Marker,
-        "toggle-button": ToggleButton
+        "toggle-button": ToggleButton,
     },
     data() {
         return {
