@@ -39,12 +39,13 @@ defmodule WaypointsDirectWeb.GraphApiController do
         end
     end
 
+    # this is the response where one or both of the from and to locations has no
+    # intersection near to it
     defp response_search_path(conn, :empty, :empty) do
-        json conn, %{exist: false, path: []}
+        json conn, %{exist: false, path: [], nearest_none: true}
     end
-
     defp response_search_path(conn, _, _) do
-        json conn, %{exist: false, path: []}
+        json conn, %{exist: false, path: [], nearest_none: true}
     end
 
     def search_nearest_intersection(geopoint, distance_increment, distance_limit, distance \\ 0) do

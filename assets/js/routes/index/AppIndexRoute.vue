@@ -344,7 +344,12 @@ export default {
                 this.showSearchResult = true;
             } else {
                 this.showSearchResult = false;
-                this.showNoRouteAlert();
+
+                if (response.nearest_none) {
+                    this.showNoNearIntersectionAlert();
+                } else {
+                    this.showNoRouteAlert();
+                }
             }
 
             this.postSearchPath();
