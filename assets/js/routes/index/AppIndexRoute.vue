@@ -36,6 +36,12 @@
       </google-map>
     </div>
 
+    <div class="mobile-menu-toggle">
+      <button @click="toggleSidebar">
+        <i class="fa fa-search"/>
+      </button>
+    </div>
+
     <modal
       v-if="showAlert"
       :visible="showAlert"
@@ -445,9 +451,11 @@ export default {
     .mobile-menu-toggle {
         display: none;
         position: fixed;
-        background-color: gray;
-        padding: 20px;
-        border-radius: 20px;
+        right: 10px;
+        top: 50px;
+		background-color:white;
+        padding: 15px;
+        border-radius: 35px;
     }
 
 
