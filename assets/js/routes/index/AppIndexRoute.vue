@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <div class="m-2 card">
+      <div class="m-2 card search-route">
         <div class="card-body">
           <h6 
             v-show="!showSearchResult" 
@@ -421,6 +421,29 @@ export default {
 
                 .fa {
                     display: inline-block;
+                }
+            }
+        }
+    }
+
+
+	@media (max-width: 800px) {
+        .app-index-route {
+            flex-direction: column;
+
+            .map-container {
+                height: 70vh;
+            }
+
+            .sidebar {
+                height: auto;
+
+                .card.search-route {
+                    flex: 1;
+
+                    .card-body {
+                        flex-direction: row;
+                    }
                 }
             }
         }
