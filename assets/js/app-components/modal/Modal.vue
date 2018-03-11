@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import $ from "jquery";
 import {Modal} from "bootstrap/dist/js/bootstrap";
 
 export default {
@@ -23,11 +24,23 @@ export default {
     },
     watch: {
         visible: function() {
-            this._modal.show();        
+            if (this.visible) {
+                this._modal.show();
+            } else {
+                this._modal.hide();
+            }
         },
     },
     mounted() {
+        // Modal triggers the event on the jQuery object so we need to use jQuery.on
+        $(this.$refs.modal).on("hidden.bs.modal", () => {
+            this.$emit("modal-hidden");
+        });
+
         this._modal = new Modal(this.$refs.modal);
+        if (this.visible) {
+            this._modal.show();
+        }
     },
 }
 </script>
