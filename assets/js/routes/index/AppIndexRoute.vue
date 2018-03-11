@@ -1,6 +1,9 @@
 <template>
-  <div class="app-index-route">
-    <div class="map-container">
+  <div 
+    class="app-index-route"
+    :class="{ 'full-map': !showSidebar }">
+    <div 
+    class="map-container">
       <google-map
       @click="mapClick">
         <google-map-polyline 
@@ -259,6 +262,7 @@ export default {
             showSearchResult: false,
             focusOnSegmentIndex: null,
             showAlert: false,
+            showSidebar: true,
         };
     },
     computed: {
@@ -383,6 +387,9 @@ export default {
         segmentFocus(index) {
             const hideIfTheSameIndex = index === this.focusOnSegmentIndex;
             this.focusOnSegmentIndex = hideIfTheSameIndex ? null : index;
+        },
+        toggleSidebar() {
+            this.showSidebar = !this.showSidebar;
         }
     }
 }
@@ -426,6 +433,23 @@ export default {
         }
     }
 
+    .map-container {
+        transition: height 0.25s linear;
+    }
+
+    .sidebar {
+        transition: opacity 0.15s linear;
+        opacity: 1;
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        position: fixed;
+        background-color: gray;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
 
 	@media (max-width: 800px) {
         .app-index-route {
@@ -433,6 +457,21 @@ export default {
 
             .map-container {
                 height: 70vh;
+            }
+
+            &.full-map {
+                .map-container {
+                    height: 100vh;
+                }
+
+                .sidebar {
+                    height: 0;
+                    opacity: 0;
+                }
+            }
+
+            .mobile-menu-toggle {
+                display: block;
             }
 
             .sidebar {
