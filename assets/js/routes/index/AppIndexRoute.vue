@@ -33,6 +33,24 @@
       </google-map>
     </div>
 
+    <modal
+      v-if="showAlert"
+      :visible="showAlert"
+      @modal-hidden="alertHidden">
+      <modal-header>
+        <h5 class="modal-title">Oh, bummer!</h5>
+      </modal-header>
+      <modal-body>
+        <p>{{ alertMessage }}</p>
+      </modal-body>
+
+      <modal-footer>
+        <button
+          class="btn btn-primary" 
+          data-dismiss="modal">Okay</button>
+      </modal-footer>
+    </modal>
+
     <div 
     class="sidebar">
       <div class="m-2 card">
@@ -239,7 +257,8 @@ export default {
             clickedCoordinatesStack: [],
             searchPathSegments: [],
             showSearchResult: false,
-            focusOnSegmentIndex: null
+            focusOnSegmentIndex: null,
+            showAlert: false,
         };
     },
     computed: {
@@ -325,6 +344,7 @@ export default {
                 this.showSearchResult = true;
             } else {
                 this.showSearchResult = false;
+                this.showNoRouteAlert();
             }
 
             this.postSearchPath();
@@ -336,6 +356,18 @@ export default {
         clearSearchCoordinatesStack() {
             this.clickedCoordinatesStack = [];
             this.searchPathSegments = [];
+        },
+        showNoRouteAlert() {
+            this.alertMessage = "We could not find a route for the selected locations.";
+            this.showAlert = true;
+        },
+        showNoNearIntersectionAlert() {
+            this.alertMessage = "There is no route near the selected locations.";
+            this.showAlert = true;
+        },
+        alertHidden() {
+            this.showAlert = false;
+            this.alertMessage = null;
         },
         backToSearch() {
             this.showSearchResult = false;
