@@ -78,9 +78,12 @@
             <h6 class="card-title">Route</h6>
 
             <div 
-              class="card-text"
+              class="card-text description"
               v-if="currentRoute">
-              {{ currentRoute.description }}
+              <span>{{ currentRoute.description }}</span>
+              <button 
+                class="btn btn-link"
+                @click.stop="clearRouteSelected">Clear</button>
             </div>
             <div 
               v-else
@@ -299,21 +302,32 @@ export default {
         routeSelect() {
             this.showSelectRouteDialog = true;
         },
+        clearRouteSelected() {
+            this.setCurrentRoute(null);
+        },
         closeSelectRouteDialog() {
             this.showSelectRouteDialog = false;
         },
-        async routeSelected(route) {
+        async setCurrentRoute(route) {
             this.currentRoute = route;
 
-            const routeDetails = await getRoute(route.id);
-            if (routeDetails) {
-                const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
-
-                this.routePath = snapToRoadPoints;
-            } else {
+            if (!route) {
                 this.routePath = [];
+            } else {
+
+                const routeDetails = await getRoute(route.id);
+                if (routeDetails) {
+                    const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+
+                    this.routePath = snapToRoadPoints;
+                } else {
+                    this.routePath = [];
+                }
             }
-            
+        },
+        // route select dialog handler
+        routeSelected(route) {
+            this.setCurrentRoute(route);
             this.closeSelectRouteDialog();
             this.postRouteSelected();
         },
@@ -402,6 +416,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .route-select {
+        .description {
+            display: flex;
+            align-items: center;
+
+            > span {
+                flex: 1;
+            }
+
+            button {
+                padding: 0 5px;
+                border-top-width: 0;
+                border-bottom-width: 0;
+            }
+        }
+    }
+
     .search-route-results {
         .route-segment {
             border-left: transparent 4px solid;
