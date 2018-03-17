@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "query-string";
-import { memoize } from "lodash";
+import { memoize, chunk } from "lodash";
 import { GOOGLE_MAP_API_KEY as api_key } from "./globals";
 
 const geocoder = new google.maps.Geocoder;
@@ -8,7 +8,7 @@ const geocoder = new google.maps.Geocoder;
 /**
  * @param {array} waypoints - an array of objects with shape of { lat, lng }
  */
-const _snapToRoads = async (waypoints) => {
+const requestSnapToRoads = async (waypoints) => {
     var pathValues = waypoints.map((w) => {
         const {lat, lng} = w;
 
@@ -33,7 +33,30 @@ const _snapToRoads = async (waypoints) => {
         return false;
     }
 };
-const snapToRoads = memoize(_snapToRoads, (waypoints) => {
+const doSnapToRoads = async (waypoints) => {
+    const apiLimit = 100;
+    const overLimit = waypoints.length > apiLimit;
+    const half = Math.floor(waypoints.length / 2);
+    const waypointsChunks = overLimit ? chunk(waypoints, half) : [waypoints];
+
+    let requests = [];
+    for (let c of waypointsChunks) {
+        let snappedPointsRequest = requestSnapToRoads(c);
+
+        requests.push(snappedPointsRequest);
+    }
+
+    return Promise.all(requests)
+        .then((results) => {
+            let consolidatedSnappedPoints = [];
+            for(let s of results) {
+                consolidatedSnappedPoints = [...consolidatedSnappedPoints, ...s];
+            }
+
+            return consolidatedSnappedPoints;
+        });
+};
+const snapToRoads = memoize(doSnapToRoads, (waypoints) => {
     const key = waypoints.reduce((accumulator, point) => {
         const id = point.route_id || point.id;
 
