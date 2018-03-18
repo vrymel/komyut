@@ -35,9 +35,7 @@ const requestSnapToRoads = async (waypoints) => {
 };
 const doSnapToRoads = async (waypoints) => {
     const apiLimit = 100;
-    const overLimit = waypoints.length > apiLimit;
-    const half = Math.floor(waypoints.length / 2);
-    const waypointsChunks = overLimit ? chunk(waypoints, half) : [waypoints];
+    const waypointsChunks = chunk(waypoints, apiLimit);
 
     let requests = [];
     for (let c of waypointsChunks) {
