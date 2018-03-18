@@ -37,9 +37,9 @@
     </div>
 
     <div class="mobile-menu-toggle">
-      <button @click="toggleSidebar">
+      <div @click="toggleSidebar">
         <i class="fa fa-search"/>
-      </button>
+      </div>
     </div>
 
     <modal
@@ -416,6 +416,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import "../common/_variables.scss";
+
     .route-select {
         .description {
             display: flex;
@@ -484,9 +486,10 @@ export default {
         position: fixed;
         right: 10px;
         top: 50px;
-		background-color:white;
-        padding: 15px;
-        border-radius: 35px;
+        background-color: $primaryColor;
+        color: white;
+        padding: 15px 19px;
+        border-radius: 28px;
     }
 
 
