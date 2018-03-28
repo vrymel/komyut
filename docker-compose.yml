@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    command: mix phx.server
+    ports:
+      - "4000:4000"
+    environment:
+      - MIX_ENV=dev
+      - PORT=4000
+    volumes:
+      - ./app_develop:/opt/app
+  db:
+    image: postgres:9.6.6
+    volumes: 
+      # - ./database_dumps:/docker-entrypoint-initdb.d # uncomment to start container with dump data
+      - ./database_docker_volume:/var/lib/postgresql/data # use this if data is already on a volume
+    environment:
+      POSTGRES_DB: waypoints_direct_dev
+      POSTGRES_PASSWORD: secretpassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"

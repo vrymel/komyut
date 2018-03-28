@@ -1,0 +1,23 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/deps": true,
+        "app/_build": true
+    },
+    "eslint.options": {},
+    "eslint.trace.server": "messages",
+    "eslint.workingDirectories": [
+        "./app/assets"
+    ],
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "vue",
+            "autoFix": true
+        }
+    ],
+    "eslint.run": "onSave",
+    "vetur.format.defaultFormatter.js": "none"
+}

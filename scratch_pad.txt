@@ -1,0 +1,123 @@
+alias WaypointsDirect.Graph
+alias WaypointsDirect.DirectedDFS
+
+g = Graph.new(10)
+%{bags: %{0 => [], 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [],
+    7 => [], 8 => [], 9 => []}, edges_count: 0, vertices_count: 10}
+
+g = Graph.add_edge(g, 0, 1)
+g = Graph.add_edge(g, 1, 2)
+g = Graph.add_edge(g, 2, 3)
+g = Graph.add_edge(g, 3, 4)
+g = Graph.add_edge(g, 5, 2)
+g = Graph.add_edge(g, 3, 6)
+g = Graph.add_edge(g, 6, 7)
+g = Graph.add_edge(g, 7, 8)
+%{bags: %{0 => [1], 1 => [2], 2 => [3], 3 => [6, 4], 4 => [], 5 => [2],
+    6 => '\a', 7 => '\b', 8 => [], 9 => []}, edges_count: 8, vertices_count: 10}
+
+dfs = DirectedDFS.process_graph(g, 0)
+%{marked: %{0 => true, 1 => true, 2 => true, 3 => true, 4 => true, 5 => false,
+    6 => true, 7 => true, 8 => true, 9 => false}}
+
+### 
+
+alias WaypointsDirect.Intersection
+alias WaypointsDirect.RouteEdge
+alias WaypointsDirect.Repo
+
+intersection = Intersection.changeset(%Intersection{})
+route_edge = RouteEdge.changeset(%RouteEdge{from_intersection_id: 1, to_intersection_id: 2})
+
+intersection1 = WaypointsDirect.Repo.get!(Intersection, 1)
+intersection2 = WaypointsDirect.Repo.get!(Intersection, 2)
+
+route_edge = Ecto.build_assoc(intersection1, :from_route_edges)
+route_edge2 = Ecto.build_assoc(intersection2, :to_route_edges)
+
+###
+
+alias WaypointsDirect.Route 
+alias WaypointsDirect.Repo
+alias WaypointsDirect.RouteEdge
+alias WaypointsDirect.Graph
+
+rc_route = Repo.get!(Route, 3)
+
+# 1 -> 2
+route_edge12 = Repo.get!(RouteEdge, 1)
+
+alias WaypointsDirect.RouteEdge
+alias WaypointsDirect.Graph
+alias WaypointsDirect.DijkstraShortestPath
+
+route_edge1 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 1, to_intersection_id: 2, weight: 1.0})
+route_edge2 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 2, to_intersection_id: 3, weight: 1.0})
+route_edge3 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 3, to_intersection_id: 4, weight: 1.0})
+route_edge4 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 4, to_intersection_id: 5, weight: 1.0})
+route_edge5 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 5, to_intersection_id: 2, weight: 1.0})
+route_edge6 = RouteEdge.changeset(%RouteEdge{from_intersection_id: 2, to_intersection_id: 1, weight: 1.0})
+
+g2 = Graph.new()
+g2 = Graph.add_edge(g2, route_edge1)
+g2 = Graph.add_edge(g2, route_edge2)
+g2 = Graph.add_edge(g2, route_edge3)
+g2 = Graph.add_edge(g2, route_edge4)
+g2 = Graph.add_edge(g2, route_edge5)
+g2 = Graph.add_edge(g2, route_edge6)
+
+####
+
+alias WaypointsDirect.GeoPoint
+alias WaypointsDirect.GeoLocation
+
+source = GeoPoint.from_degrees(%GeoPoint{lat: 8.485273, lng: 124.646718})
+bounds = GeoLocation.calculate_bounding_coordinates(source, 4)
+
+SELECT 
+  id,
+  acos(
+  	sin(0.1480959517805768) * sin(lat_radian) + 
+  	cos(0.1480959517805768) * cos(lat_radian) * cos(lng_radian - (2.1754956309048814))
+  ) 
+FROM intersections WHERE
+acos(sin(0.1480959517805768) * sin(lat_radian) + cos(0.1480959517805768) * cos(lat_radian) * cos(lng_radian - (2.1754956309048814))) <= (0.137/6371.0);
+
+query = from i in Intersection,
+  where: fragment("acos(sin(?) * sin(lat_radian) + cos(?) * cos(lat_radian) * cos(lng_radian - (?))) <= ?", 0.1480959517805768, 0.1480959517805768, 2.1754956309048814, 0.000021504)
+
+Repo.query ""
+
+####
+
+http://localhost:4000/api/graph/search?from_intersection_id=12&to_intersection_id=33
+
+Route A
+from: 60
+to: 83
+
+####
+
+import Ecto.Query
+
+query = from r in Route, 
+    where: r.id == 40,
+    join: re in assoc(r, :route_edges), 
+    join: fi in assoc(re, :from_intersection),
+    join: ti in assoc(re, :to_intersection),
+    preload: [route_edges: {re, from_intersection: fi, to_intersection: ti}]
+
+query = from re in RouteEdge, 
+        join: fi in Ecto.assoc(re, :from_intersection),
+        join: ti in Ecto.assoc(re, :to_intersection),
+        preload: [from_intersection: fi, to_intersection: ti]
+
+#### 
+
+alias WaypointsDirectWeb.GraphApiController
+alias WaypointsDirect.GeoPoint
+
+geopoint = %GeoPoint{lat: 0.148, lng: 2.175}
+geopoint1 = %GeoPoint{lat: 10, lng: 20}  
+
+GraphApiController.get_nearest_intersection(geopoint, 0.200)
