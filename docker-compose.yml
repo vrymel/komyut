@@ -10,7 +10,7 @@ services:
       - MIX_ENV=dev
       - PORT=4000
     volumes:
-      - ./app_develop:/opt/app
+      - ./app:/opt/app
   db:
     image: postgres:9.6.6
     volumes: 

@@ -39,7 +39,7 @@ config :waypoints_direct, WaypointsDirect.Repo,
   username: "postgres",
   password: "secretpassword",
   database: "waypoints_direct_dev",
-  hostname: "0.0.0.0",
+  hostname: "db",
   pool_size: 10
 
 config :sentry,
