@@ -4,8 +4,10 @@ defmodule WaypointsDirectWeb.GraphApiController do
     alias WaypointsDirect.Graph
     alias WaypointsDirect.GeoPoint
     alias WaypointsDirect.DijkstraShortestPath
+    alias WaypointsDirect.Route
     alias WaypointsDirect.RouteEdge
     alias WaypointsDirect.Intersection
+    alias WaypointsDirect.GraphUtils
 
     @within_radius 0.200 # within 200 meters radius
     @earth_radius 6371 # approximate radius of the Earth in km
@@ -21,30 +23,28 @@ defmodule WaypointsDirectWeb.GraphApiController do
       nearest_of_from = search_nearest_intersection(from_geopoint, @within_radius, distance_limit, @within_radius)
       nearest_of_to = search_nearest_intersection(to_geopoint, @within_radius, distance_limit, @within_radius)
 
-      response_search_path(conn, nearest_of_from, nearest_of_to)
+      do_search_path(conn, nearest_of_from, nearest_of_to)
     end
 
-    defp response_search_path(conn, %Intersection{:id => from_intersection_id}, %Intersection{:id => to_intersection_id}) do
-        %{:path_exist => path_exist, :path => path} = do_search_path(build_graph(), from_intersection_id, to_intersection_id)
+    defp do_search_path(conn, %Intersection{:id => from_intersection_id}, %Intersection{:id => to_intersection_id}) do
+        direct_path = search_direct_path(from_intersection_id, to_intersection_id)
 
-        if path_exist do
-          # path is a list of route_edges, we need to translate it to
-          # an intersection list so we end up with a complete path from
-          # source to destination
-          intersection_sequence = route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
+        case direct_path do 
+          :empty ->
+            graph_path = search_graph_path(from_intersection_id, to_intersection_id)
 
-          json conn, %{exist: path_exist, path: intersection_sequence}
-        else
-          json conn, %{exist: path_exist, path: []}
+            json conn, %{:exist => graph_path != [], path: graph_path}
+          _ ->
+            json conn, %{:exist => direct_path != [], path: direct_path} 
         end
     end
 
     # this is the response where one or both of the from and to locations has no
     # intersection near to it
-    defp response_search_path(conn, :empty, :empty) do
+    defp do_search_path(conn, :empty, :empty) do
         json conn, %{exist: false, path: [], nearest_none: true}
     end
-    defp response_search_path(conn, _, _) do
+    defp do_search_path(conn, _, _) do
         json conn, %{exist: false, path: [], nearest_none: true}
     end
 
@@ -90,7 +90,22 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
-    defp do_search_direct_path(source, destination) do
+    def search_direct_path(source, destination) do
+      direct_path_result = do_search_direct_path(source, destination)
+
+      case direct_path_result do
+        {:ok, %Route{:id => route_id}, direct_path} ->
+          Enum.map(direct_path, 
+            fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
+                %{intersection_id: id, lat: lat, lng: lng, route_id: route_id} 
+            end
+          )
+      _ ->
+        :empty
+      end
+    end
+
+    def do_search_direct_path(source, destination) do
       query_result = Repo.query("
         SELECT r.id FROM route_edges re
           JOIN routes r ON r.id = re.route_id
@@ -100,12 +115,63 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       case query_result do
         {:ok, %{num_rows: 0}} -> :empty
-        {:ok, %{num_rows: num_rows, rows: [first_item | _]}} -> first_item
+        {:ok, %{rows: [first_item | _]}} -> 
+          List.first(first_item) |> 
+            prepare_route_segment(source, destination)
         _ -> :empty
       end
     end
 
-    defp do_search_path(graph, source, destination) do
+    defp prepare_route_segment(route_id, source, destination) do
+      query = from r in Route, 
+        where: r.id == ^route_id,
+        join: re in assoc(r, :route_edges), 
+        join: fi in assoc(re, :from_intersection),
+        join: ti in assoc(re, :to_intersection),
+        order_by: re.id,
+        preload: [route_edges: {re, from_intersection: fi, to_intersection: ti}]
+
+      route = Repo.one query
+
+      intersection_list = route |> Map.get(:route_edges) |> GraphUtils.route_edges_to_intersection_list
+      
+      {:ok, route, segment_route_from_search_intersections(intersection_list, source, destination)}
+    end
+
+    defp segment_route_from_search_intersections([head | next_intersections], source, destination, segment_list \\ []) do
+      is_segment_empty = segment_list == []
+      source_compare = if is_segment_empty, do: source, else: destination
+
+      %Intersection{:id => intersection_id} = head
+      source_matched = intersection_id == source_compare
+
+      ignore_current_intersection = !source_matched and is_segment_empty
+      is_destination_reached = source_matched and !is_segment_empty
+
+      cond do
+        is_destination_reached ->
+          Enum.reverse([head | segment_list])
+        ignore_current_intersection ->
+          segment_route_from_search_intersections(next_intersections, source, destination, segment_list)
+        true ->
+          segment_route_from_search_intersections(next_intersections, source, destination, [head | segment_list])
+      end
+    end
+
+    defp search_graph_path(source, destination) do
+      %{:path_exist => path_exist, :path => path} = do_search_graph_path(build_graph(), source, destination)
+
+      if path_exist do
+        # path is a list of route_edges, we need to translate it to
+        # an intersection list so we end up with a complete path from
+        # source to destination
+        route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
+      else
+        []
+      end
+    end
+    
+    defp do_search_graph_path(graph, source, destination) do
       tree = DijkstraShortestPath.init_tree source
       tree = DijkstraShortestPath.build_tree graph, tree
 
