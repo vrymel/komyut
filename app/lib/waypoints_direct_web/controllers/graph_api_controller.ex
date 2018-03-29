@@ -90,6 +90,21 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
+    defp do_search_direct_path(source, destination) do
+      query_result = Repo.query("
+        SELECT r.id FROM route_edges re
+          JOIN routes r ON r.id = re.route_id
+        WHERE re.route_id IN (SELECT route_id FROM route_edges WHERE from_intersection_id = $1::int)
+          AND to_intersection_id = $2::int
+      ", [source, destination])
+
+      case query_result do
+        {:ok, %{num_rows: 0}} -> :empty
+        {:ok, %{num_rows: num_rows, rows: [first_item | _]}} -> first_item
+        _ -> :empty
+      end
+    end
+
     defp do_search_path(graph, source, destination) do
       tree = DijkstraShortestPath.init_tree source
       tree = DijkstraShortestPath.build_tree graph, tree
