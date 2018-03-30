@@ -13,7 +13,7 @@ config :logger, level: :warn
 config :waypoints_direct, WaypointsDirect.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "secretpassword",
   database: "waypoints_direct_test",
-  hostname: "localhost",
+  hostname: "db",
   pool: Ecto.Adapters.SQL.Sandbox

@@ -1,3 +1,3 @@
 defmodule WaypointsDirect.LayoutViewTest do
-  use WaypointsDirect.ConnCase, async: true
+  use WaypointsDirectWeb.ConnCase, async: true
 end
