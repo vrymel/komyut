@@ -89,11 +89,32 @@ defmodule WaypointsDirectWeb.GraphApiController do
         _ -> :empty
       end
     end
+    
+    defp get_closest_direct_route(direct_routes) do
+      # Get the route that has the lowest intersections, this is our naive approach to finding the 
+      # closest route to the destination. If we have proper route edge weight values, we should use that 
+      # instead of just counting the number of intersections to find the closest route.
+      Enum.reduce(direct_routes, nil, fn(route_segment_path, current_lowest_route_segment) -> 
+        {:ok, _, direct_path} = route_segment_path
 
-    def search_direct_path(source, destination) do
-      direct_path_result = do_search_direct_path(source, destination)
+        path_length = Enum.count(direct_path)
+        lowest_path_count = case current_lowest_route_segment do
+          {:ok, _, lowest_direct_path} -> Enum.count(lowest_direct_path)
+          _ -> nil
+        end
 
-      case direct_path_result do
+        if path_length < lowest_path_count do
+          route_segment_path
+        else
+          current_lowest_route_segment
+        end
+      end)
+    end
+
+    defp search_direct_path(source, destination) do
+      closest_route = do_search_direct_path(source, destination) |> get_closest_direct_route()
+
+      case closest_route do
         {:ok, %Route{:id => route_id}, direct_path} ->
           Enum.map(direct_path, 
             fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
@@ -105,7 +126,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
-    def do_search_direct_path(source, destination) do
+    defp do_search_direct_path(source, destination) do
       query_result = Repo.query("
         SELECT r.id FROM route_edges re
           JOIN routes r ON r.id = re.route_id
@@ -115,9 +136,10 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       case query_result do
         {:ok, %{num_rows: 0}} -> :empty
-        {:ok, %{rows: [first_item | _]}} -> 
-          List.first(first_item) |> 
-            prepare_route_segment(source, destination)
+        {:ok, %{rows: rows}} -> 
+          Enum.map(rows, fn([route_id]) -> 
+            prepare_route_segment(route_id, source, destination)
+          end)
         _ -> :empty
       end
     end
