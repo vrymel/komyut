@@ -155,41 +155,45 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       route = Repo.one query
 
-      intersection_list = route |> Map.get(:route_edges) |> GraphUtils.route_edges_to_intersection_list
+      intersection_list = 
+        route 
+        |> Map.get(:route_edges) 
+        |> GraphUtils.route_edges_to_intersection_list
+        |> segment_route_from_search_intersections(source, destination)
       
-      {:ok, route, segment_route_from_search_intersections(intersection_list, source, destination)}
+      {:ok, route, intersection_list}
     end
 
 
-    defp segment_route_from_search_intersections(intersection_list, source, destination, segment_list \\ [], ignored_intersections \\ [])
+    defp segment_route_from_search_intersections(intersection_list, start_segment, end_segment, segment_list \\ [], ignored_intersections \\ [])
 
-    defp segment_route_from_search_intersections([head | next_intersections], source, destination, segment_list, ignored_intersections) do
+    defp segment_route_from_search_intersections([head | next_intersections], start_segment, end_segment, segment_list, ignored_intersections) do
       is_segment_empty = segment_list == []
-      source_compare = if is_segment_empty, do: source, else: destination
+      source_compare = if is_segment_empty, do: start_segment, else: end_segment
 
       %Intersection{:id => intersection_id} = head
       source_matched = intersection_id == source_compare
 
       # true if we haven't started gathering the segment
       ignore_current_intersection = !source_matched and is_segment_empty
-      # true if we have started accumulating segment_list and we reached the destination intersection
+      # true if we have started accumulating segment_list and we reached the end_segment intersection
       is_destination_reached = source_matched and !is_segment_empty
 
       cond do
         is_destination_reached ->
-          Enum.reverse([head | segment_list])
+            Enum.reverse([head | segment_list])
         ignore_current_intersection ->
-          segment_route_from_search_intersections(next_intersections, source, destination, segment_list, [head | ignored_intersections])
+            segment_route_from_search_intersections(next_intersections, start_segment, end_segment, segment_list, [head | ignored_intersections])
         true ->
-          segment_route_from_search_intersections(next_intersections, source, destination, [head | segment_list], ignored_intersections)
+            segment_route_from_search_intersections(next_intersections, start_segment, end_segment, [head | segment_list], ignored_intersections)
       end
     end
 
     # This clause will be meet if we exhausted the intersection_list, so we cycle back to the beginning of the intersection_list
     # using the ignored_intersections list (the intersections that we ignored and not part of the segment_list. The intersection_list 
-    # will be exhausted if the destination intersection appeared before the source destination.
-    defp segment_route_from_search_intersections([], source, destination, segment_list, ignored_intersections) do
-      ignored_intersections |> Enum.reverse() |> segment_route_from_search_intersections(source, destination, segment_list, [])
+    # will be exhausted if the end_segment intersection appeared before the start_segment end_segment.
+    defp segment_route_from_search_intersections([], start_segment, end_segment, segment_list, ignored_intersections) do
+      ignored_intersections |> Enum.reverse() |> segment_route_from_search_intersections(start_segment, end_segment, segment_list, [])
     end
 
     defp search_graph_path(source, destination) do
