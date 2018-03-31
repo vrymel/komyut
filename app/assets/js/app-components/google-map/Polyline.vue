@@ -26,8 +26,20 @@ export default {
     },
 
     created() {
-        if (this.$parent) {
-            this._mapParent = this.$parent;
+        this._mapParent = null;
+        let directParent = this.$parent;
+
+        // move up the component tree until we found the google-map component
+        while(directParent && !this._mapParent) {
+            if (directParent["_mapInstance"]) {
+                this._mapParent = directParent;
+            } else {
+                directParent = directParent.$parent;
+            }
+        }
+
+        if (!this._mapParent) {
+            throw new Error("Polyline map parent not found.");
         }
     },
 
