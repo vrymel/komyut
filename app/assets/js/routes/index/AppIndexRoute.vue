@@ -6,9 +6,7 @@
     class="map-container">
       <google-map
       @click="mapClick">
-        <route-path-display 
-          :route="currentRouteDetails"
-          :path="routePath" />
+        <route-path-display :route="currentRoute" />
 
         <google-map-polyline
           v-if="focusOnSegmentIndex !== null"
@@ -159,7 +157,7 @@
 
 <script>
 import axios from "axios";
-import { isEmpty } from "lodash";
+import { isEmpty, assign } from "lodash";
 
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
@@ -263,7 +261,6 @@ export default {
         return {
             app_logo: APP_LOGO,
             currentRoute: null,
-            routePath: [],
             routes: [],
             routesMap: {},
             showSelectRouteDialog: false,
@@ -310,26 +307,21 @@ export default {
             this.showSelectRouteDialog = false;
         },
         async setCurrentRoute(route) {
-            this.currentRoute = route;
-
             if (!route) {
-                this.routePath = [];
-            } else {
-
-                const routeDetails = await getRoute(route.id);
-                if (routeDetails) {
-                    const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
-
-                    routeDetails.path = snapToRoadPoints;
-
-                    // TODO: use currentRouteDetails.path
-                    this.routePath = snapToRoadPoints; 
-                    this.currentRouteDetails = routeDetails;
-                } else {
-                    this.routePath = [];
-                    this.currentRouteDetails = null;
-                }
+                this.currentRoute = null;
+                return;
             }
+
+            const routeDetails = await getRoute(route.id);
+            if (routeDetails) {
+                const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+                const routeInfo = {
+                    path: snapToRoadPoints,
+                    intersections: routeDetails.intersections
+                };
+
+                this.currentRoute = assign({}, route, routeInfo);
+            } 
         },
         // route select dialog handler
         routeSelected(route) {
@@ -385,7 +377,6 @@ export default {
             this.postSearchPath();
         },
         postSearchPath() {
-            this.routePath = [];
             this.currentRoute = null;
         },
         clearSearchCoordinatesStack() {

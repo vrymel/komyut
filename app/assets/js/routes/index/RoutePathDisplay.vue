@@ -18,43 +18,53 @@
 <script>
 import { chunk } from "lodash";
 
+const chunkPath = (routeId, path) => {
+    let chunkSize = 10;
+    let chunks = chunk(path, chunkSize);
+
+    return chunks.map((c, index) => {
+        return {
+            path: c,
+            key: routeId + "-" + index,
+            visible: false
+        };
+    });
+};
+
 export default {
     name: "RoutePathDisplay",
     props: {
         route: {
             type: Object,
-            default: () => {
+            default: () => { 
+                return null;
             }
-        },
-        path: {
-            type: Array,
-            default: () => []
         }
     },
     data() {
         return {
+            path: [],
             pathChunks: []
         };
     },
     watch: {
-        path: 'chunkPath'
+        route: "updateRouteContext"
     },
     methods: {
-        chunkPath: function() {
-            const routeId = this.route.id;
-            const chunkSize = 10;
+        updateRouteContext: function() {
+            if (this.route) {
+                this.path = this.route.path;
+                this.pathChunks = chunkPath(this.route.id, this.path);
 
-            let chunks = chunk(this.path, chunkSize);
+                this.animatePath();
+            } else {
+                this.path = [];
+                this.pathChunks = [];
 
-            this.pathChunks = chunks.map((c, index) => {
-                return {
-                    path: c,
-                    key: routeId + "-" + index,
-                    visible: false
-                };
-            });
-
-            this.animatePath();
+                if (this.runningInterval) {
+                    clearInterval(this.runningInterval);
+                }
+            }
         },
         animatePath: function() {
             if (this.runningInterval) {
@@ -76,10 +86,7 @@ export default {
                     this.pathChunks[currentIndex - 1]["visible"] = false;
                 }
 
-                currentIndex++;
-                if (currentIndex >= pathChunksLength) {
-                    currentIndex = 0;
-                }
+                currentIndex = (currentIndex + 1) % pathChunksLength;
             }, 100);
         }
     }
