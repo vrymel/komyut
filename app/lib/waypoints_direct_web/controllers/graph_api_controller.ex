@@ -12,6 +12,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
     @within_radius 0.200 # within 200 meters radius
     @earth_radius 6371 # approximate radius of the Earth in km
 
+    @allowed_direct_path_length 100 # allowed hops for direct path search, this is an arbitrary value
+
     def search_path(conn, %{"from" => from_coordinates, "to" => to_coordinates}) do
       %{"lat" => from_lat, "lng" => from_lng} = Poison.decode! from_coordinates
       %{"lat" => to_lat, "lng" => to_lng} = Poison.decode! to_coordinates
@@ -33,10 +35,23 @@ defmodule WaypointsDirectWeb.GraphApiController do
           :empty ->
             graph_path = search_graph_path(from_intersection_id, to_intersection_id)
 
-            json conn, %{:exist => graph_path != [], path: graph_path}
+            json conn, %{:exist => graph_path != :empty, path: graph_path}
           _ ->
-            json conn, %{:exist => direct_path != [], path: direct_path} 
+            graph_path = search_graph_path(from_intersection_id, to_intersection_id)
+            shortest_path = get_shortest_path(direct_path, graph_path)
+                        
+            json conn, %{:exist => shortest_path != :empty, path: shortest_path} 
         end
+    end
+
+    defp get_shortest_path(direct_path, graph_path) do
+      direct_path_length = Enum.count(direct_path)
+
+      if direct_path_length < @allowed_direct_path_length do
+        direct_path
+      else
+        graph_path
+      end
     end
 
     # this is the response where one or both of the from and to locations has no
@@ -209,7 +224,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
         # source to destination
         route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
       else
-        []
+        :empty
       end
     end
     
