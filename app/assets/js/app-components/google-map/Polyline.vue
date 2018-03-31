@@ -65,7 +65,7 @@ export default {
                 path: this.path,
                 geodesic: true,
                 strokeColor: this.strokeColor,
-                strokeOpacity: 0.5,
+                strokeOpacity: this.visible ? 0.5 : 0,
                 strokeWeight: 5
             });
 
