@@ -6,9 +6,8 @@
     class="map-container">
       <google-map
       @click="mapClick">
-        <google-map-polyline 
-          v-if="routePath.length"
-          :name="'routePath'"
+        <route-path-display 
+          :route="currentRouteDetails"
           :path="routePath" />
 
         <google-map-polyline
@@ -166,6 +165,7 @@ import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
 import { snapToRoads } from "../services";
 
+import RoutePathDisplay from "./RoutePathDisplay";
 import RouteSelectDialog from "./RouteSelectDialog";
 import SearchRouteSelect from "./SearchRouteSelect";
 
@@ -257,6 +257,7 @@ export default {
     components: {
         "route-select-dialog": RouteSelectDialog,
         "search-route-select": SearchRouteSelect,
+        "route-path-display": RoutePathDisplay
     },
     data() {
         return {
@@ -319,9 +320,14 @@ export default {
                 if (routeDetails) {
                     const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
 
-                    this.routePath = snapToRoadPoints;
+                    routeDetails.path = snapToRoadPoints;
+
+                    // TODO: use currentRouteDetails.path
+                    this.routePath = snapToRoadPoints; 
+                    this.currentRouteDetails = routeDetails;
                 } else {
                     this.routePath = [];
+                    this.currentRouteDetails = null;
                 }
             }
         },

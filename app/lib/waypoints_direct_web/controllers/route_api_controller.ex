@@ -33,7 +33,7 @@ defmodule WaypointsDirectWeb.RouteApiController do
                 %{id: id, lat: lat, lng: lng} 
             end
 
-        json conn, %{success: true, intersections: intersection_list_encode_safe}
+        json conn, %{success: true, id: route_id, intersections: intersection_list_encode_safe}
     end
 
     def create(conn, %{"route_name" => route_name, "raw_route_edges" => raw_route_edges}) do
