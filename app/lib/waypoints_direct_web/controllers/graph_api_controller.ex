@@ -167,25 +167,27 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     defp segment_route_from_search_intersections(intersection_list, start_segment, end_segment, segment_list \\ [], ignored_intersections \\ [])
 
-    defp segment_route_from_search_intersections([head | next_intersections], start_segment, end_segment, segment_list, ignored_intersections) do
-      is_segment_empty = segment_list == []
-      source_compare = if is_segment_empty, do: start_segment, else: end_segment
+    defp segment_route_from_search_intersections([%Intersection{:id => intersection_id} = head | next_intersections], start_segment, end_segment, segment_list, ignored_intersections) do
+      segment_started = !Enum.empty?(segment_list)
 
-      %Intersection{:id => intersection_id} = head
-      source_matched = intersection_id == source_compare
+      is_start_segment = start_segment == intersection_id
+      is_end_segment = end_segment == intersection_id
 
-      # true if we haven't started gathering the segment
-      ignore_current_intersection = !source_matched and is_segment_empty
-      # true if we have started accumulating segment_list and we reached the end_segment intersection
-      is_destination_reached = source_matched and !is_segment_empty
+      # if the segment is already started but we incountered another start_segment
+      duplicate_start_segment = is_start_segment and segment_started
 
       cond do
-        is_destination_reached ->
-            Enum.reverse([head | segment_list])
-        ignore_current_intersection ->
-            segment_route_from_search_intersections(next_intersections, start_segment, end_segment, segment_list, [head | ignored_intersections])
+        is_end_segment and segment_started ->
+          Enum.reverse([head | segment_list])
+        duplicate_start_segment ->
+          # If there is a duplicate start_segment, recreate the segment_list again with the current head (the duplicate segment start)
+          # and ignore the existing segment list by joining it to the ignored intersections list.
+          # We do this since the duplicate start_segment is the closest to the destination intersection.
+          segment_route_from_search_intersections(next_intersections, start_segment, end_segment, [head], Enum.concat(segment_list, ignored_intersections))
+        is_start_segment or segment_started ->
+          segment_route_from_search_intersections(next_intersections, start_segment, end_segment, [head | segment_list], ignored_intersections)
         true ->
-            segment_route_from_search_intersections(next_intersections, start_segment, end_segment, [head | segment_list], ignored_intersections)
+          segment_route_from_search_intersections(next_intersections, start_segment, end_segment, segment_list, [head | ignored_intersections])
       end
     end
 
