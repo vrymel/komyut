@@ -89,8 +89,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
         _ -> :empty
       end
     end
-    
-    defp get_closest_direct_route(direct_routes) do
+  
+    defp get_closest_direct_route(direct_routes) when is_list(direct_routes) do
       # Get the route that has the lowest intersections, this is our naive approach to finding the 
       # closest route to the destination. If we have proper route edge weight values, we should use that 
       # instead of just counting the number of intersections to find the closest route.
@@ -111,6 +111,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end)
     end
 
+    defp get_closest_direct_route(_), do: :empty
+
     defp search_direct_path(source, destination) do
       closest_route = do_search_direct_path(source, destination) |> get_closest_direct_route()
 
@@ -121,7 +123,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
                 %{intersection_id: id, lat: lat, lng: lng, route_id: route_id} 
             end
           )
-      _ ->
+        _ ->
         :empty
       end
     end
