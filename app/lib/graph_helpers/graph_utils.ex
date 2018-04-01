@@ -11,9 +11,9 @@ defmodule WaypointsDirect.GraphUtils do
       # and pre-populate the intersection list with them
       # not doing so, will make it tricky to get the last intersection of the path
       # since we are only appending the from_intersection of the other edges to the intersections list
-      %RouteEdge{:to_intersection => final_intersection, :from_intersection => leading_intersection } = last_edge
+      %{:to_intersection => final_intersection, :from_intersection => leading_intersection } = last_edge
 
       intersection_list = [leading_intersection, final_intersection]
-      intersection_list = Enum.reduce preceding_edges, intersection_list, fn(%RouteEdge{:from_intersection => fe}, acc) -> [fe | acc] end
+      intersection_list = Enum.reduce preceding_edges, intersection_list, fn(%{:from_intersection => fe}, acc) -> [fe | acc] end
     end
 end
