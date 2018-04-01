@@ -44,6 +44,15 @@ defmodule WaypointsDirectWeb.GraphApiController do
         end
     end
 
+    # this is the response where one or both of the from and to locations has no
+    # intersection near to it
+    defp do_search_path(conn, :empty, :empty) do
+        json conn, %{exist: false, path: [], nearest_none: true}
+    end
+    defp do_search_path(conn, _, _) do
+        json conn, %{exist: false, path: [], nearest_none: true}
+    end
+
     defp get_shortest_path(direct_path, graph_path) do
       direct_path_length = Enum.count(direct_path)
 
@@ -52,15 +61,6 @@ defmodule WaypointsDirectWeb.GraphApiController do
       else
         graph_path
       end
-    end
-
-    # this is the response where one or both of the from and to locations has no
-    # intersection near to it
-    defp do_search_path(conn, :empty, :empty) do
-        json conn, %{exist: false, path: [], nearest_none: true}
-    end
-    defp do_search_path(conn, _, _) do
-        json conn, %{exist: false, path: [], nearest_none: true}
     end
 
     def search_nearest_intersection(geopoint, distance_increment, distance_limit, distance \\ 0) do
