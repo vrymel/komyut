@@ -218,14 +218,15 @@ defmodule WaypointsDirectWeb.GraphApiController do
     def search_graph_path(source, destination) do
       %{:path_exist => path_exist, :path => path} = do_search_graph_path(build_graph(), source, destination)
 
-      # if path_exist do
+      if path_exist do
         # path is a list of route_edges, we need to translate it to
         # an intersection list so we end up with a complete path from
         # source to destination
+        segment_tagging(path, build_route_edge_lookup_table())
         # route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
-      # else
-        # :empty
-      # end
+      else
+        :empty
+      end
     end
     
     defp do_search_graph_path(graph, source, destination) do
@@ -274,8 +275,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
       intersection_list = 
         route_edge_path
         |> Enum.map(fn(route_edge) -> prepare_route_edge_tag(route_edge, lookup) end)
-        # |> IO.inspect(charlists: :as_lists)
         |> do_segment_tagging()
+        |> Enum.reverse()
+        |> GraphUtils.route_edges_to_intersection_list()
     end
 
     defp route_accessible_match(%{:route_accessible => first_route_accessible}, %{:route_accessible => second_route_accessible}) do
