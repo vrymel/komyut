@@ -133,11 +133,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
       case closest_route do
         {:ok, %Route{:id => route_id}, direct_path} ->
-          Enum.map(direct_path, 
-            fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
-                %{intersection_id: id, lat: lat, lng: lng, route_id: route_id} 
-            end
-          )
+          direct_path
         _ ->
         :empty
       end
@@ -175,7 +171,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
       intersection_list = 
         route 
         |> Map.get(:route_edges) 
-        |> GraphUtils.route_edges_to_intersection_list
+        |> GraphUtils.route_edges_to_intersection_list()
         |> segment_route_from_search_intersections(source, destination)
       
       {:ok, route, intersection_list}
@@ -184,7 +180,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     defp segment_route_from_search_intersections(intersection_list, start_segment, end_segment, segment_list \\ [], ignored_intersections \\ [])
 
-    defp segment_route_from_search_intersections([%Intersection{:id => intersection_id} = head | next_intersections], start_segment, end_segment, segment_list, ignored_intersections) do
+    defp segment_route_from_search_intersections([%{:intersection_id => intersection_id} = head | next_intersections], start_segment, end_segment, segment_list, ignored_intersections) do
       segment_started = !Enum.empty?(segment_list)
 
       is_start_segment = start_segment == intersection_id
@@ -208,8 +204,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
-    # This clause will be meet if we exhausted the intersection_list, so we cycle back to the beginning of the intersection_list
-    # using the ignored_intersections list (the intersections that we ignored and not part of the segment_list. The intersection_list 
+    # This clause will be met if we exhausted the intersection_list, so we cycle back to the beginning of the intersection_list
+    # using the ignored_intersections list (the intersections that we ignored and not part of the segment_list). The intersection_list 
     # will be exhausted if the end_segment intersection appeared before the start_segment end_segment.
     defp segment_route_from_search_intersections([], start_segment, end_segment, segment_list, ignored_intersections) do
       ignored_intersections |> Enum.reverse() |> segment_route_from_search_intersections(start_segment, end_segment, segment_list, [])
