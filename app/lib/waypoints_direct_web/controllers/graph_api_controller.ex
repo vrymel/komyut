@@ -11,6 +11,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     @within_radius 0.200 # within 200 meters radius
     @earth_radius 6371 # approximate radius of the Earth in km
+    @graph_shorter_threshold 0.5 # 50%
 
     @allowed_direct_path_length 100 # allowed hops for direct path search, this is an arbitrary value
 
@@ -39,7 +40,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
           _ ->
             graph_path = search_graph_path(from_intersection_id, to_intersection_id)
             shortest_path = get_shortest_path(direct_path, graph_path)
-                        
+
             json conn, %{:exist => shortest_path != :empty, path: shortest_path} 
         end
     end
@@ -55,11 +56,14 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     defp get_shortest_path(direct_path, graph_path) do
       direct_path_length = Enum.count(direct_path)
+      graph_path_length = Enum.count(graph_path)
 
-      if direct_path_length < @allowed_direct_path_length do
-        direct_path
-      else
-        graph_path
+      cond do
+        (graph_path_length / direct_path_length) < @graph_shorter_threshold ->
+          # Graph path is significantly shorter than direct path so return it instead
+          graph_path
+        true ->
+          direct_path
       end
     end
 
