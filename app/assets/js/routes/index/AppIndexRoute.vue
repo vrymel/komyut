@@ -5,7 +5,9 @@
     <div 
     class="map-container">
       <google-map
-      @click="mapClick">
+        @click="mapClick"
+        :center="mapCenter"
+        :zoom="mapZoom">
         <route-path-display :route="currentRoute" />
 
         <google-map-polyline
@@ -270,6 +272,7 @@ export default {
             focusOnSegmentIndex: null,
             showAlert: false,
             showSidebar: true,
+            mapZoom: 15
         };
     },
     computed: {
@@ -283,6 +286,18 @@ export default {
             return this.searchPathSegments.map((segment) => {
                 return this.routesMap[segment.id];
             });
+        },
+        mapCenter() {
+            if (this.currentRoute) {
+                const startIntersection = this.currentRoute.intersections[0];
+
+                if (startIntersection) {
+                    return new google.maps.LatLng(startIntersection.lat, startIntersection.lng);
+                }
+            }
+
+            // this value is just arbitrary
+            return new google.maps.LatLng(8.477619, 124.644167);
         }
     },
     async mounted() {

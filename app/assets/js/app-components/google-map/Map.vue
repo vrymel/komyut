@@ -11,14 +11,30 @@
 export default {
     name: "GoogleMap",
 
+    props: {
+        center: {
+            type: Object,
+            required: true
+        },
+        zoom: {
+            type: Number,
+            default: () => 16
+        }
+    },
+
+    watch: {
+        "center": "updateCenter",
+        "zoom": "updateZoom"
+    },
+
     beforeCreate() {
         this._getMapPromises = [];
     },
 
     mounted() {
         const map = new google.maps.Map(this.$refs.map, {
-            center: new google.maps.LatLng(8.48379, 124.6509111),
-            zoom: 16
+            center: this.center,
+            zoom: this.zoom
         });
         map.setOptions({ disableDoubleClickZoom: true });
 
@@ -35,6 +51,12 @@ export default {
             } else {
                 return new Promise(resolve => this._getMapPromises.push(resolve));
             }
+        },
+        updateCenter() {
+            this._mapInstance.setOptions({center: this.center});
+        },
+        updateZoom() {
+            this._mapInstance.setOptions({zoom: this.zoom});
         }
     }
 };
