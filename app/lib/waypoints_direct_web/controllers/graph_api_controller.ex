@@ -219,7 +219,6 @@ defmodule WaypointsDirectWeb.GraphApiController do
         # an intersection list so we end up with a complete path from
         # source to destination
         segment_tagging(path, build_route_edge_lookup_table())
-        # route_edge_path_to_intersection_sequence(path, build_route_edge_lookup_table())
       else
         :empty
       end
@@ -266,8 +265,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     defp intersection_pair(%RouteEdge{:from_intersection_id => fid, :to_intersection_id => tid}), do: {fid, tid}
 
-    # iex> GraphApiController.route_segment_tagging(path, lookup)
-    def segment_tagging(route_edge_path, lookup) do
+    defp segment_tagging(route_edge_path, lookup) do
       intersection_list = 
         route_edge_path
         |> Enum.map(fn(route_edge) -> prepare_route_edge_tag(route_edge, lookup) end)
@@ -283,10 +281,10 @@ defmodule WaypointsDirectWeb.GraphApiController do
       {intersection, intersection_size}
     end
 
-    def do_segment_tagging(route_edge_list, tagged \\ [], pending \\ [])
+    defp do_segment_tagging(route_edge_list, tagged \\ [], pending \\ [])
 
     # last two remaining
-    def do_segment_tagging([first | [second | []]], tagged, pending) do
+    defp do_segment_tagging([first | [second | []]], tagged, pending) do
       {intersection, size} = route_accessible_match(first, second)
 
       case size do
@@ -300,7 +298,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
           second = second |> Map.put(:route_id, s_route_id) |> Map.put(:route_accessible, sn_route_accessible)
 
           tagged = if pending != [] do
-            tag_pending(first, pending) |> Enum.concat(tagged)
+            tag_pending(first, pending) 
+            |> Enum.concat(tagged)
           else
             tagged
           end
@@ -313,7 +312,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
           second = second |> Map.put(:route_id, route_id) |> Map.put(:route_accessible, n_route_accessible)
 
           tagged = if pending != [] do
-            tag_pending(first, pending) |> Enum.concat(tagged)
+            tag_pending(first, pending) 
+            |> Enum.concat(tagged)
           else
             tagged
           end
@@ -322,11 +322,7 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
-    def tag_pending(%{:route_id => route_id, :route_accessible => route_accessible}, pending) do
-      Enum.map(pending, fn(edge) -> edge |> Map.put(:route_id, route_id) |> Map.put(:route_accessible, route_accessible) end)
-    end
-
-    def do_segment_tagging([first | [second | others]], tagged, pending) do
+    defp do_segment_tagging([first | [second | others]], tagged, pending) do
       {intersection, size} = route_accessible_match(first, second)
 
       case size do
@@ -335,25 +331,27 @@ defmodule WaypointsDirectWeb.GraphApiController do
           n_route_accessible = MapSet.new() |> MapSet.put(route_id)
           first = first |> Map.put(:route_id, route_id) |> Map.put(:route_accessible, n_route_accessible)
 
-          if pending != [] do
-            pending = tag_pending(first, pending)
-
-            do_segment_tagging([second | others], Enum.concat([first | pending], tagged))
+          tagged = if pending != [] do
+            tag_pending(first, pending) 
+            |> Enum.concat(tagged)
           else
-            do_segment_tagging([second | others], [first | tagged], pending)
+            tagged
           end
+
+          do_segment_tagging([second | others], [first | tagged])
         1 -> 
           route_id = intersection |> MapSet.to_list() |> List.first()
           first = first |> Map.put(:route_id, route_id) |> Map.put(:route_accessible, intersection)
           second = Map.put(second, :route_accessible, intersection)
 
-          if pending != [] do
-            pending = tag_pending(first, pending)
-
-            do_segment_tagging([second | others], Enum.concat([first | pending], tagged))
+          tagged = if pending != [] do
+            tag_pending(first, pending) 
+            |> Enum.concat(tagged)
           else
-            do_segment_tagging([second | others], [first | tagged], pending)
+            tagged
           end
+
+          do_segment_tagging([second | others], [first | tagged])
         _ ->
           first = Map.put(first, :route_accessible, intersection)
           second = Map.put(second, :route_accessible, intersection)
@@ -362,22 +360,8 @@ defmodule WaypointsDirectWeb.GraphApiController do
       end
     end
 
-    defp tag_route_edge(route_id, route_edge) when is_integer(route_id)  do
-      route_edge = Map.put(route_edge, :route_id, route_id)
-
-      # this route_edge is now complete, so clear route_accessible
-      tag_route_edge(MapSet.new(), route_edge)
-    end
-
-    defp tag_route_edge(intersection, route_edge) when is_map(intersection) do
-      Map.put(route_edge, :route_accessible, intersection)
-    end
-
-    defp tag_route_edge() do
-      # multiple intersection
-
-      # set intersection to first and second 
-      # then assign to first to pending
+    defp tag_pending(%{:route_id => route_id, :route_accessible => route_accessible}, pending) do
+      Enum.map(pending, fn(edge) -> edge |> Map.put(:route_id, route_id) |> Map.put(:route_accessible, route_accessible) end)
     end
 
     defp prepare_route_edge_tag(route_edge, lookup) do
@@ -387,42 +371,6 @@ defmodule WaypointsDirectWeb.GraphApiController do
       route_edge
       |> Map.take([:from_intersection, :to_intersection, :from_intersection_id, :to_intersection_id, :id])
       |> Map.put(:route_accessible, route_accessible)
-    end
-
-    defp route_edge_path_to_intersection_sequence(route_edge_path, lookup) do
-      accumulator = %{previous_intersect: MapSet.new(), intersections: []}
-
-      # this intersections list only containers every :from_intersections of the route_edge list
-      %{intersections: intersections} = Enum.reduce(
-        route_edge_path, 
-        accumulator, 
-        fn(re, %{:previous_intersect => previous_intersect, :intersections => intersections}) -> 
-          intersection_map = to_intersection_map(re, :from_intersection)
-          route_ids = Map.get(lookup, intersection_pair(re))
-
-          intersecting_route_ids = MapSet.intersection(previous_intersect, route_ids)
-
-          case MapSet.size(intersecting_route_ids) do
-            0 -> 
-              [first_route_id | _] = MapSet.to_list(route_ids)
-              intersection_map = Map.put(intersection_map, :route_id, first_route_id)
-
-              %{previous_intersect: route_ids, intersections: [intersection_map | intersections]}
-            _ -> 
-              [first_route_id | _] = MapSet.to_list(intersecting_route_ids)
-              intersection_map = Map.put(intersection_map, :route_id, first_route_id)
-
-              %{previous_intersect: intersecting_route_ids, intersections: [intersection_map | intersections]}
-          end
-        end
-      )
-
-      # finally we add the destination intersection to the intersections list
-      [ %{route_id: last_intersection_route_id} | _] = intersections
-      [last_route_edge | _] = Enum.reverse(route_edge_path)
-      last_intersection_map = to_intersection_map(last_route_edge, :to_intersection) |> Map.put(:route_id, last_intersection_route_id)
-
-      Enum.reverse([last_intersection_map | intersections])
     end
 
     defp to_intersection_map(route_edge, target_intersection_key) do
