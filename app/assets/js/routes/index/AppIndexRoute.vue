@@ -76,12 +76,17 @@
           :class="{ 'active': showAllRoutes }"
           @click="toggleShowAllRoutes">
           <div class="card-text">
-            <i
-              v-if="showAllRoutes" 
-              class="fa fa-check-circle-o"/>
-            <i
-              v-else 
-              class="fa fa-circle-o"/>
+            <span v-if="fetchingAllRoutes">
+              <i class="fa fa-spinner fa-spin"/>
+            </span>
+            <span v-else>
+              <i
+                v-if="showAllRoutes" 
+                class="fa fa-check-circle-o"/>
+              <i
+                v-else 
+                class="fa fa-circle-o"/>
+            </span>
             Show jeepney route accessible roads
             <div class="sub-text">
               Roads that are darker indicates multiple routes pass-by on it.
@@ -336,8 +341,9 @@ export default {
             showAlert: false,
             showSidebar: true,
             mapZoom: 15,
+            fetchingAllRoutes: false,
             allRoutes: [],
-            showAllRoutes: true,
+            showAllRoutes: false,
         };
     },
     computed: {
@@ -374,8 +380,6 @@ export default {
 
             return accumulator;
         }, {});
-
-        this.allRoutes = await preloadRouteDetails(this.routes);
     },
     methods: {
         getSegmentColor,
@@ -495,12 +499,19 @@ export default {
         toggleSidebar() {
             this.showSidebar = !this.showSidebar;
         },
-        toggleShowAllRoutes() {
+        async toggleShowAllRoutes() {
             this.showAllRoutes = !this.showAllRoutes;
 
             if (this.showAllRoutes) {
                 this.searchPathSegments = [];
                 this.showSearchResult = false;
+
+                // lazy load allRoutes
+                if (!this.allRoutes.length) {
+                    this.fetchingAllRoutes = true;
+                    this.allRoutes = await preloadRouteDetails(this.routes);
+                    this.fetchingAllRoutes = false;
+                }
             }
         }
     }
