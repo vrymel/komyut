@@ -78,6 +78,9 @@
           <div class="card-text">
             <i class="fa fa-check"/>
             Show jeepney route accessible roads
+            <div class="sub-text">
+              Roads that are darker indicates multiple routes pass-by on it.
+            </div>
           </div>
         </div>
       </div>
@@ -394,6 +397,7 @@ export default {
         postRouteSelected() {
             this.searchPathSegments = [];
             this.showSearchResult = false;
+            this.showAllRoutes = false;
         },
         mapClick({latLng}) {
             const coordinate = { lat: latLng.lat(), lng: latLng.lng() };
@@ -549,6 +553,12 @@ export default {
             &.active {
                 color: #212529;
             }
+
+            .sub-text {
+                margin-top: 10px;
+                font-size: 0.8em;
+                text-align: center;
+            }
         }
     }
 
@@ -595,6 +605,12 @@ export default {
 
                     .card-body {
                         flex-direction: row;
+                    }
+                }
+
+                .show-route-accessible-roads {
+                    .sub-text {
+                        text-align: left;
                     }
                 }
             }
