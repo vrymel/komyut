@@ -76,7 +76,12 @@
           :class="{ 'active': showAllRoutes }"
           @click="toggleShowAllRoutes">
           <div class="card-text">
-            <i class="fa fa-check"/>
+            <i
+              v-if="showAllRoutes" 
+              class="fa fa-check-circle-o"/>
+            <i
+              v-else 
+              class="fa fa-circle-o"/>
             Show jeepney route accessible roads
             <div class="sub-text">
               Roads that are darker indicates multiple routes pass-by on it.
