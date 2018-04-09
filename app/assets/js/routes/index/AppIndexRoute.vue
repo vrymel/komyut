@@ -166,8 +166,14 @@
             <button 
               class="btn btn-primary"
               @click="searchPath">
-              <i class="fa fa-search"/>
-            Search</button>
+              <i 
+                v-if="searchingPath"
+                class="fa fa-spinner fa-spin"/>
+              <i
+                v-else 
+                class="fa fa-search"/>
+              Search
+            </button>
             <button
               class="btn btn-link"
               @click="clearSearchCoordinatesStack"
@@ -413,8 +419,16 @@ export default {
                 this.clickedCoordinatesStack = this.clickedCoordinatesStack.splice(1);
             }
         },
-        async searchPath() {
+        preSearchPath() {
+            this.searchingPath = true;
             this.searchPathSegments = [];
+        },
+        async searchPath() {
+            if (this.searchingPath)
+                return;
+
+            this.preSearchPath();
+
             const params = {
                 from: this.searchFromCoordinate,
                 to: this.searchToCoordinate
@@ -450,6 +464,7 @@ export default {
         postSearchPath() {
             this.currentRoute = null;
             this.showAllRoutes = false;
+            this.searchingPath = false;
         },
         clearSearchCoordinatesStack() {
             this.clickedCoordinatesStack = [];
