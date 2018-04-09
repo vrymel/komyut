@@ -444,6 +444,7 @@ export default {
         },
         postSearchPath() {
             this.currentRoute = null;
+            this.showAllRoutes = false;
         },
         clearSearchCoordinatesStack() {
             this.clickedCoordinatesStack = [];
@@ -476,6 +477,11 @@ export default {
         },
         toggleShowAllRoutes() {
             this.showAllRoutes = !this.showAllRoutes;
+
+            if (this.showAllRoutes) {
+                this.searchPathSegments = [];
+                this.showSearchResult = false;
+            }
         }
     }
 }
