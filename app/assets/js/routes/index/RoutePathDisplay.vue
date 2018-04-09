@@ -39,6 +39,10 @@ export default {
             default: () => { 
                 return null;
             }
+        },
+        showPathAnimation: {
+            type: Boolean,
+            default: () => true
         }
     },
     data() {
@@ -50,13 +54,18 @@ export default {
     watch: {
         route: "updateRouteContext"
     },
+    mounted() {
+        if (this.route) {
+            this.updateRouteContext();
+        }
+    },
     methods: {
         updateRouteContext: function() {
             if (this.route) {
                 this.path = this.route.path;
                 this.pathChunks = chunkPath(this.route.id, this.path);
 
-                this.animatePath();
+                this.showPathAnimation && this.animatePath();
             } else {
                 this.path = [];
                 this.pathChunks = [];

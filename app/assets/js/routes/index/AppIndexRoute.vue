@@ -8,7 +8,16 @@
         @click="mapClick"
         :center="mapCenter"
         :zoom="mapZoom">
-        <route-path-display :route="currentRoute" />
+        <route-path-display 
+          v-if="!showAllRoutes"
+          :route="currentRoute" />
+        <div v-if="showAllRoutes">
+          <route-path-display
+            v-for="(r, index) in allRoutes"
+            :show-path-animation="false"
+            :key="index"
+            :route="r" />
+        </div>
 
         <google-map-polyline
           v-if="focusOnSegmentIndex !== null"
@@ -61,6 +70,19 @@
 
     <div 
     class="sidebar">
+      <div class="m-2 card">
+        <div 
+          class="card-body"
+          @click="toggleShowAllRoutes">
+          <div class="card-text">
+            <i
+              v-show="showAllRoutes"
+              class="fa fa-check"/>
+            Show jeepney route accessible roads
+          </div>
+        </div>
+      </div>
+
       <div class="m-2 card">
         <div class="card-body">
           <h6 class="card-title">City</h6>
@@ -159,7 +181,7 @@
 
 <script>
 import axios from "axios";
-import { isEmpty, assign } from "lodash";
+import { isEmpty, assign, memoize } from "lodash";
 
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
@@ -180,7 +202,7 @@ const getRoutes = async () => {
     }
 };
 
-const getRoute = async (routeId) => {
+const doGetRoute = async (routeId) => {
     try {
         const result = await axios.get(`${api_paths.ROUTE_API_INDEX}/${routeId}`);
 
@@ -189,6 +211,34 @@ const getRoute = async (routeId) => {
         // TODO: add sentry log
         return false;
     }
+};
+const getRoute = memoize(doGetRoute);
+
+const getRouteDetails = async (route) => {
+    const routeDetails = await getRoute(route.id);
+    if (routeDetails) {
+        const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+        const routeInfo = {
+            path: snapToRoadPoints,
+            intersections: routeDetails.intersections
+        };
+
+        return assign({}, route, routeInfo);
+    }
+
+    return null;
+};
+
+const preloadRouteDetails = async (routes) => {
+    const store = [];
+
+    for (let r of routes) {
+        let routeDetails = await getRouteDetails(r);
+
+        store.push(routeDetails);
+    }
+
+    return store;
 };
 
 const doSearchPath = async (searchCoordinates) => {
@@ -272,7 +322,9 @@ export default {
             focusOnSegmentIndex: null,
             showAlert: false,
             showSidebar: true,
-            mapZoom: 15
+            mapZoom: 15,
+            allRoutes: [],
+            showAllRoutes: true,
         };
     },
     computed: {
@@ -309,6 +361,8 @@ export default {
 
             return accumulator;
         }, {});
+
+        this.allRoutes = await preloadRouteDetails(this.routes);
     },
     methods: {
         getSegmentColor,
@@ -327,15 +381,9 @@ export default {
                 return;
             }
 
-            const routeDetails = await getRoute(route.id);
+            const routeDetails = await getRouteDetails(route);
             if (routeDetails) {
-                const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
-                const routeInfo = {
-                    path: snapToRoadPoints,
-                    intersections: routeDetails.intersections
-                };
-
-                this.currentRoute = assign({}, route, routeInfo);
+                this.currentRoute = routeDetails;
             } 
         },
         // route select dialog handler
@@ -422,6 +470,9 @@ export default {
         },
         toggleSidebar() {
             this.showSidebar = !this.showSidebar;
+        },
+        toggleShowAllRoutes() {
+            this.showAllRoutes = !this.showAllRoutes;
         }
     }
 }
