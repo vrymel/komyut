@@ -72,12 +72,11 @@
     class="sidebar">
       <div class="m-2 card">
         <div 
-          class="card-body"
+          class="show-route-accessible-roads card-body"
+          :class="{ 'active': showAllRoutes }"
           @click="toggleShowAllRoutes">
           <div class="card-text">
-            <i
-              v-show="showAllRoutes"
-              class="fa fa-check"/>
+            <i class="fa fa-check"/>
             Show jeepney route accessible roads
           </div>
         </div>
@@ -542,6 +541,15 @@ export default {
     .sidebar {
         transition: opacity 0.15s linear;
         opacity: 1;
+
+        .show-route-accessible-roads {
+            cursor: pointer;
+            color: #b9b9b9;
+
+            &.active {
+                color: #212529;
+            }
+        }
     }
 
     .mobile-menu-toggle {
