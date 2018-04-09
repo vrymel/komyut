@@ -95,11 +95,11 @@
         </div>
       </div>
 
-      <div class="m-2 card">
+      <div class="m-2 card city-select">
         <div class="card-body">
           <h6 class="card-title">City</h6>
 
-          <div class="card-text">
+          <div class="card-text description">
             Cagayan de Oro City
           </div>
         </div>
@@ -120,7 +120,7 @@
             </div>
             <div 
               v-else
-              class="card-text no-route-selected">No route selected</div>
+              class="card-text no-selected">No route selected</div>
           </div>
         </div>
       </div>
@@ -524,6 +524,12 @@ export default {
 <style lang="scss" scoped>
     @import "../common/_variables.scss";
 
+    .city-select {
+        .description {
+            font-size: 0.9em;
+        }
+    }
+
     .route-select {
         .description {
             display: flex;
@@ -539,9 +545,16 @@ export default {
                 border-bottom-width: 0;
             }
         }
+
+        .no-selected {
+            font-size: 0.9em;
+            color: gray;
+        }
     }
 
     .search-route-results {
+        margin-top: 5px;
+
         .route-segment {
             border-left: transparent 4px solid;
             padding: 10px 12px 10px 6px;

@@ -4,7 +4,7 @@
       {{ address }}
     </div>
     <div v-else>
-      <span>No location selected</span>
+      <span class="no-selected">No location selected</span>
     </div>
   </div>
 </template>
@@ -51,3 +51,12 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+    .address-display {
+        font-size: 0.9em;
+
+        .no-selected {
+            color: gray;
+        }
+    }
+</style>
