@@ -189,11 +189,13 @@
       </div>
     </div>
 
-    <route-select-dialog
-      v-show="showSelectRouteDialog"
-      :routes="routes"
-      @close="closeSelectRouteDialog"
-      @routeSelected="routeSelected"/>
+    <transition name="fade">
+      <route-select-dialog
+        v-show="showSelectRouteDialog"
+        :routes="routes"
+        @close="closeSelectRouteDialog"
+        @routeSelected="routeSelected"/>
+    </transition>
   </div>
 </template>
 
@@ -523,6 +525,14 @@ export default {
 
 <style lang="scss" scoped>
     @import "../common/_variables.scss";
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .2s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
 
     .city-select {
         .description {
