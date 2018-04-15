@@ -431,6 +431,9 @@ export default {
             if (this.searchingPath)
                 return;
 
+            if (isEmpty(this.searchFromCoordinate) || isEmpty(this.searchToCoordinate))
+                return;
+
             this.preSearchPath();
 
             const params = {
