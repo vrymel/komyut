@@ -42,7 +42,17 @@ export default {
         };
     },
     watch: {
-        coordinates: async function() {
+        coordinates: function() {
+            this.resolveCoordinates();
+        }
+    },
+    mounted() {
+        if (!isEmpty(this.coordinates)) {
+            this.resolveCoordinates();
+        }
+    },
+    methods: {
+        resolveCoordinates: async function() {
             const address = await getCoordinateAddress(this.coordinates);
 
             this.address = address;
