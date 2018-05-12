@@ -2,8 +2,8 @@
     <div class="hero">
         <div class="cover-container">
             <div class="content">
-                <h1>Waypoints Direct</h1>
-                <p class="lead">A jeepney routes listing</p>
+                <h1>Barker</h1>
+                <p class="lead">Jeepney route search and listing</p>
 
                 <a href="<%= route_path(@conn, :index) %>" class="btn btn-primary go-to-routes">
                     <img src="<%= static_path(@conn, "/images/jeepney_logo.png") %>">

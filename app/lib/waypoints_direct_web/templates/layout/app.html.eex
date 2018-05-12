@@ -15,10 +15,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="View Cagayan de Oro jeepney routes in a friendly map interface. Helps you find what route to take to your destination.">
+  <meta name="description" content="Search and display routes in Cagayan de Oro. Find what route to take to your destination.">
   <meta name="author" content="">
 
-  <title>Waypoints Direct | Jeepney Routes | Cagayan de Oro</title>
+  <title>Barker | Jeepney Routes | Cagayan de Oro</title>
 
   <%# TODO: find a way to make this load only in the homepage using "partial" since this is only used there #%>
   <link href="https://fonts.googleapis.com/css?family=Comfortaa:700" rel="stylesheet"> 
