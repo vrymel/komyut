@@ -5,11 +5,19 @@
     <div 
     class="map-container">
       <google-map
-      @click="mapClick">
-        <google-map-polyline 
-          v-if="routePath.length"
-          :name="'routePath'"
-          :path="routePath" />
+        @click="mapClick"
+        :center="mapCenter"
+        :zoom="mapZoom">
+        <route-path-display 
+          v-if="!showAllRoutes"
+          :route="currentRoute" />
+        <div v-if="showAllRoutes">
+          <route-path-display
+            v-for="(r, index) in allRoutes"
+            :show-path-animation="false"
+            :key="index"
+            :route="r" />
+        </div>
 
         <google-map-polyline
           v-if="focusOnSegmentIndex !== null"
@@ -63,10 +71,35 @@
     <div 
     class="sidebar">
       <div class="m-2 card">
+        <div 
+          class="show-route-accessible-roads card-body"
+          :class="{ 'active': showAllRoutes }"
+          @click="toggleShowAllRoutes">
+          <div class="card-text">
+            <span v-if="fetchingAllRoutes">
+              <i class="fa fa-spinner fa-spin"/>
+            </span>
+            <span v-else>
+              <i
+                v-if="showAllRoutes" 
+                class="fa fa-check-circle-o"/>
+              <i
+                v-else 
+                class="fa fa-circle-o"/>
+            </span>
+            Show jeepney route accessible roads
+            <div class="sub-text">
+              Roads that are darker indicates multiple routes pass-by on it.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-2 card city-select">
         <div class="card-body">
           <h6 class="card-title">City</h6>
 
-          <div class="card-text">
+          <div class="card-text description">
             Cagayan de Oro City
           </div>
         </div>
@@ -87,7 +120,7 @@
             </div>
             <div 
               v-else
-              class="card-text no-route-selected">No route selected</div>
+              class="card-text no-selected">No route selected</div>
           </div>
         </div>
       </div>
@@ -138,8 +171,14 @@
             <button 
               class="btn btn-primary"
               @click="searchPath">
-              <i class="fa fa-search"/>
-            Search</button>
+              <i 
+                v-if="searchingPath"
+                class="fa fa-spinner fa-spin"/>
+              <i
+                v-else 
+                class="fa fa-search"/>
+              Search
+            </button>
             <button
               class="btn btn-link"
               @click="clearSearchCoordinatesStack"
@@ -150,22 +189,25 @@
       </div>
     </div>
 
-    <route-select-dialog
-      v-show="showSelectRouteDialog"
-      :routes="routes"
-      @close="closeSelectRouteDialog"
-      @routeSelected="routeSelected"/>
+    <transition name="fade">
+      <route-select-dialog
+        v-show="showSelectRouteDialog"
+        :routes="routes"
+        @close="closeSelectRouteDialog"
+        @routeSelected="routeSelected"/>
+    </transition>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { isEmpty } from "lodash";
+import { isEmpty, assign, memoize } from "lodash";
 
 import api_paths from "../api_paths";
 import { APP_LOGO } from "../globals";
 import { snapToRoads } from "../services";
 
+import RoutePathDisplay from "./RoutePathDisplay";
 import RouteSelectDialog from "./RouteSelectDialog";
 import SearchRouteSelect from "./SearchRouteSelect";
 
@@ -180,7 +222,7 @@ const getRoutes = async () => {
     }
 };
 
-const getRoute = async (routeId) => {
+const doGetRoute = async (routeId) => {
     try {
         const result = await axios.get(`${api_paths.ROUTE_API_INDEX}/${routeId}`);
 
@@ -189,6 +231,34 @@ const getRoute = async (routeId) => {
         // TODO: add sentry log
         return false;
     }
+};
+const getRoute = memoize(doGetRoute);
+
+const getRouteDetails = async (route) => {
+    const routeDetails = await getRoute(route.id);
+    if (routeDetails) {
+        const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+        const routeInfo = {
+            path: snapToRoadPoints,
+            intersections: routeDetails.intersections
+        };
+
+        return assign({}, route, routeInfo);
+    }
+
+    return null;
+};
+
+const preloadRouteDetails = async (routes) => {
+    const store = [];
+
+    for (let r of routes) {
+        let routeDetails = await getRouteDetails(r);
+
+        store.push(routeDetails);
+    }
+
+    return store;
 };
 
 const doSearchPath = async (searchCoordinates) => {
@@ -257,12 +327,12 @@ export default {
     components: {
         "route-select-dialog": RouteSelectDialog,
         "search-route-select": SearchRouteSelect,
+        "route-path-display": RoutePathDisplay
     },
     data() {
         return {
             app_logo: APP_LOGO,
             currentRoute: null,
-            routePath: [],
             routes: [],
             routesMap: {},
             showSelectRouteDialog: false,
@@ -272,6 +342,10 @@ export default {
             focusOnSegmentIndex: null,
             showAlert: false,
             showSidebar: true,
+            mapZoom: 15,
+            fetchingAllRoutes: false,
+            allRoutes: [],
+            showAllRoutes: false,
         };
     },
     computed: {
@@ -285,6 +359,18 @@ export default {
             return this.searchPathSegments.map((segment) => {
                 return this.routesMap[segment.id];
             });
+        },
+        mapCenter() {
+            if (this.currentRoute) {
+                const startIntersection = this.currentRoute.intersections[0];
+
+                if (startIntersection) {
+                    return new google.maps.LatLng(startIntersection.lat, startIntersection.lng);
+                }
+            }
+
+            // this value is just arbitrary
+            return new google.maps.LatLng(8.477619, 124.644167);
         }
     },
     async mounted() {
@@ -309,21 +395,15 @@ export default {
             this.showSelectRouteDialog = false;
         },
         async setCurrentRoute(route) {
-            this.currentRoute = route;
-
             if (!route) {
-                this.routePath = [];
-            } else {
-
-                const routeDetails = await getRoute(route.id);
-                if (routeDetails) {
-                    const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
-
-                    this.routePath = snapToRoadPoints;
-                } else {
-                    this.routePath = [];
-                }
+                this.currentRoute = null;
+                return;
             }
+
+            const routeDetails = await getRouteDetails(route);
+            if (routeDetails) {
+                this.currentRoute = routeDetails;
+            } 
         },
         // route select dialog handler
         routeSelected(route) {
@@ -334,6 +414,7 @@ export default {
         postRouteSelected() {
             this.searchPathSegments = [];
             this.showSearchResult = false;
+            this.showAllRoutes = false;
         },
         mapClick({latLng}) {
             const coordinate = { lat: latLng.lat(), lng: latLng.lng() };
@@ -344,8 +425,19 @@ export default {
                 this.clickedCoordinatesStack = this.clickedCoordinatesStack.splice(1);
             }
         },
-        async searchPath() {
+        preSearchPath() {
+            this.searchingPath = true;
             this.searchPathSegments = [];
+        },
+        async searchPath() {
+            if (this.searchingPath)
+                return;
+
+            if (isEmpty(this.searchFromCoordinate) || isEmpty(this.searchToCoordinate))
+                return;
+
+            this.preSearchPath();
+
             const params = {
                 from: this.searchFromCoordinate,
                 to: this.searchToCoordinate
@@ -379,8 +471,9 @@ export default {
             this.postSearchPath();
         },
         postSearchPath() {
-            this.routePath = [];
             this.currentRoute = null;
+            this.showAllRoutes = false;
+            this.searchingPath = false;
         },
         clearSearchCoordinatesStack() {
             this.clickedCoordinatesStack = [];
@@ -410,6 +503,21 @@ export default {
         },
         toggleSidebar() {
             this.showSidebar = !this.showSidebar;
+        },
+        async toggleShowAllRoutes() {
+            this.showAllRoutes = !this.showAllRoutes;
+
+            if (this.showAllRoutes) {
+                this.searchPathSegments = [];
+                this.showSearchResult = false;
+
+                // lazy load allRoutes
+                if (!this.allRoutes.length) {
+                    this.fetchingAllRoutes = true;
+                    this.allRoutes = await preloadRouteDetails(this.routes);
+                    this.fetchingAllRoutes = false;
+                }
+            }
         }
     }
 }
@@ -417,6 +525,20 @@ export default {
 
 <style lang="scss" scoped>
     @import "../common/_variables.scss";
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .2s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+
+    .city-select {
+        .description {
+            font-size: 0.9em;
+        }
+    }
 
     .route-select {
         .description {
@@ -433,9 +555,16 @@ export default {
                 border-bottom-width: 0;
             }
         }
+
+        .no-selected {
+            font-size: 0.9em;
+            color: gray;
+        }
     }
 
     .search-route-results {
+        margin-top: 5px;
+
         .route-segment {
             border-left: transparent 4px solid;
             padding: 10px 12px 10px 6px;
@@ -479,6 +608,21 @@ export default {
     .sidebar {
         transition: opacity 0.15s linear;
         opacity: 1;
+
+        .show-route-accessible-roads {
+            cursor: pointer;
+            color: #b9b9b9;
+
+            &.active {
+                color: #212529;
+            }
+
+            .sub-text {
+                margin-top: 10px;
+                font-size: 0.8em;
+                text-align: center;
+            }
+        }
     }
 
     .mobile-menu-toggle {
@@ -524,6 +668,12 @@ export default {
 
                     .card-body {
                         flex-direction: row;
+                    }
+                }
+
+                .show-route-accessible-roads {
+                    .sub-text {
+                        text-align: left;
                     }
                 }
             }

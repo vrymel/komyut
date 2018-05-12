@@ -28,12 +28,8 @@ defmodule WaypointsDirectWeb.RouteApiController do
         route = Repo.one query
 
         intersection_list = GraphUtils.route_edges_to_intersection_list(Map.get(route, :route_edges))
-        intersection_list_encode_safe = Enum.map intersection_list, 
-            fn(%Intersection{:id => id, :lat => lat, :lng => lng}) -> 
-                %{id: id, lat: lat, lng: lng} 
-            end
 
-        json conn, %{success: true, intersections: intersection_list_encode_safe}
+        json conn, %{success: true, id: route_id, intersections: intersection_list}
     end
 
     def create(conn, %{"route_name" => route_name, "raw_route_edges" => raw_route_edges}) do
