@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    command: mix phx.server
+    ports:
+      - "4000:4000"
+    environment:
+      - MIX_ENV=dev
+      - PORT=4000
+    volumes:
+      - ./app:/opt/app
+  db:
+    image: postgres:9.6.6
+    environment:
+      POSTGRES_DB: barker_prod
+      POSTGRES_PASSWORD: secret.barker.awaw!
+      PGDATA: /var/lib/postgresql/data/pgdata
