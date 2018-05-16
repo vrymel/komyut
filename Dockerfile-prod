@@ -14,6 +14,11 @@ COPY ./app /opt/app
 
 WORKDIR /opt/app
 
+RUN mix deps.get --only=production && \ 
+    cd assets && npm install && cd ..
+    # mix phx.digest && \
+    # mix release --env=prod
+
 # run this manually in the container
 # host> docker-compose run web mix deps.get
 
