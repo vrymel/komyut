@@ -1,29 +1,7 @@
 FROM vrymel/docker-elixir-phoenix:1.6.4
 
-ENV APP_ENV="production" \ 
-    GOOGLE_MAP_API_KEY="AIzaSyB11S8LbcWKHxQPT08a3vxhlvOqONbL_x4" \
-    SENTRY_FRONTEND_DSN="https://08fcdb18141041af961108b6d8106edb@sentry.io/293955" \
-    SENTRY_BACKEND_DSN="https://4e191bd891144a858533ccbe40456c19:3030fafb86dd4e61ad29b3520634ff16@sentry.io/293949" \
-    AUTH0_DOMAIN="vapps.auth0.com" \ 
-    AUTH0_CLIENT_ID="b5Hb86MTNMlYXlCLWWPrf9e9at2l4svs" \ 
-    AUTH0_CLIENT_SECRET="1FaQntko218v8LVTIHDvmIPBERH_5wep_UWvqJ5tEMVLd3gJWd6tkpBtzymI4tP3" \
-    WAYPOINTS_DIRECT_KEY_FILE="" \
-    WAYPOINTS_DIRECT_CERT_FILE=""
-
 COPY ./app /opt/app
 
 WORKDIR /opt/app
 
-RUN mix deps.get --only=production && \ 
-    cd assets && npm install && cd ..
-    # mix phx.digest && \
-    # mix release --env=prod
-
-# run this manually in the container
-# host> docker-compose run web mix deps.get
-
-# run this manually in the container
-# host> docker-compose run web bash
-# container> cd assets && npm install
-
-CMD "/bin/bash"
+CMD ["/bin/bash"]
