@@ -11,6 +11,8 @@ services:
       - PORT=4000
     volumes:
       - ./app:/opt/app
+    depends_on:
+      - db
   db:
     image: postgres:9.6.6
     volumes: 

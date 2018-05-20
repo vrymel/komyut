@@ -1,0 +1,39 @@
+version: '3'
+services:
+  barkerapp:
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - "4000:4000"
+    environment:
+      - APP_ENV=${APP_ENV}
+      - MIX_ENV=${MIX_ENV}
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - GOOGLE_MAP_API_KEY=${GOOGLE_MAP_API_KEY}
+      - SENTRY_FRONTEND_DSN=${SENTRY_FRONTEND_DSN}
+      - SENTRY_BACKEND_DSN=${SENTRY_BACKEND_DSN}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+      - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
+      - WAYPOINTS_DIRECT_KEY_FILE=${WAYPOINTS_DIRECT_KEY_FILE}
+      - WAYPOINTS_DIRECT_CERT_FILE=${WAYPOINTS_DIRECT_CERT_FILE}
+    depends_on:
+      - barkerdb
+  barkerdb:
+    image: postgres:9.6.6
+    volumes: 
+      # - ./database_dumps:/docker-entrypoint-initdb.d # uncomment to start container with dump data
+      - ./database_docker_volume:/var/lib/postgresql/data # use this if data is already on a volume
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
