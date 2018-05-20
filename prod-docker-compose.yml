@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-prod
-    command: MIX_ENV=prod mix phx.server
+    command: mix phx.server
     ports:
       - "4000:4000"
     environment:
