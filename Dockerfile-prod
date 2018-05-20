@@ -7,6 +7,7 @@ WORKDIR /opt/app
 RUN mix deps.get --only production && \
     cd assets && npm install && \
     ./node_modules/.bin/brunch build && \
-    cd ..
+    cd .. && \
+    mix phx.digest
 
 CMD ["/bin/bash"]
