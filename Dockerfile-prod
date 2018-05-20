@@ -4,4 +4,6 @@ COPY ./app /opt/app
 
 WORKDIR /opt/app
 
+RUN cd assets && npm install && cd ..
+
 CMD ["/bin/bash"]
