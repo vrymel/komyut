@@ -8,6 +8,6 @@ RUN mix deps.get --only production && \
     cd assets && npm install && \
     ./node_modules/.bin/brunch build && \
     cd .. && \
-    mix phx.digest
+    MIX_ENV=prod mix phx.digest
 
 CMD ["/bin/bash"]
