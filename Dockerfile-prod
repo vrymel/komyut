@@ -1,13 +1,4 @@
 FROM vrymel/docker-elixir-phoenix:1.6.4
-
 COPY ./app /opt/app
-
 WORKDIR /opt/app
-
-RUN mix deps.get --only production && \
-    cd assets && npm install && \
-    ./node_modules/.bin/brunch build && \
-    cd .. && \
-    MIX_ENV=prod mix phx.digest
-
 CMD ["/bin/bash"]
