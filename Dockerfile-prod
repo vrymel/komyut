@@ -4,6 +4,9 @@ COPY ./app /opt/app
 
 WORKDIR /opt/app
 
-RUN cd assets && npm install && cd ..
+RUN mix deps.get --only production && \
+    cd assets && npm install && \
+    ./node_modules/.bin/brunch build && \
+    cd ..
 
 CMD ["/bin/bash"]
