@@ -1,7 +1,4 @@
 FROM vrymel/docker-elixir-phoenix:1.6.4
-
 COPY ./app /opt/app
-
 WORKDIR /opt/app
-
 CMD ["/bin/bash"]

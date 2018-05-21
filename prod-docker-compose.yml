@@ -4,8 +4,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-prod
+    command: ./startapp.sh
     ports:
-      - "4000:4000"
+      - "443:4000"
+    volumes:
+      - ./app:/opt/app
+      - /etc/letsencrypt/live/barkerapp.vrymel.com/privkey.pem:/etc/letsencrypt/live/barkerapp.vrymel.com/privkey.pem
+      - /etc/letsencrypt/live/barkerapp.vrymel.com/cert.pem:/etc/letsencrypt/live/barkerapp.vrymel.com/cert.pem
     environment:
       - APP_ENV=${APP_ENV}
       - MIX_ENV=${MIX_ENV}
@@ -35,5 +40,3 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
       PGDATA: /var/lib/postgresql/data/pgdata
-    ports:
-      - "5432:5432"
