@@ -2,6 +2,7 @@
   <div class="app-new-route">
     <div class="map">
       <google-map
+      :center="mapCenter"
       @click="onMapClick">
         <google-map-circle 
           v-for="(intersection) in intersections"
@@ -210,7 +211,8 @@ export default {
             routePath: [],
             showRoutePath: false,
             routeName: "",
-            saving: false
+            saving: false,
+            mapCenter: new google.maps.LatLng(8.477619, 124.644167), // this value is just arbitrary
         };
     },
     methods: {
