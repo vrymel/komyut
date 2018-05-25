@@ -2,7 +2,7 @@
 
 mix deps.get --only production
 
-cd assets && npm install && ./node_modules/.bin/brunch build && cd ..
+cd assets && npm install && ./node_modules/.bin/brunch build --production && cd ..
 
 MIX_ENV=prod mix phx.digest
 
