@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1] - 2018-05-25
+### Changes
+- Fixed production bundle
+- Added `center` prop for the `Map` component in management module
+- Updated Auth0 secret
+
+## [1.0.0] - 2018-05-20 🎉🎉🎉
+### Changes
+- Added search feature 😎
+- Changed viewing of route - route segments is gone
+- Setup project to be hosted in a docker container 
+
 ## [0.5.0-beta] - 2017-12-29
 ### Changes
 - Upgrade Phoenix to 1.3
