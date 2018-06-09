@@ -11,6 +11,7 @@
         .scene {
             display: flex;
             flex: 4;
+            overflow: hidden;
 
             .svg-wrapper {
                 display: flex;
@@ -20,11 +21,11 @@
                     .svg-luxe {
                         flex: 1;
                         max-width: 368px;
+                        transform: translateX(-100px);
                     }
                 }
                 
                 &.jeepney {
-                    flex: 2;
                     justify-content: center;
 
                     .svg-jeepney {
@@ -34,9 +35,11 @@
                 }
                 &.must {
                     justify-content: flex-end;
+
                     .svg-must {
                         flex: 1;
                         max-width: 294px;
+                        transform: translateX(100px);
                     }
                 }
             }
@@ -65,6 +68,28 @@
                 font-family: "Open Sans", sans-serif;
                 margin-left: 10px;
             }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+    .landing-container
+    .main-graphics 
+    .scene
+    .svg-wrapper {
+        &.luxe, &.must {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 410px) {
+    .landing-container
+    .main-graphics 
+    .scene
+    .svg-wrapper {
+        &.jeepney {
+            margin: 0 25px;
         }
     }
 }

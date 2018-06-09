@@ -2,7 +2,7 @@
     <div class="main-graphics">
         <div class="scene">
             <div class="luxe svg-wrapper">
-                <svg viewBox="0 0 368 717" preserveAspectRatio="xMinYMax meet" class="svg-luxe" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
+                <svg viewBox="0 0 368 717" preserveAspectRatio="xMaxYMax slice" class="svg-luxe" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
                     stroke-miterlimit="1.414">
                     <g id="luxe">
                         <path fill="#e9b10c" d="M354.356 0h13.273v715.529h-13.273z" />
