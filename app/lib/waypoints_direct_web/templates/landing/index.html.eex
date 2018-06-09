@@ -1,7 +1,7 @@
 <div class="landing-container">
     <div class="main-graphics">
         <div class="scene">
-            <svg class="svg-luxe" viewBox="0 0 368 717" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
+            <svg viewBox="0 0 368 717" preserveAspectRatio="xMinYMax meet" class="svg-luxe" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
                 stroke-miterlimit="1.414">
                 <g id="luxe">
                     <path fill="#e9b10c" d="M354.356 0h13.273v715.529h-13.273z" />
@@ -11,7 +11,7 @@
                 </g>
             </svg>
 
-            <svg class="svg-jeepney" viewBox="0 0 440 416" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
+            <svg class="svg-jeepney" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
                 <g id="jeepney">
                     <path id="Spare-tire" serif:id="Spare tire" d="M434.417 164.352c0-6.91-5.611-12.52-12.521-12.52h-25.04c-6.911 0-12.521 5.61-12.521 12.52v78.449c0 6.91 5.61 12.52 12.521 12.52h25.04c6.91 0 12.521-5.61 12.521-12.52v-78.449z"
                         fill="#181818" />
@@ -384,14 +384,20 @@
                 </g>
             </svg>
 
-            <svg class="svg-must" viewBox="0 0 372 674" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
+            <svg 
+                viewBox="0 0 294 531"
+                preserveAspectRatio="xMaxYMax meet"
+                class="svg-must"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                stroke-linejoin="round"
                 stroke-miterlimit="1.414">
                 <g id="MUST">
-                    <path fill="#fff" d="M9 49.881h363v623.402H9z" />
-                    <path d="M9 49.881l-9 10v613.402h9V49.881z" fill="#e9ecff" />
-                    <path d="M200.087 0l-9 9.615v40.266h9V0z" fill="#202654" />
-                    <path fill="#1f296e" d="M200.087 0H372v49.881H200.087z" />
-                    <path d="M372 190.643a4.039 4.039 0 0 0-4.037-4.037H203.798a4.039 4.039 0 0 0-4.037 4.037V593.75a4.039 4.039 0 0 0 4.037 4.037h164.165A4.039 4.039 0 0 0 372 593.75V190.643z"
+                    <path fill="#fff" d="M7.095 39.324h286.171v491.459H7.095z" />
+                    <path d="M7.095 39.324L0 47.207v483.576h7.095V39.324z" fill="#e9ecff" />
+                    <path d="M157.739 0l-7.096 7.58v31.744h7.096V0z" fill="#202654" />
+                    <path fill="#1f296e" d="M157.739 0h135.528v39.324H157.739z" />
+                    <path d="M293.266 150.294a3.184 3.184 0 0 0-3.182-3.183h-129.42a3.184 3.184 0 0 0-3.182 3.183v317.789a3.184 3.184 0 0 0 3.182 3.183h129.42a3.184 3.184 0 0 0 3.182-3.183V150.294z"
                         fill="#e9ecff" />
                 </g>
             </svg>
