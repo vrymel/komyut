@@ -9,10 +9,19 @@
         width: 100vw;
 
         .scene {
-            flex: 6;
+            display: flex;
+            flex: 4;
 
-            .jeepney {
-                width: 30%;
+            .svg-luxe {
+                flex: 1;
+            }
+
+            .svg-jeepney {
+                flex: 1;
+            }
+
+            .svg-must {
+                flex: 1;
             }
         }
 
