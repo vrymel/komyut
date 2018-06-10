@@ -29,10 +29,19 @@
                 
                 &.jeepney {
                     justify-content: center;
+                    display: flex;
+                    flex: 2;
+                    margin: 0 25px;
 
-                    svg {
-                        flex: 1;
+                    .jeepney-svg {
+                        flex: 3;
                         max-width: 440px;
+                    }
+
+                    .enter-here-svg {
+                        flex: 1;
+                        max-width: 142px;
+                        margin-left: 50px;
                     }
                 }
                 &.must {
@@ -73,24 +82,13 @@
     }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
     .landing-container
     .main-graphics 
     .scene
     .svg-wrapper {
         &.luxe, &.must {
             display: none;
-        }
-    }
-}
-
-@media (max-width: 410px) {
-    .landing-container
-    .main-graphics 
-    .scene
-    .svg-wrapper {
-        &.jeepney {
-            margin: 0 25px;
         }
     }
 }
