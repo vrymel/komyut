@@ -39,13 +39,12 @@
                     margin: 0 25px;
 
                     .jeepney-svg {
-                        flex: 3;
+                        flex: 5;
                         max-width: 440px;
                     }
 
                     .enter-here-svg {
-                        flex: 1;
-                        max-width: 142px;
+                        flex: 2;
                         margin-left: 50px;
                     }
                 }
@@ -87,25 +86,6 @@
     }
 }
 
-@media (max-width: 800px) {
-    .landing-container
-    .main-graphics 
-    .scene
-    .svg-wrapper {
-        &.luxe, &.must {
-            display: none;
-        }
-    }
-}
-
-@media (max-height: 330px) {
-    .landing-container
-    .main-graphics 
-    .clouds-svg {
-        display: none;
-    }
-}
-
 #cloud1, #cloud2, #cloud3, #cloud4 {
     animation: cloudmove 360s ease -5s infinite;
 }
@@ -118,4 +98,62 @@
     50% {
         transform: translateX(400px);
     }
+}
+
+#sign_head {
+    transform-origin: top center;
+    animation: swing 5s ease -5s infinite;
+}
+
+@keyframes swing {
+    10% {
+      transform: rotate3d(0, 0, 1, 10deg);
+    }
+  
+    20% {
+      transform: rotate3d(0, 0, 1, -5deg);
+    }
+  
+    30% {
+      transform: rotate3d(0, 0, 1, 3deg);
+    }
+  
+    40% {
+      transform: rotate3d(0, 0, 1, -3deg);
+    }
+
+    50% {
+      transform: rotate3d(0, 0, 1, 2deg);
+    }
+
+    55%, 100% {
+      transform: rotate3d(0, 0, 1, 0deg);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .landing-container
+    .main-graphics 
+    .scene
+    .svg-wrapper {
+        &.luxe, &.must {
+            display: none;
+        }
+    }
+}
+
+@media (max-height: 600px) {
+    .landing-container
+    .main-graphics 
+    .clouds-svg {
+        display: none;
+    }
+}
+
+@media (min-height: 600px) and (max-width: 600px) {
+    .landing-container
+    .main-graphics 
+    .clouds-svg {
+        margin-top: 60px;
+    } 
 }
