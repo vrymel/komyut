@@ -105,3 +105,17 @@
         display: none;
     }
 }
+
+#cloud1, #cloud2, #cloud3, #cloud4 {
+    animation: cloudmove 360s ease -5s infinite;
+}
+
+@keyframes cloudmove {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(400px);
+    }
+}
