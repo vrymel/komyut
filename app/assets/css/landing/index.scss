@@ -8,6 +8,11 @@
         height: 100vh;
         width: 100vw;
 
+        .clouds-svg {
+            position: absolute;
+            top: 10px;
+        }
+
         .scene {
             display: flex;
             flex: 4;
@@ -90,5 +95,13 @@
         &.luxe, &.must {
             display: none;
         }
+    }
+}
+
+@media (max-height: 330px) {
+    .landing-container
+    .main-graphics 
+    .clouds-svg {
+        display: none;
     }
 }
