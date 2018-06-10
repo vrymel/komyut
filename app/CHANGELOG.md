@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - 2018-06-10
+### Changes
+- Updated landing page with new design 🎨
+
 ## [1.0.1] - 2018-05-25
 ### Changes
 - Fixed production bundle
