@@ -18,17 +18,19 @@
                 flex: 1;
 
                 &.luxe {
-                    .svg-luxe {
+                    flex-shrink: 10;
+
+                    svg {
                         flex: 1;
                         max-width: 368px;
-                        transform: translateX(-100px);
+                        transform: translateX(-200px);
                     }
                 }
                 
                 &.jeepney {
                     justify-content: center;
 
-                    .svg-jeepney {
+                    svg {
                         flex: 1;
                         max-width: 440px;
                     }
@@ -36,7 +38,7 @@
                 &.must {
                     justify-content: flex-end;
 
-                    .svg-must {
+                    svg {
                         flex: 1;
                         max-width: 294px;
                         transform: translateX(100px);
@@ -46,7 +48,6 @@
         }
 
         .floor {
-            flex: 1;
             background-color: #3B3B3B;
             color: #FEB926;
             display: flex;
