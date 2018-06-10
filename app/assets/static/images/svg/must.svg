@@ -1,0 +1,9 @@
+<svg viewBox="0 0 294 531" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414">
+  <g id="MUST">
+    <path fill="#fff" d="M7.095 39.324h286.171v491.459H7.095z"/>
+    <path d="M7.095 39.324L0 47.207v483.576h7.095V39.324z" fill="#e9ecff"/>
+    <path d="M157.739 0l-7.096 7.58v31.744h7.096V0z" fill="#202654"/>
+    <path fill="#1f296e" d="M157.739 0h135.528v39.324H157.739z"/>
+    <path d="M293.266 150.294a3.184 3.184 0 0 0-3.182-3.183h-129.42a3.184 3.184 0 0 0-3.182 3.183v317.789a3.184 3.184 0 0 0 3.182 3.183h129.42a3.184 3.184 0 0 0 3.182-3.183V150.294z" fill="#e9ecff"/>
+  </g>
+</svg>
