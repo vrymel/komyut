@@ -46,6 +46,10 @@
                     .enter-here-svg {
                         flex: 2;
                         margin-left: 50px;
+
+                        #sign_head {
+                            cursor: pointer;
+                        }
                     }
                 }
                 &.must {
@@ -85,6 +89,8 @@
         }
     }
 }
+
+// ANIMATIONS
 
 #cloud1, #cloud2, #cloud3, #cloud4 {
     animation: cloudmove 360s ease -5s infinite;
@@ -141,6 +147,8 @@
         }
     }
 }
+
+// RESPONSIVE MEDIA QUERIES
 
 @media (max-height: 600px) {
     .landing-container

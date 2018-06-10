@@ -424,4 +424,15 @@
         </div>
         <div class="floor"></div>
     </div>
+
+    <a id="hidden-routes-redirect" href="/routes" style="display: none">Go to Routes</a>
+    <script type="text/javascript">
+        (function () {
+            var hiddenRoutesRedirect = document.querySelector("#hidden-routes-redirect");
+            var signHead = document.querySelector("#sign_head");
+            signHead.addEventListener("click", function() {
+                hiddenRoutesRedirect.click();
+            });
+        })();
+    </script>
 </div>
