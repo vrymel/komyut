@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2018-06-11
+### Changes
+- Fixed enter here sign is bigger than jeepney in landing page
+
 ## [1.1.0] - 2018-06-10
 ### Changes
 - Updated landing page with new design 🎨
