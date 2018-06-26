@@ -43,15 +43,17 @@
                     }
                 }
 
-                .jeepney-enter-sign-container {
+                .jeepney-mountain {
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-end;
-                    flex: 3;
-
+                    position: relative;
+                        
                     svg.jeepney-enter-sign {
+                        position: absolute;
+                        bottom: 0px;
                         margin-left: 70px;
                         margin-right: 70px;
+                        max-height: 330px;
                     }
                 }
             }
