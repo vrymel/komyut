@@ -1,92 +1,30 @@
 @import "../_variables";
 
 .landing-container {
-    .main-graphics {
+    .main {
         display: flex;
-        flex-direction: column;
-        background-color: #DFFBFF;
         height: 100vh;
-        width: 100vw;
 
-        .clouds-svg {
-            position: absolute;
-            top: 10px;
-        }
-
-        .scene {
+        .illustration {
             display: flex;
-            flex: 4;
-            overflow: hidden;
+            flex-direction: column;
+            background-color: #74DEFB;
+            flex: 2;
 
-            .svg-wrapper {
-                display: flex;
+            .scene {
                 flex: 1;
+            }
 
-                &.luxe {
-                    flex-shrink: 10;
-
-                    svg {
-                        flex: 1;
-                        max-width: 368px;
-                        transform: translateX(-200px);
-                    }
-                }
-                
-                &.jeepney {
-                    justify-content: center;
-                    display: flex;
-                    flex: 2;
-                    margin: 0 25px;
-
-                    .jeepney-svg {
-                        flex: 5;
-                        max-width: 440px;
-                    }
-
-                    .enter-here-svg {
-                        flex: 2;
-                        margin-left: 50px;
-                        max-width: 169px;
-
-                        #sign_head {
-                            cursor: pointer;
-                        }
-                    }
-                }
-                &.must {
-                    justify-content: flex-end;
-
-                    svg {
-                        flex: 1;
-                        max-width: 294px;
-                        transform: translateX(100px);
-                    }
-                }
+            .road {
+                height: 40px;
+                width: 100%;
+                background-color: #003742;
             }
         }
 
-        .floor {
-            background-color: #3B3B3B;
-            color: #FEB926;
-            display: flex;
-            align-items: center;
-            padding: 10px 30px;
-
-            h1 {
-                flex: 1;
-                text-align: right;
-                margin-right: 10px;
-
-                .img-header {
-                    width: 60%;
-                }
-            }
-
-            h4 {
-                flex: 1;
-                font-family: "Open Sans", sans-serif;
-                margin-left: 10px;
-            }
+        .features {
+            background-color: white;
+            flex: 1;
         }
     }
 }
@@ -108,8 +46,8 @@
 }
 
 #sign_head {
-    transform-origin: top center;
-    animation: swing 5s ease -5s infinite;
+    // transform-origin: top center;
+    // animation: swing 5s ease -5s infinite;
 }
 
 @keyframes swing {
