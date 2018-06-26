@@ -3,7 +3,7 @@
         <div class="illustration">
             <div class="scene">
                 <div class="cloud-container">
-                    <svg class="clouds" viewBox="-70 0 816 188" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
+                    <svg class="clouds" viewBox="-70 0 816 188" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
                         stroke-miterlimit="1.414">
                         <g id="clouds" fill="#fff">
                             <path id="cloud4" d="M265.856 117.79a27.193 27.193 0 0 1-.007-.64c0-16.188 12.044-29.586 27.651-31.713 1.13-10.242 9.821-18.22 20.361-18.22 11.306 0 20.486 9.18 20.486 20.486 0 .747-.041 1.484-.119 2.211a22.88 22.88 0 0 1 3.64-.291c12.542 0 22.726 10.183 22.726 22.726a22.77 22.77 0 0 1-.657 5.441h-94.081z"
@@ -22,7 +22,7 @@
                     <h2>Your public transport guide</h2>
                 </div>
                 <div class="jeepney-enter-sign-container">
-                    <svg class="jeepney-enter-sign" viewBox="0 0 434 320" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/"
+                    <svg class="jeepney-enter-sign" viewBox="0 0 434 320"
                         fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
                         <g id="center-piece" serif:id="center piece">
                             <g id="enter_here">
