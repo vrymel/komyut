@@ -16,11 +16,18 @@
                 flex-direction: column;
                 flex: 1;
 
+                .cloud-container {
+                    margin-top: 10px;
+                }
+
                 .app-name {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    justify-content: center;
                     margin-top: 30px;
+                    z-index: 2;
+                    flex: 2;
 
                     h1 {
                         font-family: 'Open Sans';
@@ -40,7 +47,7 @@
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-end;
-                    flex: 1;
+                    flex: 3;
 
                     svg.jeepney-enter-sign {
                         margin-left: 70px;
@@ -66,7 +73,7 @@
 // ANIMATIONS
 
 #cloud1, #cloud2, #cloud3, #cloud4 {
-    // animation: cloudmove 360s ease -5s infinite;
+    animation: cloudmove 360s ease -5s infinite;
 }
 
 @keyframes cloudmove {
