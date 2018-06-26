@@ -16,6 +16,26 @@
                 flex-direction: column;
                 flex: 1;
 
+                .app-name {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-top: 30px;
+
+                    h1 {
+                        font-family: 'Open Sans';
+                        font-weight: bold;
+                        color: #FF5000;
+                        font-size: 3.5rem;
+                    }
+
+                    h2 {
+                        font-family: 'Open Sans';
+                        font-size: 1.5rem;
+                        color: #343434;
+                    }
+                }
+
                 .jeepney-enter-sign-container {
                     display: flex;
                     flex-direction: column;
@@ -46,7 +66,7 @@
 // ANIMATIONS
 
 #cloud1, #cloud2, #cloud3, #cloud4 {
-    animation: cloudmove 360s ease -5s infinite;
+    // animation: cloudmove 360s ease -5s infinite;
 }
 
 @keyframes cloudmove {

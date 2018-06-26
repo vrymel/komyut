@@ -21,7 +21,7 @@
   <title>Barker | Jeepney Routes | Cagayan de Oro</title>
 
   <%# TODO: find a way to make this load only in the homepage using "partial" since this is only used there #%>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet">
 
   <link rel="icon" href="<%= static_path(@conn, "/images/favicon.ico") %>?1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
