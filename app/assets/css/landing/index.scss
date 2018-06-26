@@ -12,7 +12,21 @@
             flex: 2;
 
             .scene {
+                display: flex;
+                flex-direction: column;
                 flex: 1;
+
+                .jeepney-enter-sign-container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    flex: 1;
+
+                    svg.jeepney-enter-sign {
+                        margin-left: 70px;
+                        margin-right: 70px;
+                    }
+                }
             }
 
             .road {

@@ -3,15 +3,27 @@
         <div class="illustration">
             <div class="scene">
                 <div class="cloud-container">
-
+                    <svg class="clouds" viewBox="0 0 578 118" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
+                        stroke-miterlimit="1.414">
+                        <g id="clouds" fill="#fff">
+                            <path id="cloud4" d="M265.856 117.79a27.193 27.193 0 0 1-.007-.64c0-16.188 12.044-29.586 27.651-31.713 1.13-10.242 9.821-18.22 20.361-18.22 11.306 0 20.486 9.18 20.486 20.486 0 .747-.041 1.484-.119 2.211a22.88 22.88 0 0 1 3.64-.291c12.542 0 22.726 10.183 22.726 22.726a22.77 22.77 0 0 1-.657 5.441h-94.081z"
+                                fill-opacity=".898" />
+                            <path id="cloud3" d="M520.407 24.39c1.081-6.905 7.061-12.195 14.268-12.195.885 0 1.752.08 2.593.233C538.785 5.33 545.099 0 552.647 0c7.468 0 13.727 5.218 15.328 12.203.132-.005.264-.008.397-.008 5.314 0 9.628 4.314 9.628 9.628 0 .889-.121 1.75-.347 2.567h-57.246z"
+                                fill-opacity=".702" />
+                            <path id="cloud2" d="M360.6 50.573a34.139 34.139 0 0 1-.006-.64c0-16.188 12.043-29.585 27.651-31.714C389.374 7.978 398.066 0 408.606 0c11.306 0 20.485 9.179 20.485 20.485 0 .747-.04 1.485-.118 2.211 1.203-.193 2.42-.29 3.639-.29 12.542 0 22.726 10.183 22.726 22.726 0 1.875-.228 3.697-.657 5.441H360.6z"
+                                fill-opacity=".945" />
+                            <path id="cloud1" d="M0 85.713c2.783-8.112 10.172-14.092 19.039-14.811a37.226 37.226 0 0 1-1.174-9.301c0-20.537 16.673-37.211 37.21-37.211 18.629 0 34.079 13.719 36.789 31.595 11.852.707 21.26 10.555 21.26 22.584a22.585 22.585 0 0 1-1.154 7.144H0z"
+                                fill-opacity=".749" />
+                        </g>
+                    </svg>
                 </div>
                 <div class="app-name">
                     <h1>Barker</h1>
                     <h2>Your public transport guide</h2>
                 </div>
                 <div class="jeepney-enter-sign-container">
-                    <svg viewBox="0 0 434 329" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/" fill-rule="evenodd" clip-rule="evenodd"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
+                    <svg class="jeepney-enter-sign" viewBox="0 0 434 320" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/"
+                        fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
                         <g id="center-piece" serif:id="center piece">
                             <g id="enter_here">
                                 <g id="post">
