@@ -123,3 +123,15 @@
       transform: rotate3d(0, 0, 1, 0deg);
     }
 }
+
+@media (max-height: 615px) {
+  .app-name {
+      opacity: 0;
+  }
+}
+
+@media (min-width: 1367px), (max-height: 515px) {
+    svg.mountain {
+        opacity: 0;
+    }
+}
