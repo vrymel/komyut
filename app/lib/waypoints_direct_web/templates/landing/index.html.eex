@@ -26,7 +26,7 @@
                             fill="#00bee5" />
                     </svg>
 
-                    <svg class="jeepney-enter-sign" viewBox="0 0 434 320" fill-rule="evenodd" clip-rule="evenodd"
+                    <svg class="jeepney-enter-sign" viewBox="-15 -10 449 320" fill-rule="evenodd" clip-rule="evenodd"
                         stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
                         <g id="center-piece" serif:id="center piece">
                             <g id="enter_here">

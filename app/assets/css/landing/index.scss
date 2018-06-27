@@ -89,8 +89,9 @@
 }
 
 #sign_head {
-    // transform-origin: top center;
-    // animation: swing 5s ease -5s infinite;
+    transform-origin: 55px 17px;
+    animation: swing 5s ease -5s infinite;
+    cursor: pointer;
 }
 
 @keyframes swing {
@@ -114,36 +115,11 @@
       transform: rotate3d(0, 0, 1, 2deg);
     }
 
-    55%, 100% {
+    55% {
+      transform: translate3d(0, 0, 1, -1deg)
+    }
+
+    60%, 100% {
       transform: rotate3d(0, 0, 1, 0deg);
     }
-  }
-
-  @media (max-width: 800px) {
-    .landing-container
-    .main-graphics 
-    .scene
-    .svg-wrapper {
-        &.luxe, &.must {
-            display: none;
-        }
-    }
-}
-
-// RESPONSIVE MEDIA QUERIES
-
-@media (max-height: 600px) {
-    .landing-container
-    .main-graphics 
-    .clouds-svg {
-        display: none;
-    }
-}
-
-@media (min-height: 600px) and (max-width: 600px) {
-    .landing-container
-    .main-graphics 
-    .clouds-svg {
-        margin-top: 60px;
-    } 
 }
