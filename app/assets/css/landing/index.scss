@@ -8,7 +8,8 @@
         .illustration {
             display: flex;
             flex-direction: column;
-            background-color: #74DEFB;
+            background: #74defb;
+            background: linear-gradient(to bottom, #74defb 0%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
             flex: 2;
 
             .scene {
