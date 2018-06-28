@@ -396,7 +396,20 @@
                 <h2>Your public transport guide</h2> 
             </div>
         </div>
-        <div class="features"></div>
+        <div class="features">
+            <div class="feature">
+                <h3>Search</h3>
+                <p>Find what routes to take between two points. </p>
+            </div>
+            <div class="feature">
+                <h3>Sequencing</h3>
+                <p>Color-coded route result. To easily identify what route to take.</p>
+            </div>
+            <div class="feature">
+                <h3>View</h3>
+                <p>See what path a given route takes.</p>
+            </div>
+        </div>
     </div>
 
 

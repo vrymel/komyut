@@ -76,6 +76,15 @@
         .features {
             background-color: white;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #33788E;
+            font-family: "Helvetica Neue", "Arial", "sans-serif";
+            
+            .feature {
+                margin: 15px 10px;
+            }
         }
     }
 }
