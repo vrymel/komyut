@@ -13,6 +13,12 @@
             flex: 2;
             position: relative;
 
+            .cloud-wrapper {
+                position: absolute;
+                height: 100px;
+                width: 100%;
+            }
+
             .mountain-wrapper {
                 position: absolute;
                 height: 100%;
@@ -45,56 +51,26 @@
                 background-color: #003742;
             }
 
-            // .scene {
-            //     display: flex;
-            //     flex-direction: column;
-            //     flex: 1;
+            .app-name { 
+                display: flex; 
+                flex-direction: column; 
+                align-items: center; 
+                z-index: 2;
+                margin-top: 100px;
 
-            //     .cloud-container {
-            //         margin-top: 10px;
-            //     }
+                h1 { 
+                    font-family: 'Open Sans'; 
+                    font-weight: bold; 
+                    color: #FF5000; 
+                    font-size: 3.5rem; 
+                } 
 
-            //     .app-name {
-            //         display: flex;
-            //         flex-direction: column;
-            //         align-items: center;
-            //         justify-content: center;
-            //         margin-top: 30px;
-            //         z-index: 2;
-            //         flex: 2;
-
-            //         h1 {
-            //             font-family: 'Open Sans';
-            //             font-weight: bold;
-            //             color: #FF5000;
-            //             font-size: 3.5rem;
-            //         }
-
-            //         h2 {
-            //             font-family: 'Open Sans';
-            //             font-size: 1.5rem;
-            //             color: #343434;
-            //         }
-            //     }
-
-            //     .jeepney-mountain {
-            //         display: flex;
-            //         flex-direction: column;
-            //         position: relative;
-            //         overflow: hidden;
-                        
-            //         .jeepney-enter-sign-wrapper {
-            //             position: absolute;
-            //             bottom: 0px;
-            //             display: flex;
-
-            //             svg {
-            //                 height: 100%;
-            //                 width: 100%;
-            //             }
-            //         }
-            //     }
-            // }
+                h2 { 
+                    font-family: 'Open Sans'; 
+                    font-size: 1.5rem; 
+                    color: #343434; 
+                } 
+            }
         }
 
         .features {
