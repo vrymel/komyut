@@ -398,16 +398,31 @@
         </div>
         <div class="features">
             <div class="feature">
-                <h3>Search</h3>
-                <p>Find what routes to take between two points. </p>
+                <div class="icon-block">
+                    <img src="images/search.svg">
+                </div>
+                <div class="text-block">
+                    <h3>Search</h3>
+                    <p>Find what routes to take between two points. </p>
+                </div>
+            </div>
+            <div class="feature sequencing">
+                <div class="icon-block">
+                    <img src="images/sequencing.svg">
+                </div>
+                <div class="text-block">
+                    <h3>Sequencing</h3>
+                    <p>Color-coded route result. To easily identify what route to take.</p>
+                </div>
             </div>
             <div class="feature">
-                <h3>Sequencing</h3>
-                <p>Color-coded route result. To easily identify what route to take.</p>
-            </div>
-            <div class="feature">
-                <h3>View</h3>
-                <p>See what path a given route takes.</p>
+                <div class="icon-block">
+                    <img src="images/view.svg">
+                </div>
+                <div class="text-block">
+                    <h3>View</h3>
+                    <p>See what path a given route takes.</p>
+                </div>
             </div>
         </div>
     </div>

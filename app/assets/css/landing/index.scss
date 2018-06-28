@@ -83,7 +83,39 @@
             font-family: "Helvetica Neue", "Arial", "sans-serif";
             
             .feature {
-                margin: 15px 10px;
+                margin: 15px 35px;
+                display: flex;
+
+                .icon-block {
+                    margin-top: 5px;
+                    margin-right: 20px;
+
+                    img {
+                        width: 32px;
+                    }
+
+                    img.sequencing {
+                        width: 35px;
+                    }
+                }
+
+                .text-block {
+                    flex: 1;
+
+                    h3 {
+                        font-size: 1.5em;
+                    }
+                }
+            }
+            
+            .feature.sequencing {
+                .icon-block {
+                    margin-right: 17px;
+
+                    img {
+                        width: 35px;
+                    }
+                }
             }
         }
     }
