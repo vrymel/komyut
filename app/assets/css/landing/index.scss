@@ -184,3 +184,42 @@
         opacity: 0;
     }
 }
+
+@media (max-width: 769px) {
+    .main {
+        flex-direction: column;
+
+        .features {
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .landing-container .main .illustration .app-name {
+        margin-top: 75px;
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 1em;
+        }
+    }
+}
+
+@media (min-width: 900px) {
+    .landing-container .main .illustration .app-name {
+        margin-top: 125px;
+
+        h1 {
+            font-size: 5em;
+        }
+
+        h2 {
+            font-size: 2.5em;
+        }
+    }   
+}
