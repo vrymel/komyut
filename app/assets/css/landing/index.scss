@@ -22,6 +22,21 @@
                 justify-content: flex-end;
             }
 
+            .jeepney-wrapper {
+                position: absolute;
+                bottom: 40px;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                padding: 0 50px;
+                
+                svg {
+                    max-height: 360px;
+                    flex: 1;
+                }
+            }
+
             .road {
                 position: absolute;
                 bottom: 0;
