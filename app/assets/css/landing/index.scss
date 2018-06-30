@@ -75,7 +75,6 @@
 
         .features {
             background-color: white;
-            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -190,8 +189,9 @@
         flex-direction: column;
 
         .features {
-            margin-top: 50px;
-            margin-bottom: 50px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 12px;
         }
     }
 }
