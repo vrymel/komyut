@@ -1,91 +1,123 @@
 @import "../_variables";
 
 .landing-container {
-    .main-graphics {
+    .main {
         display: flex;
-        flex-direction: column;
-        background-color: #DFFBFF;
         height: 100vh;
-        width: 100vw;
 
-        .clouds-svg {
-            position: absolute;
-            top: 10px;
-        }
-
-        .scene {
+        .illustration {
             display: flex;
-            flex: 4;
-            overflow: hidden;
+            flex-direction: column;
+            background: #74defb;
+            background: linear-gradient(to bottom, #74defb 0%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            flex: 2;
+            position: relative;
+            min-height: 375px;
 
-            .svg-wrapper {
+            .cloud-wrapper {
+                position: absolute;
+                height: 100px;
+                width: 100%;
+            }
+
+            .mountain-wrapper {
+                position: absolute;
+                height: 100%;
+                width: 100%;
                 display: flex;
-                flex: 1;
+                flex-direction: column;
+                justify-content: flex-end;
+            }
 
-                &.luxe {
-                    flex-shrink: 10;
-
-                    svg {
-                        flex: 1;
-                        max-width: 368px;
-                        transform: translateX(-200px);
-                    }
-                }
+            .jeepney-wrapper {
+                position: absolute;
+                bottom: 40px;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                padding: 0 50px;
                 
-                &.jeepney {
-                    justify-content: center;
-                    display: flex;
-                    flex: 2;
-                    margin: 0 25px;
-
-                    .jeepney-svg {
-                        flex: 5;
-                        max-width: 440px;
-                    }
-
-                    .enter-here-svg {
-                        flex: 2;
-                        margin-left: 50px;
-                        max-width: 169px;
-
-                        #sign_head {
-                            cursor: pointer;
-                        }
-                    }
+                svg {
+                    max-height: 360px;
+                    flex: 1;
                 }
-                &.must {
-                    justify-content: flex-end;
+            }
 
-                    svg {
-                        flex: 1;
-                        max-width: 294px;
-                        transform: translateX(100px);
-                    }
-                }
+            .road {
+                position: absolute;
+                bottom: 0;
+                height: 40px;
+                width: 100%;
+                background-color: #003742;
+            }
+
+            .app-name { 
+                display: flex; 
+                flex-direction: column; 
+                align-items: center; 
+                z-index: 2;
+                margin-top: 100px;
+                font-size: 10px;
+
+                h1 { 
+                    font-family: 'Open Sans'; 
+                    font-weight: bold; 
+                    color: #FF5000; 
+                    font-size: 3.5rem; 
+                } 
+
+                h2 { 
+                    font-family: 'Open Sans'; 
+                    font-size: 1.5rem; 
+                    color: #343434; 
+                } 
             }
         }
 
-        .floor {
-            background-color: #3B3B3B;
-            color: #FEB926;
+        .features {
+            background-color: white;
             display: flex;
-            align-items: center;
-            padding: 10px 30px;
+            flex-direction: column;
+            justify-content: center;
+            color: #33788E;
+            font-family: "Helvetica Neue", "Arial", "sans-serif";
+            min-height: 350px;
+            
+            .feature {
+                margin: 15px 35px;
+                display: flex;
 
-            h1 {
-                flex: 1;
-                text-align: right;
-                margin-right: 10px;
+                .icon-block {
+                    margin-top: 5px;
+                    margin-right: 20px;
 
-                .img-header {
-                    width: 60%;
+                    img {
+                        width: 32px;
+                    }
+
+                    img.sequencing {
+                        width: 35px;
+                    }
+                }
+
+                .text-block {
+                    flex: 1;
+
+                    h3 {
+                        font-size: 1.5em;
+                    }
                 }
             }
+            
+            .feature.sequencing {
+                .icon-block {
+                    margin-right: 17px;
 
-            h4 {
-                flex: 1;
-                font-family: "Open Sans", sans-serif;
-                margin-left: 10px;
+                    img {
+                        width: 35px;
+                    }
+                }
             }
         }
     }
@@ -93,7 +125,7 @@
 
 // ANIMATIONS
 
-#cloud1, #cloud2, #cloud3, #cloud4 {
+.cloud {
     animation: cloudmove 360s ease -5s infinite;
 }
 
@@ -108,8 +140,9 @@
 }
 
 #sign_head {
-    transform-origin: top center;
+    transform-origin: 55px 17px;
     animation: swing 5s ease -5s infinite;
+    cursor: pointer;
 }
 
 @keyframes swing {
@@ -133,36 +166,231 @@
       transform: rotate3d(0, 0, 1, 2deg);
     }
 
-    55%, 100% {
+    55% {
+      transform: translate3d(0, 0, 1, -1deg)
+    }
+
+    60%, 100% {
       transform: rotate3d(0, 0, 1, 0deg);
     }
-  }
+}
 
-  @media (max-width: 800px) {
-    .landing-container
-    .main-graphics 
-    .scene
-    .svg-wrapper {
-        &.luxe, &.must {
-            display: none;
+// MEDIA QUERIES
+
+@media screen and (min-width: 1367px) {
+    svg.mountain {
+        opacity: 0;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .main {
+        flex-direction: column;
+
+        .features {
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
     }
 }
 
-// RESPONSIVE MEDIA QUERIES
+// portrait
+@media screen and (min-width: 360px) and (min-height: 640px) {
+    .landing-container .main .illustration .app-name {
+        margin-top: 50px;
 
-@media (max-height: 600px) {
-    .landing-container
-    .main-graphics 
-    .clouds-svg {
-        display: none;
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 1em;
+        }
     }
 }
 
-@media (min-height: 600px) and (max-width: 600px) {
-    .landing-container
-    .main-graphics 
-    .clouds-svg {
-        margin-top: 60px;
-    } 
+// landscape 
+@media screen and (min-width: 640px) and (min-height: 360px) {
+    .landing-container .main .illustration {
+        min-height: 365px;
+
+        .jeepney-wrapper svg {
+            max-height: 200px;
+        }
+
+        .app-name {
+            margin-top: 20px;
+
+            h1 {
+                font-size: 3em;
+            }
+    
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    }
+}
+
+// portrait iphone 5,SE
+@media screen and (min-width: 320px) and (min-height: 568px) {
+    .landing-container .main .illustration .app-name {
+        h1 {
+            font-size: 3em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+    }
+}
+
+// landscape iphone 5,SE
+@media screen and (min-width: 568px) and (min-height: 320px) {
+    .landing-container .main .illustration {
+        min-height: 325px;
+
+        .jeepney-wrapper svg {
+            max-height: 180px;
+        }
+
+        .app-name {
+            margin-top: 20px;
+
+            h1 {
+                font-size: 3em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    }
+}
+
+// landscape iphone 6,7,8
+@media screen and (min-width: 667px) and (min-height: 375px) {
+    .landing-container .main .illustration {
+        min-height: 380px;
+    }
+}
+
+// portrait iphone 6,7,8 +
+@media screen and (min-width: 414px) and (min-height: 736px) {
+    .landing-container .main .illustration .app-name {
+        h1 {
+            font-size: 3em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+    }
+}
+
+// landscape iphone 6,7,8 +
+@media screen and (min-width: 736px) and (min-height: 414px) {
+    .landing-container .main .illustration {
+        min-height: 420px;
+
+        .jeepney-wrapper svg {
+            max-height: 200px;
+        }
+
+        .app-name {
+            margin-top: 20px;
+
+            h1 {
+                font-size: 3em;
+            }
+    
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    }
+}
+
+// portrait iphoneX
+@media screen and (min-width: 375px) and (min-height: 812px) {
+    .landing-container .main .illustration .app-name {
+        h1 {
+            font-size: 3em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+    }
+}
+
+// landscape iphoneX
+@media screen and (min-width: 812px) and (min-height: 375px) {
+    .landing-container .main .illustration .app-name {
+        margin-top: 50px;
+
+        h1 {
+            font-size: 3em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+    }
+}
+
+// portrait ipad
+@media screen and (min-width: 768px) and (min-height: 1024px) {
+    .landing-container .main .illustration {
+        .jeepney-wrapper svg {
+            max-height: 320px;
+        }
+
+        .app-name {
+            margin-top: 120px;
+
+            h1 {
+                font-size: 4em;
+            }
+
+            h2 {
+                font-size: 2.5em;
+            }
+        }
+    }
+}
+
+// landscape ipad
+@media screen and (min-width: 1024px) and (min-height: 768px) {
+    .landing-container .main .illustration .app-name {
+        margin-top: 150px;
+        h1 {
+            font-size: 4em;
+        }
+
+        h2 {
+            font-size: 2.5em;
+        }
+    }
+}
+
+// landscape big monitors
+@media screen and (min-width: 1025px)  {
+    .landing-container .main .illustration {
+        .jeepney-wrapper svg {
+            max-height: 300px;
+        }
+
+        .app-name {
+            margin-top: 120px;
+
+            h1 {
+                font-size: 4em;
+            }
+
+            h2 {
+                font-size: 2.5em;
+            }
+        }
+    }
 }
