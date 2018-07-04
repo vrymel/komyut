@@ -194,68 +194,34 @@
     }
 }
 
-// portrait
-@media screen and (min-width: 360px) and (min-height: 640px) {
+@media only screen and 
+(min-device-width: 320px) and 
+(max-device-width: 812px) and 
+(orientation : portrait) {
     .landing-container .main .illustration .app-name {
-        margin-top: 50px;
-
+        margin-top: 40px;
+        
         h1 {
-            font-size: 2.5em;
+            font-size: 3em;
         }
 
         h2 {
-            font-size: 1em;
+            font-size: 1.5em;
         }
     }
 }
 
-// landscape 
-@media screen and (min-width: 640px) and (min-height: 360px) {
+@media only screen and 
+(min-device-width: 320px) and 
+(max-device-width: 812px) and 
+(orientation : landscape) {
     .landing-container .main .illustration {
-        min-height: 365px;
-
         .jeepney-wrapper svg {
             max-height: 200px;
         }
 
         .app-name {
-            margin-top: 20px;
-
-            h1 {
-                font-size: 3em;
-            }
-    
-            h2 {
-                font-size: 1.5em;
-            }
-        }
-    }
-}
-
-// portrait iphone 5,SE
-@media screen and (min-width: 320px) and (min-height: 568px) {
-    .landing-container .main .illustration .app-name {
-        h1 {
-            font-size: 3em;
-        }
-
-        h2 {
-            font-size: 1.5em;
-        }
-    }
-}
-
-// landscape iphone 5,SE
-@media screen and (min-width: 568px) and (min-height: 320px) {
-    .landing-container .main .illustration {
-        min-height: 325px;
-
-        .jeepney-wrapper svg {
-            max-height: 180px;
-        }
-
-        .app-name {
-            margin-top: 20px;
+            margin-top: 50px;
 
             h1 {
                 font-size: 3em;
@@ -263,133 +229,6 @@
 
             h2 {
                 font-size: 1.5em;
-            }
-        }
-    }
-}
-
-// landscape iphone 6,7,8
-@media screen and (min-width: 667px) and (min-height: 375px) {
-    .landing-container .main .illustration {
-        min-height: 380px;
-    }
-}
-
-// portrait iphone 6,7,8 +
-@media screen and (min-width: 414px) and (min-height: 736px) {
-    .landing-container .main .illustration .app-name {
-        h1 {
-            font-size: 3em;
-        }
-
-        h2 {
-            font-size: 1.5em;
-        }
-    }
-}
-
-// landscape iphone 6,7,8 +
-@media screen and (min-width: 736px) and (min-height: 414px) {
-    .landing-container .main .illustration {
-        min-height: 420px;
-
-        .jeepney-wrapper svg {
-            max-height: 200px;
-        }
-
-        .app-name {
-            margin-top: 20px;
-
-            h1 {
-                font-size: 3em;
-            }
-    
-            h2 {
-                font-size: 1.5em;
-            }
-        }
-    }
-}
-
-// portrait iphoneX
-@media screen and (min-width: 375px) and (min-height: 812px) {
-    .landing-container .main .illustration .app-name {
-        h1 {
-            font-size: 3em;
-        }
-
-        h2 {
-            font-size: 1.5em;
-        }
-    }
-}
-
-// landscape iphoneX
-@media screen and (min-width: 812px) and (min-height: 375px) {
-    .landing-container .main .illustration .app-name {
-        margin-top: 50px;
-
-        h1 {
-            font-size: 3em;
-        }
-
-        h2 {
-            font-size: 1.5em;
-        }
-    }
-}
-
-// portrait ipad
-@media screen and (min-width: 768px) and (min-height: 1024px) {
-    .landing-container .main .illustration {
-        .jeepney-wrapper svg {
-            max-height: 320px;
-        }
-
-        .app-name {
-            margin-top: 120px;
-
-            h1 {
-                font-size: 4em;
-            }
-
-            h2 {
-                font-size: 2.5em;
-            }
-        }
-    }
-}
-
-// landscape ipad
-@media screen and (min-width: 1024px) and (min-height: 768px) {
-    .landing-container .main .illustration .app-name {
-        margin-top: 150px;
-        h1 {
-            font-size: 4em;
-        }
-
-        h2 {
-            font-size: 2.5em;
-        }
-    }
-}
-
-// landscape big monitors
-@media screen and (min-width: 1025px)  {
-    .landing-container .main .illustration {
-        .jeepney-wrapper svg {
-            max-height: 300px;
-        }
-
-        .app-name {
-            margin-top: 120px;
-
-            h1 {
-                font-size: 4em;
-            }
-
-            h2 {
-                font-size: 2.5em;
             }
         }
     }
