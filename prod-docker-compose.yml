@@ -9,8 +9,8 @@ services:
       - "443:4000"
     volumes:
       - ./app:/opt/app
-      - /etc/letsencrypt/live/barkerapp.vrymel.com/privkey.pem:/etc/letsencrypt/live/barkerapp.vrymel.com/privkey.pem
-      - /etc/letsencrypt/live/barkerapp.vrymel.com/cert.pem:/etc/letsencrypt/live/barkerapp.vrymel.com/cert.pem
+      - ${WAYPOINTS_DIRECT_KEY_FILE}:${WAYPOINTS_DIRECT_KEY_FILE}
+      - ${WAYPOINTS_DIRECT_CERT_FILE}:${WAYPOINTS_DIRECT_CERT_FILE}
     environment:
       - APP_ENV=${APP_ENV}
       - MIX_ENV=${MIX_ENV}
