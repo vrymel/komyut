@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.3] - 2018-07-04
+### Changes
+- Changed app name from "Barker" to "Komyut"
+- Fixed mobile layout
+
 ## [1.1.2] - 2018-06-30
 ### Changes
 - Updated landing page to include application features
