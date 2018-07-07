@@ -2,13 +2,19 @@
   <div class="app-new-route">
     <div class="map">
       <google-map
-      :center="mapCenter"
-      @click="onMapClick">
+        :center="mapCenter"
+        @click="onMapClick">
         <google-map-circle 
           v-for="(intersection) in intersections"
           :key="intersection.id"
           :center="intersection"
           @click="onCircleClick"/>
+
+        <google-map-polyline
+          v-if="viewRouteInfo"
+          :name="'viewRouteInfo'"
+          :path="viewRouteInfo.path"
+          :stroke-color="'#2E0D23'"/>
 
         <google-map-marker
           v-for="(intersection, index) in selectedIntersectionPoints"
@@ -34,13 +40,15 @@
         <div class="card-body">
           <h6 class="card-title">View Route</h6>
 
-          <select class="form-control">
+          <select
+            class="form-control"
+            v-model="viewRouteId">
+            <option value="">None</option>
             <option
               v-for="(route, index) in routes"
+              :value="route.id"
               :key="index">{{ route.description }}</option>
           </select>
-
-          <button type="button" class="btn btn-secondary" style="margin-top: 10px;">View</button>
         </div>
       </div>
 
@@ -221,6 +229,17 @@ const getRoutes = async () => {
     }
 };
 
+const getRoute = async (routeId) => {
+    try {
+        const result = await axios.get(`${api_paths.ROUTE_API_INDEX}/${routeId}`);
+
+        return result.data;
+    } catch (e) {
+        // TODO: add sentry log
+        return false;
+    }
+};
+
 export default {
     name: "AppNewRoute",
     components: {
@@ -229,6 +248,8 @@ export default {
     data() {
         return {
             routes: [],
+            viewRouteId: "",
+            viewRouteInfo: null,
             showIntersections: false,
             intersections: [],
             controlModes: controlModes,
@@ -240,6 +261,21 @@ export default {
             saving: false,
             mapCenter: new google.maps.LatLng(8.477619, 124.644167), // this value is just arbitrary
         };
+    },
+    watch: {
+        viewRouteId: async function() {
+            if (!this.viewRouteId) {
+                this.viewRouteInfo = null;
+                return;
+            }
+
+            const routeDetails = await getRoute(this.viewRouteId);
+            const snapToRoadPoints = await snapToRoads(routeDetails.intersections);
+            this.viewRouteInfo = {
+                path: snapToRoadPoints,
+                intersections: routeDetails.intersections
+            };
+        }
     },
     async mounted() {
         const routes = await getRoutes();
