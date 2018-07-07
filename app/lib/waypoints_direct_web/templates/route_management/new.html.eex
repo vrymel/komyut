@@ -11,7 +11,8 @@
     PAGE_ROUTES = {
         "INDEX": "<%= intersection_api_path(@conn, :index) %>",
         "CREATE": "<%= intersection_api_path(@conn, :create) %>",
-        "CREATE_ROUTE": "<%= route_api_path(@conn, :create) %>"
+        "CREATE_ROUTE": "<%= route_api_path(@conn, :create) %>",
+        "ROUTE_API_INDEX": "<%= route_api_path(@conn, :index) %>",
     };
 
     Raven.config('<%= sentryFrontendDsn() %>').install()

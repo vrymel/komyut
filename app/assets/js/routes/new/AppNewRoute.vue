@@ -32,6 +32,20 @@
     <div class="sidebar">
       <div class="m-2 card">
         <div class="card-body">
+          <h6 class="card-title">View Route</h6>
+
+          <select class="form-control">
+            <option
+              v-for="(route, index) in routes"
+              :key="index">{{ route.description }}</option>
+          </select>
+
+          <button type="button" class="btn btn-secondary" style="margin-top: 10px;">View</button>
+        </div>
+      </div>
+
+      <div class="m-2 card">
+        <div class="card-body">
           <h6 class="card-title">Control Modes</h6>
           
           <div class="my-3">
@@ -196,6 +210,17 @@ const controlModes = {
     removeEdge: 40
 };
 
+const getRoutes = async () => {
+    try {
+        const result = await axios.get(api_paths.ROUTE_API_INDEX);
+
+        return result.data;
+    } catch (e) {
+        // TODO: add sentry log
+        return false;
+    }
+};
+
 export default {
     name: "AppNewRoute",
     components: {
@@ -203,6 +228,7 @@ export default {
     },
     data() {
         return {
+            routes: [],
             showIntersections: false,
             intersections: [],
             controlModes: controlModes,
@@ -214,6 +240,11 @@ export default {
             saving: false,
             mapCenter: new google.maps.LatLng(8.477619, 124.644167), // this value is just arbitrary
         };
+    },
+    async mounted() {
+        const routes = await getRoutes();
+
+        this.routes = routes || [];
     },
     methods: {
         remove() {
