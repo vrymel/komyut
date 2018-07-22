@@ -1,28 +1,29 @@
 version: '3'
 services:
-  app:
-    build:
-      context: .
-    command: mix phx.server
-    ports:
-      - "4000:4000"
-    environment:
-      - APP_ENV=${APP_ENV}
-      - MIX_ENV=${MIX_ENV}
-      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
-      - GOOGLE_MAP_API_KEY=${GOOGLE_MAP_API_KEY}
-      - SENTRY_FRONTEND_DSN=${SENTRY_FRONTEND_DSN}
-      - SENTRY_BACKEND_DSN=${SENTRY_BACKEND_DSN}
-      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
-      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
-      - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
-    volumes:
-      - ./app:/opt/app
-    depends_on:
-      - db
+  # #USING LOCAL ELIXIR INSTALLATION FROM NOW
+  # app:
+  #   build:
+  #     context: .
+  #   command: mix phx.server
+  #   ports:
+  #     - "4000:4000"
+  #   environment:
+  #     - APP_ENV=${APP_ENV}
+  #     - MIX_ENV=${MIX_ENV}
+  #     - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #     - POSTGRES_DB=${POSTGRES_DB}
+  #     - POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
+  #     - GOOGLE_MAP_API_KEY=${GOOGLE_MAP_API_KEY}
+  #     - SENTRY_FRONTEND_DSN=${SENTRY_FRONTEND_DSN}
+  #     - SENTRY_BACKEND_DSN=${SENTRY_BACKEND_DSN}
+  #     - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+  #     - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+  #     - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
+  #   volumes:
+  #     - ./app:/opt/app
+  #   depends_on:
+  #     - db
   db:
     image: postgres:9.6.6
     volumes: 
