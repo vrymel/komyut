@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import subprocess
 
 def get_flags():
