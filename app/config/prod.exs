@@ -33,7 +33,8 @@ config :sentry,
   tags: %{
     env: "production"
   },
-  included_environments: [:prod]
+  included_environments: [:prod],
+  json_library: Poison
 
 # ## SSL Support
 #

@@ -50,4 +50,5 @@ config :sentry,
   tags: %{
     env: "development"
   },
-  included_environments: [:dev]
+  included_environments: [:dev],
+  json_library: Poison
