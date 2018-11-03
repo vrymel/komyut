@@ -4,7 +4,7 @@ defmodule WaypointsDirect.Mixfile do
   def project do
     [app: :waypoints_direct,
      version: "1.1.3",
-     elixir: "~> 1.5",
+     elixir: "~> 1.7",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -30,7 +30,7 @@ defmodule WaypointsDirect.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.3.0"},
+    [{:phoenix, "~> 1.3.4"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
@@ -38,9 +38,10 @@ defmodule WaypointsDirect.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
+     {:plug_cowboy, "~> 1.0"},
      {:distillery, "~> 1.4", runtime: false},
      {:poison, "~> 3.1"},
-     {:sentry, "~> 6.1.0"},
+     {:sentry, "~> 7.0"},
      {:ueberauth, "~> 0.4"},
      {:ueberauth_auth0, "~> 0.3"}]
   end

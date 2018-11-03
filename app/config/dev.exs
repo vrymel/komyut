@@ -36,10 +36,10 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :waypoints_direct, WaypointsDirect.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "secretpassword",
-  database: "waypoints_direct_dev",
-  hostname: "db",
+  username: System.get_env("POSTGRES_USERNAME"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  database: System.get_env("POSTGRES_DB"),
+  hostname: System.get_env("POSTGRES_HOSTNAME"),
   pool_size: 10
 
 config :sentry,
@@ -50,4 +50,5 @@ config :sentry,
   tags: %{
     env: "development"
   },
-  included_environments: [:dev]
+  included_environments: [:dev],
+  json_library: Poison

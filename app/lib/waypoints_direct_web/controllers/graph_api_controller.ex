@@ -31,17 +31,17 @@ defmodule WaypointsDirectWeb.GraphApiController do
 
     defp do_search_path(conn, %Intersection{:id => from_intersection_id}, %Intersection{:id => to_intersection_id}) do
         direct_path = search_direct_path(from_intersection_id, to_intersection_id)
+        graph_path = search_graph_path(from_intersection_id, to_intersection_id)
 
-        case direct_path do 
-          :empty ->
-            graph_path = search_graph_path(from_intersection_id, to_intersection_id)
+        cond do
+          direct_path == :empty ->
+            json conn, %{:exist => graph_path != :empty, path: graph_path, type: :graph}
+          graph_path == :empty ->
+            json conn, %{:exist => direct_path != :empty, path: direct_path, type: :direct}
+          true ->
+            {shortest_path, path_type} = get_shortest_path(direct_path, graph_path)
 
-            json conn, %{:exist => graph_path != :empty, path: graph_path}
-          _ ->
-            graph_path = search_graph_path(from_intersection_id, to_intersection_id)
-            shortest_path = get_shortest_path(direct_path, graph_path)
-
-            json conn, %{:exist => shortest_path != :empty, path: shortest_path} 
+            json conn, %{:exist => shortest_path != :empty, path: shortest_path, type: path_type}
         end
     end
 
@@ -61,9 +61,9 @@ defmodule WaypointsDirectWeb.GraphApiController do
       cond do
         (graph_path_length / direct_path_length) < @graph_shorter_threshold ->
           # Graph path is significantly shorter than direct path so return it instead
-          graph_path
+          {graph_path, :graph}
         true ->
-          direct_path
+          {direct_path, :direct}
       end
     end
 

@@ -20,7 +20,7 @@ defmodule WaypointsDirect.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: WaypointsDirect.Supervisor]
 
-    :ok = :error_logger.add_report_handler(Sentry.Logger)
+    {:ok, _} = Logger.add_backend(Sentry.LoggerBackend)
 
     Supervisor.start_link(children, opts)
   end
