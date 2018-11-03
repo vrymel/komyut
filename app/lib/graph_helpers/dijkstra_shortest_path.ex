@@ -31,12 +31,12 @@ defmodule WaypointsDirect.DijkstraShortestPath do
 
     adjacent = Graph.adjacent(graph, Map.get(lowest_weight, :key))
 
-    tree = 
+    tree =
       if adjacent do
         Enum.reduce adjacent, tree, fn(route_edge, acc) ->
           relax(acc, route_edge)
         end
-      else 
+      else
         tree
       end
 
@@ -46,7 +46,10 @@ defmodule WaypointsDirect.DijkstraShortestPath do
     if IndexMinPQ.empty?(pq), do: tree, else: build_tree(graph, tree)
   end
 
-  defp relax(%{:edge_to => edge_to, :dist_to => dist_to, :pq => pq} = tree, %RouteEdge{:from_intersection_id => v, :to_intersection_id => w, :weight => edge_weight} = route_edge) do
+  defp relax(
+    %{:edge_to => edge_to, :dist_to => dist_to, :pq => pq} = tree,
+    %RouteEdge{:from_intersection_id => v, :to_intersection_id => w, :weight => edge_weight} = route_edge
+  ) do
     v_weight = Map.get(dist_to, v)
     w_weight = Map.get(dist_to, w)
 
@@ -57,11 +60,17 @@ defmodule WaypointsDirect.DijkstraShortestPath do
     # to trap if w_weight == nil
     if w_weight > next_vertex_weight do
       dist_to = Map.put(dist_to, w, next_vertex_weight)
-      edge_to = Map.put(edge_to, w, route_edge) 
+      edge_to = Map.put(edge_to, w, route_edge)
       pq = assign_pq pq, %{key: w, value: next_vertex_weight}
-    end
 
-    tree |> Map.put(:dist_to, dist_to) |> Map.put(:edge_to, edge_to) |> Map.put(:pq, pq)
+      tree
+      |> Map.put(:dist_to, dist_to)
+      |> Map.put(:edge_to, edge_to)
+      |> Map.put(:pq, pq)
+    else
+      tree
+      |> Map.put(:pq, pq)
+    end
   end
 
   defp assign_pq(pq, %{:key => key, :value => _} = key_value) do
