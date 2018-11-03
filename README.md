@@ -6,14 +6,14 @@ The application code is setup to run directly on the host machine. The database 
 The following are the requirements for the application environment. See `user_data.txt` for the installation commands.
 
 1. Erlang and Elixir
-1. Node 6
+1. Node 6.12.x
 1. Docker and Docker Compose (only used for the database)
 1. Mix hex/phoenix
 1. PostgreSQL (as a docker image)
 
-## Deployment in a Docker environment
+## Deployment
 
-#### <a id="deploy-box">Deploying on a new box</a>
+#### <a id="deploy-box">Deploying in a new box</a>
 
 1. Clone the application
 1. Create the following directories and `.env` file:
@@ -26,9 +26,13 @@ The following are the requirements for the application environment. See `user_da
     
     `docker-compose up -d`
 
+1. Install phoenix dependencies
+
+    `./run_app_init.sh`
+
 1. Run the server
 
-    `./run_phxserver.py`
+    `./run_phxserver.py --detached`
 
     > This helper script just retrieves the environment variables defined in `.env` and prepend it as flags when running `mix phx.server`. So it is important that `.env`'s is targeting development or production.
 

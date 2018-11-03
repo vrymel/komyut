@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0] - 2018-11-03
+This is all internal updates, version upgrades, moved to hosting Phoenix to host instead of inside Docker.
+
+### Changes
+- Upgraded to Elixir 1.7
+- Upgraded to Phoenix 1.3.4
+- Upgraded to Sentry 7.0
+- Serve project from host installation instead of inside Docker.
+
 ## [1.1.3] - 2018-07-04
 ### Changes
 - Changed app name from "Barker" to "Komyut"

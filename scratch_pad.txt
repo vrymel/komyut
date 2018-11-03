@@ -121,3 +121,12 @@ geopoint = %GeoPoint{lat: 0.148, lng: 2.175}
 geopoint1 = %GeoPoint{lat: 10, lng: 20}  
 
 GraphApiController.get_nearest_intersection(geopoint, 0.200)
+
+####
+
+alias WaypointsDirectWeb.GraphApiController
+
+direct_path = GraphApiController.search_direct_path(127, 427)
+graph_path = GraphApiController.search_graph_path(127, 427)
+shortest_path = GraphApiController.get_shortest_path(direct_path, graph_path)
+
