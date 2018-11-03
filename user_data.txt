@@ -1,0 +1,54 @@
+# Ubuntu 16.04.4 x64
+
+# Install erlang and elixir
+wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+sudo apt-get update
+sudo apt-get install esl-erlang -y
+sudo apt-get install elixir -y
+
+# Install Node 6
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install nodejs -y
+
+# Install certbot
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository ppa:certbot/certbot -y
+sudo apt-get update
+sudo apt-get install python-certbot-apache -y
+
+# Set Docker repository
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+# Install Docker
+sudo apt-get update
+sudo apt-get install docker-ce -y
+# Validate if Docker was successfully installed
+# sudo docker run hello-world
+
+# Install Docker Compose
+# Important to replace the docker compose version to what the latest is
+# See: https://github.com/docker/compose/releases for the latest version
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Create sudoer user
+adduser <username>
+usermod -aG sudo <username>
+
+# Install hex (installed per user)
+mix local.hex --force
+
+# Install Phoenix (installed per user)
+mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
+
+# Install PostgreSQL (if not hosting in Docker)
+sudo apt-get install postgresql postgresql-contrib -y
