@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import subprocess
+import argparse
 
 def get_flags():
     flags = []
@@ -12,12 +13,20 @@ def get_flags():
 
     return ' '.join(flags)
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--detached', action='store_true', help='Run server in detached mode')
+args = parser.parse_args()
+
 flags = get_flags()
 change_dir = 'cd app'
 mix_command = 'mix phx.server'
-main_command = '{} {}'.format(flags, mix_command)
+if args.detached:
+    print('Using detached mode')
+    mix_command = 'elixir --detached -S mix do compile, phx.server'
 
+main_command = '{} {}'.format(flags, mix_command)
 final_command = '{} && {}'.format(change_dir, main_command)
 
-print("Running mix phx.server")
+print('Running mix phx.server')
 subprocess.call(final_command, shell=True)
