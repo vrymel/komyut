@@ -11,6 +11,18 @@ There are two main features right now:
 
 In the Philippines, a [Jeepney](https://en.wikipedia.org/wiki/Jeepney) is a commonly used public transport. They have defined routes within the city so people can access different areas within the city by taking a single or multiple routes of a jeepney.
 
+![Jeepney route search](https://raw.githubusercontent.com/vrymel/waypoints_direct/master/readme_imgs/jeepney.JPG "Jeepney route search")
+
+## Screenshots
+
+#### Jeepney route search
+
+![Jeepney route search](https://raw.githubusercontent.com/vrymel/waypoints_direct/master/readme_imgs/route-search.jpg "Jeepney route search")
+
+#### Jeepney route listing
+
+![Jeepney route search](https://raw.githubusercontent.com/vrymel/waypoints_direct/master/readme_imgs/route-listing.jpg "Jeepney route search")
+
 ## Project Structure
 
 The application code is setup to run directly on the host machine. The database layer is the only component hosted in docker for ease of installation.
