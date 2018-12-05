@@ -1,3 +1,16 @@
+## About
+
+This is a personal project that involves me learning Elixir and Dijkstra's path-finding algorithm. 
+
+There are two main features right now:
+
+* **Jeepney route search** - users can specify two points within the city, and the it will return the shortest jeepney route(s) to take.
+* **Jeepney route listing** - users can view jeepney routes within the city.
+
+### Jeepney Route
+
+In the Philippines, a [Jeepney](https://en.wikipedia.org/wiki/Jeepney) is a commonly used public transport. They have defined routes within the city so people can access different areas within the city by taking a single or multiple routes of a jeepney.
+
 ## Project Structure
 
 The application code is setup to run directly on the host machine. The database layer is the only component hosted in docker for ease of installation.
